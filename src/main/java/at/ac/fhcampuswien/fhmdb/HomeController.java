@@ -34,6 +34,12 @@ public class HomeController implements Initializable {
     public JFXComboBox genreComboBox;
 
     @FXML
+    public JFXComboBox releaseYearComboBox;
+
+    @FXML
+    public JFXComboBox ratingComboBox;
+
+    @FXML
     public JFXButton sortBtn;
 
     public List<Movie> allMovies;
@@ -60,10 +66,17 @@ public class HomeController implements Initializable {
         movieListView.setCellFactory(movieListView -> new MovieCell()); // apply custom cells to the listview
 
         Object[] genres = Genre.values();   // get all genres
-        genreComboBox.getItems().add("No filter");  // add "no filter" to the combobox
-        genreComboBox.getItems().addAll(genres);    // add all genres to the combobox
+        genreComboBox.getItems().add("No filter");  // add "no filter" to the genre combobox
+        genreComboBox.getItems().addAll(genres);    // add all genres to the genre combobox
         genreComboBox.setPromptText("Filter by Genre");
+
+        releaseYearComboBox.getItems().add("No filter"); // add "no filter" to the year combobox
+        releaseYearComboBox.setPromptText("Filter by Release Year"); // set the prompt text for the year combobox
+
+        ratingComboBox.getItems().add("No filter"); // add "no filter" to the year combobox
+        ratingComboBox.setPromptText("Filter by Rating"); // set the prompt text for the year combobox
     }
+
 
     // sort movies based on sortedState
     // by default sorted state is NONE
