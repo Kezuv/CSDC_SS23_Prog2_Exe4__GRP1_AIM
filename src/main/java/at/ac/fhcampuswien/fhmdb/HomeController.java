@@ -1,6 +1,7 @@
 package at.ac.fhcampuswien.fhmdb;
 
 import at.ac.fhcampuswien.fhmdb.api.MovieAPI;
+import at.ac.fhcampuswien.fhmdb.api.SearchParameter;
 import at.ac.fhcampuswien.fhmdb.models.Genre;
 import at.ac.fhcampuswien.fhmdb.models.Movie;
 import at.ac.fhcampuswien.fhmdb.models.SortedState;
@@ -37,7 +38,7 @@ public class HomeController implements Initializable {
     public JFXComboBox genreComboBox;
 
     @FXML
-    public JFXComboBox releaseYearComboBox;
+    public JFXComboBox releasedYearComboBox;
 
     @FXML
     public JFXComboBox ratingComboBox;
@@ -62,7 +63,8 @@ public class HomeController implements Initializable {
     }
 
     public void initializeState() throws IOException {
-        allMovies = Movie.initializeMovies(MovieAPI.movieApiRequest("",null));
+        System.out.println(MovieAPI.getCustomURL());
+        allMovies = Movie.initializeMovies(MovieAPI.getRequest());
         observableMovies.clear();
         observableMovies.addAll(allMovies); // add all movies to the observable list
         sortedState = SortedState.NONE;
@@ -72,20 +74,23 @@ public class HomeController implements Initializable {
         movieListView.setItems(observableMovies);   // set the items of the listview to the observable list
         movieListView.setCellFactory(movieListView -> new MovieCell()); // apply custom cells to the listview
 
-        Object[] genres = Genre.values();   // get all genres
-        genreComboBox.getItems().add("No filter");  // add "no filter" to the genre combobox
-        genreComboBox.getItems().addAll(genres);    // add all genres to the genre combobox
+        Genre[] genres = Genre.values(); // get all genres
+
+        genreComboBox.getItems().add("No filter");// add "no filter" to the genre combobox
+        for (int i = 0; i < genres.length; i ++) {
+            genreComboBox.getItems().addAll(genres[i].name());    // add all genres to the genre combobox
+        }
         genreComboBox.setPromptText("Filter by Genre");
 
-        releaseYearComboBox.getItems().add("No filter"); // add "no filter" to the year combobox
+        releasedYearComboBox.getItems().add("No filter"); // add "no filter" to the year combobox
         for(int year = LocalDate.now().getYear(); year >= 1950; year--) {
-            releaseYearComboBox.getItems().add(String.valueOf(year)); // add each year from 1900 to current year to the year combobox
+            releasedYearComboBox.getItems().add(String.valueOf(year)); // add each year from 1900 to current year to the year combobox
         }
-        releaseYearComboBox.setPromptText("Filter by Release Year"); // set the prompt text for the year combobox
+        releasedYearComboBox.setPromptText("Filter by Release Year"); // set the prompt text for the year combobox
 
         ratingComboBox.getItems().add("No filter"); // add "no filter" to the year combobox
-        for(double rating = 9.0; rating >= 1; rating -= 1) {
-            ratingComboBox.getItems().add(String.valueOf(rating)+" > "+String.valueOf(rating +1)); // add each rating from 10.0 to 0.5 to the rating combobox
+        for(double rating = 10.0; rating >= 0.5; rating -= 0.5) {
+            ratingComboBox.getItems().add(String.valueOf(rating)); // add each rating from 10.0 to 0.5 to the rating combobox
         }
         ratingComboBox.setPromptText("Filter by Rating"); // set the prompt text for the year combobox
     }
@@ -139,7 +144,7 @@ public class HomeController implements Initializable {
 
         return movies.stream()
                 .filter(Objects::nonNull)
-                .filter(movie -> movie.getReleaseYear() == releaseYear)
+                .filter(movie -> movie.getReleasedYear() == releaseYear)
                 .toList();
     }
 
@@ -177,12 +182,30 @@ public class HomeController implements Initializable {
     }
 
     public void searchBtnClicked(ActionEvent actionEvent) throws IOException {
-        String searchQuery = searchField.getText().trim().toLowerCase();
-        Genre genre = (Genre) genreComboBox.getSelectionModel().getSelectedItem();
-        Object releaseYear = releaseYearComboBox.getSelectionModel().getSelectedItem();
-        Object rating = ratingComboBox.getSelectionModel().getSelectedItem();
-        //TODO Implement rating and Year
-        allMovies = Movie.initializeMovies(MovieAPI.movieApiRequest(searchQuery, genre.name()));
+
+        String searchQuery =  searchField.getText().trim().toLowerCase();
+        if (searchQuery != null && !searchQuery.equals("")) {
+            MovieAPI.addParam(SearchParameter.CUSTOMSEARCH, searchQuery);
+        }
+
+        String genre = (String) genreComboBox.getSelectionModel().getSelectedItem();
+        if (genre != null && !genre.equals("No filter")) {
+            MovieAPI.addParam(SearchParameter.GENRE, genre);
+        }
+
+        String releaseYear = (String) releasedYearComboBox.getSelectionModel().getSelectedItem();
+        if (releaseYear != null && !releaseYear.equals("No filter")) {
+            MovieAPI.addParam(SearchParameter.YEAR, releaseYear);
+        }
+
+        String rating = (String) ratingComboBox.getSelectionModel().getSelectedItem();
+        if (rating != null && !rating.equals("No filter")) {
+            MovieAPI.addParam(SearchParameter.RATING, rating);
+        }
+
+        System.out.println(MovieAPI.getCustomURL());
+        allMovies = Movie.initializeMovies(MovieAPI.getRequest());
+
         observableMovies.clear();
         observableMovies.addAll(allMovies); // add all movies to the observable list
         sortedState = SortedState.NONE;

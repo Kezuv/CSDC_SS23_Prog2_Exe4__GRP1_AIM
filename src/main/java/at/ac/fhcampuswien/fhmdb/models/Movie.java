@@ -1,11 +1,8 @@
 package at.ac.fhcampuswien.fhmdb.models;
 
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 
-import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class Movie {
@@ -16,9 +13,9 @@ public class Movie {
     private final List<Genre> genres;
     private final List<String> directors, writers, mainCast;
     private final double rating;
-    private final int releaseYear, lengthInMinutes;
+    private final int releasedYear, lengthInMinutes;
 
-    public Movie(String id, String title, String description, String imgUrl, List<Genre> genres, List<String> directors, List<String> writers, List<String> mainCast, double rating, int releaseYear, int lengthInMinutes) {
+    public Movie(String id, String title, String description, String imgUrl, List<Genre> genres, List<String> directors, List<String> writers, List<String> mainCast, double rating, int releasedYear, int lengthInMinutes) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -28,7 +25,7 @@ public class Movie {
         this.writers = writers;
         this.mainCast = mainCast;
         this.rating = rating;
-        this.releaseYear = releaseYear;
+        this.releasedYear = releasedYear;
         this.lengthInMinutes = lengthInMinutes;
     }
 
@@ -93,8 +90,8 @@ public class Movie {
         return mainCast;
     }
 
-    public int getReleaseYear() {
-        return releaseYear;
+    public int getReleasedYear() {
+        return releasedYear;
     }
 
     public int getLengthInMinutes() {
