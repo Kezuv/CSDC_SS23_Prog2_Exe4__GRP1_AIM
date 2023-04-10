@@ -11,6 +11,8 @@ import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+
+import java.util.List;
 import java.util.stream.Collectors;
 
 public class MovieCell extends ListCell<Movie> {
@@ -51,11 +53,11 @@ public class MovieCell extends ListCell<Movie> {
 
             rating.setText(String.valueOf(movie.getRating()));
             //TODO Image HTTPRequest
-            img.setImage(new Image("https://www.imdb.com/title/tt0068646/mediaviewer/rm4260419329"));
+            //img.setImage(new Image("https://www.imdb.com/title/tt0068646/mediaviewer/rm4260419329"));
 
-            directors.setText(setUpList(movie, movie.getDirectors(), "Directors"));
-            writers.setText(setUpList(movie, movie.getWriters(), "Writers"));
-            mainCast.setText(setUpList(movie, movie.getMainCast(), "Main Cast"));
+            directors.setText(setUpList(movie.getDirectors(), "Directors"));
+            writers.setText(setUpList(movie.getWriters(), "Writers"));
+            mainCast.setText(setUpList(movie.getMainCast(), "Main Cast"));
 
 
 
@@ -86,15 +88,14 @@ public class MovieCell extends ListCell<Movie> {
         }
     }
 
-    private String setUpList(Movie movie, String[] type, String description){
+    private String setUpList(List<String> type, String description){
 
         String list = description+": ";
-        String[] directorsList = movie.getDirectors();
-        for (int i = 0; i < type.length; i ++){
-            if (i == type.length){
-                list = list + directorsList[i];
+        for (int i = 0; i < type.size() ; i ++){
+            if (i == type.size()-1 ){
+                list = list + type.get(i);
             } else {
-                list = list + directorsList[i] + ", ";
+                list = list + type.get(i) + ", ";
             }
         }
         return list;

@@ -1,5 +1,6 @@
 package at.ac.fhcampuswien.fhmdb;
 
+import at.ac.fhcampuswien.fhmdb.api.MovieAPI;
 import at.ac.fhcampuswien.fhmdb.models.Genre;
 import at.ac.fhcampuswien.fhmdb.models.Movie;
 import at.ac.fhcampuswien.fhmdb.models.SortedState;
@@ -14,6 +15,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TextField;
 
+import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
 import java.util.Comparator;
@@ -51,12 +53,16 @@ public class HomeController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        initializeState();
+        try {
+            initializeState();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
         initializeLayout();
     }
 
-    public void initializeState() {
-        allMovies = Movie.initializeMovies();
+    public void initializeState() throws IOException {
+        allMovies = Movie.initializeMovies(MovieAPI.movieApiRequest("",null));
         observableMovies.clear();
         observableMovies.addAll(allMovies); // add all movies to the observable list
         sortedState = SortedState.NONE;
@@ -170,13 +176,18 @@ public class HomeController implements Initializable {
         observableMovies.addAll(filteredMovies);
     }
 
-    public void searchBtnClicked(ActionEvent actionEvent) {
+    public void searchBtnClicked(ActionEvent actionEvent) throws IOException {
         String searchQuery = searchField.getText().trim().toLowerCase();
-        Object genre = genreComboBox.getSelectionModel().getSelectedItem();
+        Genre genre = (Genre) genreComboBox.getSelectionModel().getSelectedItem();
         Object releaseYear = releaseYearComboBox.getSelectionModel().getSelectedItem();
         Object rating = ratingComboBox.getSelectionModel().getSelectedItem();
+        //TODO Implement rating and Year
+        allMovies = Movie.initializeMovies(MovieAPI.movieApiRequest(searchQuery, genre.name()));
+        observableMovies.clear();
+        observableMovies.addAll(allMovies); // add all movies to the observable list
+        sortedState = SortedState.NONE;
 
-        applyAllFilters(searchQuery, genre, releaseYear, rating);
+        //applyAllFilters(searchQuery, genre, releaseYear, rating);
 
         if (sortedState != SortedState.NONE) {
             sortMovies();
