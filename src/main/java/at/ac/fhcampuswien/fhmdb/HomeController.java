@@ -72,14 +72,14 @@ public class HomeController implements Initializable {
         genreComboBox.setPromptText("Filter by Genre");
 
         releaseYearComboBox.getItems().add("No filter"); // add "no filter" to the year combobox
-        for(int year = LocalDate.now().getYear(); year >= 1900; year--) {
+        for(int year = LocalDate.now().getYear(); year >= 1950; year--) {
             releaseYearComboBox.getItems().add(String.valueOf(year)); // add each year from 1900 to current year to the year combobox
         }
         releaseYearComboBox.setPromptText("Filter by Release Year"); // set the prompt text for the year combobox
 
         ratingComboBox.getItems().add("No filter"); // add "no filter" to the year combobox
-        for(double rating = 10.0; rating >= 0.5; rating -= 0.5) {
-            ratingComboBox.getItems().add(String.valueOf(rating)); // add each rating from 10.0 to 0.5 to the rating combobox
+        for(double rating = 9.0; rating >= 1; rating -= 1) {
+            ratingComboBox.getItems().add(String.valueOf(rating)+" > "+String.valueOf(rating +1)); // add each rating from 10.0 to 0.5 to the rating combobox
         }
         ratingComboBox.setPromptText("Filter by Rating"); // set the prompt text for the year combobox
     }
@@ -144,7 +144,7 @@ public class HomeController implements Initializable {
 
         return movies.stream()
                 .filter(Objects::nonNull)
-                .filter(movie -> movie.getRating() >= minRating)
+                .filter(movie -> movie.getRating() >= minRating && movie.getRating() < minRating +1)
                 .toList();
     }
     public void applyAllFilters(String searchQuery, Object genre, Object releaseYear, Object rating) {
