@@ -5,14 +5,43 @@ import java.util.Arrays;
 import java.util.List;
 
 public class Movie {
-    private final String title;
-    private final String description;
+
+    private final String id, title, description;
+
+    private final String imgUrl;
     private final List<Genre> genres;
+    private final String[] directors, writers, mainCast;
+
+    private final int releaseYear, lengthInMinutes, rating;
 
     public Movie(String title, String description, List<Genre> genres) {
         this.title = title;
         this.description = description;
         this.genres = genres;
+
+        this.id = "";
+        this.imgUrl = "";
+        this.directors = new String[0];
+        this.writers = new String[0];
+        this.mainCast = new String[0];
+        this.releaseYear = 0;
+        this.lengthInMinutes = 0;
+        this.rating = 0;
+
+    }
+
+    public Movie(String id, String title, String description, String imgUrl, List<Genre> genres, String[] directors, String[] writers, String[] mainCast, int releaseYear, int lengthInMinutes, int rating) {
+        this.id = id;
+        this.title = title;
+        this.description = description;
+        this.imgUrl = imgUrl;
+        this.genres = genres;
+        this.directors = directors;
+        this.writers = writers;
+        this.mainCast = mainCast;
+        this.releaseYear = releaseYear;
+        this.lengthInMinutes = lengthInMinutes;
+        this.rating = rating;
     }
 
     @Override
@@ -67,11 +96,36 @@ public class Movie {
         return movies;
     }
 
-    public int getReleaseYear() {
-        return 2020;
+
+    public String getId() {
+        return id;
     }
 
-    public double getRating() {
-        return 6;
+    public String getImgUrl() {
+        return imgUrl;
+    }
+
+    public String[] getDirectors() {
+        return directors;
+    }
+
+    public String[] getWriters() {
+        return writers;
+    }
+
+    public String[] getMainCast() {
+        return mainCast;
+    }
+
+    public int getReleaseYear() {
+        return releaseYear;
+    }
+
+    public int getLengthInMinutes() {
+        return lengthInMinutes;
+    }
+
+    public int getRating() {
+        return rating;
     }
 }
