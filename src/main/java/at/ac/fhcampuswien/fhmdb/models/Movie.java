@@ -66,4 +66,12 @@ public class Movie {
 
         return movies;
     }
+
+    public int getReleaseYear() {
+        return 2020;
+    }
+
+    public double getRating() {
+        return 6;
+    }
 }
