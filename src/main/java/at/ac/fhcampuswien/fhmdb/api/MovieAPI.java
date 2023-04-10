@@ -10,7 +10,8 @@ public class MovieAPI {
         return finalUrl;
     }
     public static String movieApiRequest(String searchField, String genre) throws IOException {
-        String requestUrl = "http://localhost:8080/movies";
+  //      String requestUrl = "http://localhost:8080/movies";
+        String requestUrl = "https://prog2.fh-campuswien.ac.at/movies";
         if (searchField.equals("") && genre == null) {
                 return getRequest(requestUrl);
         } else {
