@@ -27,74 +27,53 @@ import java.util.ResourceBundle;
 public class HomeController implements Initializable {
     @FXML
     public JFXButton searchBtn;
-
     @FXML
     public TextField searchField;
-
     @FXML
     public JFXListView movieListView;
-
     @FXML
     public JFXComboBox genreComboBox;
-
     @FXML
     public JFXComboBox releasedYearComboBox;
-
     @FXML
     public JFXComboBox ratingComboBox;
-
     @FXML
     public JFXButton sortBtn;
-
     public List<Movie> allMovies;
-
     protected ObservableList<Movie> observableMovies = FXCollections.observableArrayList();
-
     protected SortedState sortedState;
-
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
-        try {
-            initializeState();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        initializeLayout();
-    }
 
     public void initializeState() throws IOException {
         System.out.println(MovieAPI.getCustomURL());
-        allMovies = Movie.initializeMovies(MovieAPI.getRequest());
+        allMovies = Movie.initializeMovies(MovieAPI.getApiRequest());
         observableMovies.clear();
         observableMovies.addAll(allMovies); // add all movies to the observable list
         sortedState = SortedState.NONE;
     }
 
     public void initializeLayout() {
+        Genre[] genres = Genre.values(); // get all genres
         movieListView.setItems(observableMovies);   // set the items of the listview to the observable list
         movieListView.setCellFactory(movieListView -> new MovieCell()); // apply custom cells to the listview
 
-        Genre[] genres = Genre.values(); // get all genres
-
+        genreComboBox.setPromptText("Filter by Genre");
         genreComboBox.getItems().add("No filter");// add "no filter" to the genre combobox
         for (int i = 0; i < genres.length; i ++) {
             genreComboBox.getItems().addAll(genres[i].name());    // add all genres to the genre combobox
         }
-        genreComboBox.setPromptText("Filter by Genre");
 
+        releasedYearComboBox.setPromptText("Filter by Release Year"); // set the prompt text for the year combobox
         releasedYearComboBox.getItems().add("No filter"); // add "no filter" to the year combobox
         for(int year = LocalDate.now().getYear(); year >= 1950; year--) {
             releasedYearComboBox.getItems().add(String.valueOf(year)); // add each year from 1900 to current year to the year combobox
         }
-        releasedYearComboBox.setPromptText("Filter by Release Year"); // set the prompt text for the year combobox
 
+        ratingComboBox.setPromptText("Filter by Rating"); // set the prompt text for the year combobox
         ratingComboBox.getItems().add("No filter"); // add "no filter" to the year combobox
         for(double rating = 10.0; rating >= 0.5; rating -= 0.5) {
             ratingComboBox.getItems().add(String.valueOf(rating)); // add each rating from 10.0 to 0.5 to the rating combobox
         }
-        ratingComboBox.setPromptText("Filter by Rating"); // set the prompt text for the year combobox
     }
-
 
     // sort movies based on sortedState
     // by default sorted state is NONE
@@ -111,11 +90,9 @@ public class HomeController implements Initializable {
 
     public List<Movie> filterByQuery(List<Movie> movies, String query){
         if(query == null || query.isEmpty()) return movies;
-
         if(movies == null) {
             throw new IllegalArgumentException("movies must not be null");
         }
-
         return movies.stream()
                 .filter(Objects::nonNull)
                 .filter(movie ->
@@ -127,21 +104,19 @@ public class HomeController implements Initializable {
 
     public List<Movie> filterByGenre(List<Movie> movies, Genre genre){
         if(genre == null) return movies;
-
         if(movies == null) {
             throw new IllegalArgumentException("movies must not be null");
         }
-
         return movies.stream()
                 .filter(Objects::nonNull)
                 .filter(movie -> movie.getGenres().contains(genre))
                 .toList();
     }
+
     public List<Movie> filterByReleaseYear(List<Movie> movies, int releaseYear) {
         if(movies == null) {
             throw new IllegalArgumentException("movies must not be null");
         }
-
         return movies.stream()
                 .filter(Objects::nonNull)
                 .filter(movie -> movie.getReleasedYear() == releaseYear)
@@ -152,27 +127,24 @@ public class HomeController implements Initializable {
         if(movies == null) {
             throw new IllegalArgumentException("movies must not be null");
         }
-
         return movies.stream()
                 .filter(Objects::nonNull)
                 .filter(movie -> movie.getRating() >= minRating && movie.getRating() < minRating +1)
                 .toList();
     }
+
     public void applyAllFilters(String searchQuery, Object genre, Object releaseYear, Object rating) {
         List<Movie> filteredMovies = allMovies;
 
         if (!searchQuery.isEmpty()) {
             filteredMovies = filterByQuery(filteredMovies, searchQuery);
         }
-
         if (genre != null && !genre.toString().equals("No filter")) {
             filteredMovies = filterByGenre(filteredMovies, Genre.valueOf(genre.toString()));
         }
-
         if (releaseYear != null && !releaseYear.toString().equals("No filter")) {
             filteredMovies = filterByReleaseYear(filteredMovies, Integer.parseInt(releaseYear.toString()));
         }
-
         if (rating != null && !rating.toString().equals("No filter")) {
             filteredMovies = filterByRating(filteredMovies, Double.parseDouble(rating.toString()));
         }
@@ -182,7 +154,6 @@ public class HomeController implements Initializable {
     }
 
     public void searchBtnClicked(ActionEvent actionEvent) throws IOException {
-
         String searchQuery =  searchField.getText().trim().toLowerCase();
         if (searchQuery != null && !searchQuery.equals("")) {
             MovieAPI.addParam(SearchParameter.CUSTOMSEARCH, searchQuery);
@@ -203,15 +174,11 @@ public class HomeController implements Initializable {
             MovieAPI.addParam(SearchParameter.RATING, rating);
         }
 
-        System.out.println(MovieAPI.getCustomURL());
-        allMovies = Movie.initializeMovies(MovieAPI.getRequest());
-
+        allMovies = Movie.initializeMovies(MovieAPI.getApiRequest());
         observableMovies.clear();
         observableMovies.addAll(allMovies); // add all movies to the observable list
         sortedState = SortedState.NONE;
-
         //applyAllFilters(searchQuery, genre, releaseYear, rating);
-
         if (sortedState != SortedState.NONE) {
             sortMovies();
         }
@@ -219,5 +186,15 @@ public class HomeController implements Initializable {
 
     public void sortBtnClicked(ActionEvent actionEvent) {
         sortMovies();
+    }
+
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        try {
+            initializeState();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        initializeLayout();
     }
 }
