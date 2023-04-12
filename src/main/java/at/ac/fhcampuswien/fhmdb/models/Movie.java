@@ -1,7 +1,9 @@
 package at.ac.fhcampuswien.fhmdb.models;
 
+import at.ac.fhcampuswien.fhmdb.api.MovieAPI;
 import com.google.gson.Gson;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,11 +17,11 @@ public class Movie {
     private final double rating;
     private final int releasedYear, lengthInMinutes;
 
-    public Movie(String id, String title, String description, String imgUrl, List<Genre> genres, List<String> directors, List<String> writers, List<String> mainCast, double rating, int releasedYear, int lengthInMinutes) {
+    public Movie(String id, String title, String description, String imgUrl, List<Genre> genres, List<String> directors, List<String> writers, List<String> mainCast, double rating, int releasedYear, int lengthInMinutes) throws IOException {
         this.id = id;
         this.title = title;
         this.description = description;
-        this.imgUrl = imgUrl;
+        this.imgUrl = MovieAPI.getTrueImgUrl(imgUrl, "[property=og:image]", "content");
         this.genres = genres;
         this.directors = directors;
         this.writers = writers;

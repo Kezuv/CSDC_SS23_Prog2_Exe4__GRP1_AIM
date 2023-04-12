@@ -55,11 +55,7 @@ public class MovieCell extends ListCell<Movie> {
 
             rating.setText(String.valueOf(movie.getRating()));
             //TODO Image HTTPRequest
-            try {
-                imgView.setImage(new Image(MovieAPI.getTrueImgUrl(movie.getImgUrl(), "[property=og:image]", "content")));
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
+            imgView.setImage(new Image(movie.getImgUrl()));
             try {
                 imgView.setImage(new Image(MovieAPI.getTrueImgUrl(movie.getImgUrl(), "meta[property=og:image]", "content")));
                 imgView.setFitHeight(100);
