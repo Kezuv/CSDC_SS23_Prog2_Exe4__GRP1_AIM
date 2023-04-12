@@ -54,7 +54,14 @@ public class HomeController implements Initializable {
     public void initializeLayout() {
         Genre[] genres = Genre.values(); // get all genres
         movieListView.setItems(observableMovies);   // set the items of the listview to the observable list
-        movieListView.setCellFactory(movieListView -> new MovieCell()); // apply custom cells to the listview
+
+        movieListView.setCellFactory(movieListView -> {
+            MovieCell cell = new MovieCell(); // apply custom cells to the listview
+            cell.setOnMouseClicked(event -> {
+                cell.startEdit();
+            });
+            return cell;
+        });
 
         genreComboBox.setPromptText("Filter by Genre");
         genreComboBox.getItems().add("No filter");// add "no filter" to the genre combobox
