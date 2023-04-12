@@ -25,8 +25,10 @@ public class MovieCell extends ListCell<Movie> {
     private final Label writers = new Label();
     private final Label mainCast = new Label();
     private final Label rating = new Label();
+    private final Label releaseYear = new Label();
     private final ImageView imgView = new ImageView();
-    private final VBox layout = new VBox(imgView, title, description, genre, directors, writers, mainCast, rating);
+    private final VBox layout = new VBox();
+    private boolean isExpanded = false;
 
     private String setUpList(List<String> type, String description){
 
@@ -50,6 +52,7 @@ public class MovieCell extends ListCell<Movie> {
             setText(null);
         } else {
             this.getStyleClass().add("movie-cell");
+            // set Text
             title.setText(movie.getTitle());
             description.setText(
                     movie.getDescription() != null
@@ -62,40 +65,59 @@ public class MovieCell extends ListCell<Movie> {
                     .map(Enum::toString)
                     .collect(Collectors.joining(", "));
             genre.setText(genres);
-            rating.setText("Rating: " + String.valueOf(movie.getRating()));
-            //For fast testing comment the code below (try to catch)
-            try {
-                imgView.setImage(new Image(MovieAPI.getTrueImgUrl(movie.getImgUrl(), "meta[property=og:image]", "content")));
-                imgView.setFitHeight(100);
-                imgView.setPreserveRatio(true);
-                imgView.setSmooth(true);
-                imgView.setCache(true);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
+            if (isExpanded){
+                directors.setText(setUpList(movie.getDirectors(), "Directors"));
+                writers.setText(setUpList(movie.getWriters(), "Writers"));
+                mainCast.setText(setUpList(movie.getMainCast(), "Main Cast"));
+                rating.setText("Rating: " + movie.getRating());
+                releaseYear.setText("Release Year: " + movie.getReleaseYear());
             }
-            directors.setText(setUpList(movie.getDirectors(), "Directors"));
-            writers.setText(setUpList(movie.getWriters(), "Writers"));
-            mainCast.setText(setUpList(movie.getMainCast(), "Main Cast"));
+
             // color scheme
             title.getStyleClass().add("text-yellow");
             description.getStyleClass().add("text-white");
             genre.getStyleClass().add("text-white");
-            genre.setStyle("-fx-font-style: italic");
-            directors.getStyleClass().add("text-white");
-            writers.getStyleClass().add("text-white");
-            mainCast.getStyleClass().add("text-white");
             rating.getStyleClass().add("text-white");
+            writers.getStyleClass().add("text-white");
+            directors.getStyleClass().add("text-white");
+            releaseYear.getStyleClass().add("text-white");
+            genre.setStyle("-fx-font-style: italic");
             layout.setBackground(new Background(new BackgroundFill(Color.web("#454545"), null, null)));
+
+
             // layout
             title.fontProperty().set(title.getFont().font(20));
             description.setMaxWidth(this.getScene().getWidth() - 30);
             description.setWrapText(true);
-            directors.setWrapText(true);
             layout.setPadding(new Insets(10));
             layout.spacingProperty().set(10);
             layout.alignmentProperty().set(Pos.CENTER_LEFT);
+            if (isExpanded) {
+                try {
+                    imgView.setImage(new Image(MovieAPI.getTrueImgUrl(movie.getImgUrl())));
+                    imgView.setFitHeight(100);
+                    imgView.setPreserveRatio(true);
+                    imgView.setSmooth(true);
+                    imgView.setCache(true);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+                layout.getChildren().clear();
+                layout.getChildren().addAll(imgView, title, description, directors, writers, mainCast, rating, releaseYear, genre);
+            } else {
+                layout.getChildren().clear();
+                layout.getChildren().addAll(title, description, genre);
+            }
+
             setGraphic(layout);
         }
+    }
+
+    @Override
+    public void startEdit() {
+        super.startEdit();
+        isExpanded = !isExpanded;
+        updateItem(getItem(), false);
     }
 }
 

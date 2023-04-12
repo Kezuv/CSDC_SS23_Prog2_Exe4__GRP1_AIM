@@ -1,6 +1,5 @@
 package at.ac.fhcampuswien.fhmdb.models;
 
-import at.ac.fhcampuswien.fhmdb.api.MovieAPI;
 import com.google.gson.Gson;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -12,9 +11,9 @@ public class Movie {
     private final List<Genre> genres;
     private final List<String> directors, writers, mainCast;
     private final double rating;
-    private final int releasedYear, lengthInMinutes;
+    private final int releaseYear, lengthInMinutes;
 
-    public Movie(String id, String title, String description, String imgUrl, List<Genre> genres, List<String> directors, List<String> writers, List<String> mainCast, double rating, int releasedYear, int lengthInMinutes) throws IOException {
+    public Movie(String id, String title, String description, String imgUrl, List<Genre> genres, List<String> directors, List<String> writers, List<String> mainCast, double rating, int releaseYear, int lengthInMinutes) throws IOException {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -24,7 +23,7 @@ public class Movie {
         this.writers = writers;
         this.mainCast = mainCast;
         this.rating = rating;
-        this.releasedYear = releasedYear;
+        this.releaseYear = releaseYear;
         this.lengthInMinutes = lengthInMinutes;
     }
 
@@ -56,8 +55,8 @@ public class Movie {
         return mainCast;
     }
 
-    public int getReleasedYear() {
-        return releasedYear;
+    public int getReleaseYear() {
+        return releaseYear;
     }
 
     public double getRating() {

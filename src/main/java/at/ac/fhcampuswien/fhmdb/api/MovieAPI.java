@@ -55,9 +55,9 @@ public class MovieAPI {
         return customURL;
     }
 
-    public static String getTrueImgUrl(String url, String tagName, String attribute) throws IOException {
+    public static String getTrueImgUrl(String url) throws IOException {
         Document metaCode = Jsoup.connect(url).get();
-        Element element = metaCode.select(tagName).first();
-        return element.attr(attribute);
+        Element element = metaCode.select("meta[property=og:image]").first();
+        return element.attr("content");
     }
 }
