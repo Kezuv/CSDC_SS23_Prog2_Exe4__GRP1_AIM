@@ -7,7 +7,6 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
 public class MovieAPI {
-
     private static String customURL = "https://prog2.fh-campuswien.ac.at/movies";
     private static boolean firstParam = true;
     public static String addParam(SearchParameter param, String value){
@@ -40,7 +39,6 @@ public class MovieAPI {
         firstParam = true;
     }
 
-
     public static String getApiRequest() throws IOException {
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder()
@@ -56,20 +54,10 @@ public class MovieAPI {
     public static String getCustomURL() {
         return customURL;
     }
+
     public static String getTrueImgUrl(String url, String tagName, String attribute) throws IOException {
         Document metaCode = Jsoup.connect(url).get();
         Element element = metaCode.select(tagName).first();
-        assert element != null;
         return element.attr(attribute);
-    }
-    public static String getImgRequest(String url) throws IOException {
-        OkHttpClient client = new OkHttpClient();
-        Request request = new Request.Builder()
-                .url(url)
-                .build();
-
-        Response response = client.newCall(request).execute();
-        System.out.println(response.body().string());
-        return response.body().string();
     }
 }
