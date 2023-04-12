@@ -64,7 +64,7 @@ public class HomeController implements Initializable {
 
     public void initializeState() throws IOException {
         System.out.println(MovieAPI.getCustomURL());
-        allMovies = Movie.initializeMovies(MovieAPI.getRequest());
+        allMovies = Movie.initializeMovies(MovieAPI.getApiRequest());
         observableMovies.clear();
         observableMovies.addAll(allMovies); // add all movies to the observable list
         sortedState = SortedState.NONE;
@@ -204,7 +204,7 @@ public class HomeController implements Initializable {
         }
 
         System.out.println(MovieAPI.getCustomURL());
-        allMovies = Movie.initializeMovies(MovieAPI.getRequest());
+        allMovies = Movie.initializeMovies(MovieAPI.getApiRequest());
 
         observableMovies.clear();
         observableMovies.addAll(allMovies); // add all movies to the observable list

@@ -1,8 +1,10 @@
 package at.ac.fhcampuswien.fhmdb.api;
 
 import java.io.IOException;
-
 import okhttp3.*;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
 
 public class MovieAPI {
 
@@ -39,7 +41,7 @@ public class MovieAPI {
     }
 
 
-    public static String getRequest() throws IOException {
+    public static String getApiRequest() throws IOException {
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder()
                 .url(customURL)
@@ -53,5 +55,21 @@ public class MovieAPI {
 
     public static String getCustomURL() {
         return customURL;
+    }
+    public static String getTrueImgUrl(String url, String tagName, String attribute) throws IOException {
+        Document metaCode = Jsoup.connect(url).get();
+        Element element = metaCode.select(tagName).first();
+        assert element != null;
+        return element.attr(attribute);
+    }
+    public static String getImgRequest(String url) throws IOException {
+        OkHttpClient client = new OkHttpClient();
+        Request request = new Request.Builder()
+                .url(url)
+                .build();
+
+        Response response = client.newCall(request).execute();
+        System.out.println(response.body().string());
+        return response.body().string();
     }
 }
