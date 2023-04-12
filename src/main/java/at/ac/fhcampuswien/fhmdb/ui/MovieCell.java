@@ -79,6 +79,7 @@ public class MovieCell extends ListCell<Movie> {
             genre.getStyleClass().add("text-white");
             rating.getStyleClass().add("text-white");
             writers.getStyleClass().add("text-white");
+            mainCast.getStyleClass().add("text-white");
             directors.getStyleClass().add("text-white");
             releaseYear.getStyleClass().add("text-white");
             genre.setStyle("-fx-font-style: italic");

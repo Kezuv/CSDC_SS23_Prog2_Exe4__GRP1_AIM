@@ -35,6 +35,10 @@
          <JFXComboBox fx:id="releasedYearComboBox" focusColor="#f5c518" styleClass="filter-combo-box" stylesheets="@styles.css" />
          <JFXComboBox fx:id="ratingComboBox" focusColor="#f5c518" styleClass="filter-combo-box" stylesheets="@styles.css" />
          <JFXButton fx:id="searchBtn" styleClass="background-yellow" stylesheets="@styles.css" text="Filter" onAction="#searchBtnClicked"/>
+
+         <TextField fx:id="directorsField" prefHeight="25.0" prefWidth="170.0"  />
+         <JFXButton fx:id="directorsBtn" styleClass="background-yellow" stylesheets="@styles.css" text="Count" onAction="#countDirectorsMovies"/>
+         <Label fx:id="directorsCount" styleClass="background-yellow" stylesheets="@styles.css"/>
       </children>
       <VBox.margin>
          <Insets />
