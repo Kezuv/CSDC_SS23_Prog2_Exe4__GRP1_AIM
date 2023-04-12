@@ -24,7 +24,7 @@ public class MovieAPI {
                 customURL = customURL + "genre=" + value;
                 break;
             case YEAR:
-                customURL = customURL + "releasedYear=" + value;
+                customURL = customURL + "releaseYear=" + value;
                 break;
             case RATING:
                 customURL = customURL + "ratingFrom=" + value;
