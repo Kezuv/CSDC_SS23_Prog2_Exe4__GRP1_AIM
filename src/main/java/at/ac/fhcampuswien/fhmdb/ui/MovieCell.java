@@ -10,6 +10,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import java.io.IOException;
@@ -61,7 +62,8 @@ public class MovieCell extends ListCell<Movie> {
                     .map(Enum::toString)
                     .collect(Collectors.joining(", "));
             genre.setText(genres);
-            rating.setText(String.valueOf(movie.getRating()));
+            rating.setText("Rating: " + String.valueOf(movie.getRating()));
+            //For fast testing comment the code below (try to catch)
             try {
                 imgView.setImage(new Image(MovieAPI.getTrueImgUrl(movie.getImgUrl(), "meta[property=og:image]", "content")));
                 imgView.setFitHeight(100);
