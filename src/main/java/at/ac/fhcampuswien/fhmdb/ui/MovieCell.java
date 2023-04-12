@@ -25,6 +25,7 @@ public class MovieCell extends ListCell<Movie> {
     private final Label writers = new Label();
     private final Label mainCast = new Label();
     private final Label rating = new Label();
+    private final Label releaseYear = new Label();
     private final ImageView imgView = new ImageView();
     private final VBox layout = new VBox();
     private boolean isExpanded = false;
@@ -64,11 +65,12 @@ public class MovieCell extends ListCell<Movie> {
                     .map(Enum::toString)
                     .collect(Collectors.joining(", "));
             genre.setText(genres);
-            rating.setText("Rating: " + String.valueOf(movie.getRating()));
             if (isExpanded){
                 directors.setText(setUpList(movie.getDirectors(), "Directors"));
                 writers.setText(setUpList(movie.getWriters(), "Writers"));
                 mainCast.setText(setUpList(movie.getMainCast(), "Main Cast"));
+                rating.setText("Rating: " + movie.getRating());
+                releaseYear.setText("Release Year: " + movie.getReleaseYear());
             }
 
             // color scheme
@@ -78,7 +80,7 @@ public class MovieCell extends ListCell<Movie> {
             rating.getStyleClass().add("text-white");
             writers.getStyleClass().add("text-white");
             directors.getStyleClass().add("text-white");
-
+            releaseYear.getStyleClass().add("text-white");
             genre.setStyle("-fx-font-style: italic");
             layout.setBackground(new Background(new BackgroundFill(Color.web("#454545"), null, null)));
 
@@ -101,7 +103,7 @@ public class MovieCell extends ListCell<Movie> {
                     throw new RuntimeException(e);
                 }
                 layout.getChildren().clear();
-                layout.getChildren().addAll(imgView, title, description, genre, directors, writers, mainCast, rating);
+                layout.getChildren().addAll(imgView, title, description, directors, writers, mainCast, rating, releaseYear, genre);
             } else {
                 layout.getChildren().clear();
                 layout.getChildren().addAll(title, description, genre);

@@ -126,7 +126,7 @@ public class HomeController implements Initializable {
         }
         return movies.stream()
                 .filter(Objects::nonNull)
-                .filter(movie -> movie.getReleasedYear() == releaseYear)
+                .filter(movie -> movie.getReleaseYear() == releaseYear)
                 .toList();
     }
 
