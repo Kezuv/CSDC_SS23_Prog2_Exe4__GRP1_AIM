@@ -19,10 +19,9 @@ import javafx.scene.control.TextField;
 import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Objects;
-import java.util.ResourceBundle;
+import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 public class HomeController implements Initializable {
     @FXML
@@ -95,6 +94,7 @@ public class HomeController implements Initializable {
         }
     }
 
+    /*Commented out for now and will be removed after correct functions
     public List<Movie> filterByQuery(List<Movie> movies, String query){
         if(query == null || query.isEmpty()) return movies;
         if(movies == null) {
@@ -107,8 +107,9 @@ public class HomeController implements Initializable {
                     movie.getDescription().toLowerCase().contains(query.toLowerCase())
                 )
                 .toList();
-    }
+    }*/
 
+    /*Commented out for now and will be removed after correct functions
     public List<Movie> filterByGenre(List<Movie> movies, Genre genre){
         if(genre == null) return movies;
         if(movies == null) {
@@ -118,8 +119,8 @@ public class HomeController implements Initializable {
                 .filter(Objects::nonNull)
                 .filter(movie -> movie.getGenres().contains(genre))
                 .toList();
-    }
-
+    }*/
+    /*Commented out for now and will be removed after correct functions
     public List<Movie> filterByReleaseYear(List<Movie> movies, int releaseYear) {
         if(movies == null) {
             throw new IllegalArgumentException("movies must not be null");
@@ -128,8 +129,9 @@ public class HomeController implements Initializable {
                 .filter(Objects::nonNull)
                 .filter(movie -> movie.getReleaseYear() == releaseYear)
                 .toList();
-    }
+    }*/
 
+    /*Commented out for now and will be removed after correct functions
     public List<Movie> filterByRating(List<Movie> movies, double minRating) {
         if(movies == null) {
             throw new IllegalArgumentException("movies must not be null");
@@ -138,8 +140,28 @@ public class HomeController implements Initializable {
                 .filter(Objects::nonNull)
                 .filter(movie -> movie.getRating() >= minRating && movie.getRating() < minRating +1)
                 .toList();
+    }*/
+
+    //If more actors has the same count, only the first one was returned
+    public String getMostPopularActor(List<Movie> movies){
+        return movies.stream()
+                .flatMap(movie -> movie.getMainCast().stream())
+                .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()))
+                .entrySet().stream()
+                .max(Map.Entry.comparingByValue())
+                .map(Map.Entry::getKey)
+                .orElse("");//<- If nothing is there
     }
 
+    //If more movies has the same length, only the first one was returned
+    public int getLongestMovieTitle(List<Movie> movies){
+        return movies.stream()
+                .mapToInt(movie -> movie.getTitle().length())//<- .trim() before .length() would remove the spaces too
+                .max()
+                .orElse(0);//<- If nothing is there
+    }
+
+    /*Commented out for now and will be removed after correct functions
     public void applyAllFilters(String searchQuery, Object genre, Object releaseYear, Object rating) {
         List<Movie> filteredMovies = allMovies;
 
@@ -158,7 +180,7 @@ public class HomeController implements Initializable {
 
         observableMovies.clear();
         observableMovies.addAll(filteredMovies);
-    }
+    }*/
 
     public void searchBtnClicked(ActionEvent actionEvent) throws IOException {
         String searchQuery =  searchField.getText().trim().toLowerCase();
