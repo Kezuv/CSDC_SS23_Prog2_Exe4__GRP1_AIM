@@ -217,11 +217,11 @@ public class HomeController implements Initializable {
         }
 
         String releaseYear = (String) releaseYearComboBox.getSelectionModel().getSelectedItem();
-        Integer endReleaseYear = (Integer) yearRangeComboBox.getSelectionModel().getSelectedItem();
-        String endReleaseYearStr = endReleaseYear != null ? String.valueOf(endReleaseYear) : null;
+        String endReleaseYearStr =  yearRangeComboBox.getSelectionModel().getSelectedItem() != null ? yearRangeComboBox.getSelectionModel().getSelectedItem().toString() : "no filter";
+        Integer endReleaseYear = !endReleaseYearStr.equals("no filter") ? Integer.parseInt(endReleaseYearStr) : null;
 
-        if (endReleaseYear != null && !endReleaseYear.equals("No filter")) {
-            for (int i = Integer.parseInt((String) releaseYear); i ==Integer.parseInt((String) endReleaseYearStr); ++i) {
+        if (endReleaseYear != null) {
+            for (int i = Integer.parseInt(releaseYear); i ==endReleaseYear; ++i) {
                 MovieAPI.addParam(SearchParameter.YEAR, String.valueOf(i));
             }
         } else if (releaseYear != null && !releaseYear.equals("No filter")) {
