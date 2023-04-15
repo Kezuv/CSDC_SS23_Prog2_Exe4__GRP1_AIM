@@ -36,6 +36,8 @@ public class HomeController implements Initializable {
     @FXML
     public JFXComboBox releasedYearComboBox;
     @FXML
+    public JFXComboBox yearRangeComboBox;
+    @FXML
     public JFXComboBox ratingComboBox;
     @FXML
     public JFXButton sortBtn;
@@ -72,8 +74,27 @@ public class HomeController implements Initializable {
         releasedYearComboBox.setPromptText("Filter by Release Year"); // set the prompt text for the year combobox
         releasedYearComboBox.getItems().add("No filter"); // add "no filter" to the year combobox
         for(int year = LocalDate.now().getYear(); year >= 1950; year--) {
-            releasedYearComboBox.getItems().add(String.valueOf(year)); // add each year from 1900 to current year to the year combobox
+            releasedYearComboBox.getItems().add(String.valueOf(year)); // add each year from 1950 to current year to the year combobox
         }
+
+        yearRangeComboBox.getItems().add("No filter");
+        yearRangeComboBox.setPromptText("Filter by Year Range"); // set the prompt text for the year combobox
+        yearRangeComboBox.setDisable(true); // disable the range combobox initially
+        releasedYearComboBox.valueProperty().addListener((observableValue, oldValue, newValue) -> {
+            if (!newValue.equals("No filter")) {
+                int releaseYear = Integer.parseInt(String.valueOf(newValue));
+                yearRangeComboBox.getItems().clear();
+                yearRangeComboBox.getItems().add("No filter");
+                for (int i = releaseYear; i <= LocalDate.now().getYear(); i++) {
+                    yearRangeComboBox.getItems().add(i);
+                }
+                yearRangeComboBox.setDisable(false);
+            } else {
+                yearRangeComboBox.getItems().clear();
+                yearRangeComboBox.getItems().add("No filter");
+                yearRangeComboBox.setDisable(true);
+            }
+        });
 
         ratingComboBox.setPromptText("Filter by Rating"); // set the prompt text for the year combobox
         ratingComboBox.getItems().add("No filter"); // add "no filter" to the year combobox
