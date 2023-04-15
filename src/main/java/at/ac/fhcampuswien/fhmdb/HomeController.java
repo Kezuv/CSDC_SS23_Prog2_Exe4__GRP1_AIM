@@ -34,7 +34,7 @@ public class HomeController implements Initializable {
     @FXML
     public JFXComboBox genreComboBox;
     @FXML
-    public JFXComboBox releasedYearComboBox;
+    public JFXComboBox releaseYearComboBox;
     @FXML
     public JFXComboBox yearRangeComboBox;
     @FXML
@@ -71,29 +71,29 @@ public class HomeController implements Initializable {
             genreComboBox.getItems().addAll(genres[i].name());    // add all genres to the genre combobox
         }
 
-        releasedYearComboBox.setPromptText("Filter by Release Year"); // set the prompt text for the year combobox
-        releasedYearComboBox.getItems().add("No filter"); // add "no filter" to the year combobox
+        releaseYearComboBox.setPromptText("Filter by Release Year"); // set the prompt text for the year combobox
+        releaseYearComboBox.getItems().add("No filter"); // add "no filter" to the year combobox
         for(int year = LocalDate.now().getYear(); year >= 1950; year--) {
-            releasedYearComboBox.getItems().add(String.valueOf(year)); // add each year from 1950 to current year to the year combobox
+            releaseYearComboBox.getItems().add(String.valueOf(year)); // add each year from 1950 to current year to the year combobox
         }
 
-        yearRangeComboBox.getItems().add("No filter");
-        yearRangeComboBox.setPromptText("Filter by Year Range"); // set the prompt text for the year combobox
+        yearRangeComboBox.setPromptText("Year Range"); // set the prompt text for the year combobox
+        yearRangeComboBox.getItems().add("No filter"); // add "No filter"
         yearRangeComboBox.setDisable(true); // disable the range combobox initially
-        releasedYearComboBox.valueProperty().addListener((observableValue, oldValue, newValue) -> {
-            if (!newValue.equals("No filter")) {
-                int releaseYear = Integer.parseInt(String.valueOf(newValue));
-                yearRangeComboBox.getItems().clear();
-                yearRangeComboBox.getItems().add("No filter");
-                for (int i = releaseYear; i <= LocalDate.now().getYear(); i++) {
-                    yearRangeComboBox.getItems().add(i);
-                }
-                yearRangeComboBox.setDisable(false);
-            } else {
-                yearRangeComboBox.getItems().clear();
-                yearRangeComboBox.getItems().add("No filter");
-                yearRangeComboBox.setDisable(true);
+        releaseYearComboBox.valueProperty().addListener((observableValue, oldValue, newValue) -> {
+        if (!newValue.equals("No filter")) {
+            int releaseYear = Integer.parseInt(String.valueOf(newValue));
+            yearRangeComboBox.getItems().clear();
+            yearRangeComboBox.getItems().add("No filter"); // add a null value for the "No filter" option
+            for (int i = LocalDate.now().getYear(); i >= releaseYear; i--) {
+                yearRangeComboBox.getItems().add(i);
             }
+            yearRangeComboBox.setDisable(false);
+        } else {
+            yearRangeComboBox.getItems().clear();
+            yearRangeComboBox.getItems().add("No filter"); // add a null value for the "No filter" option
+            yearRangeComboBox.setDisable(true);
+        }
         });
 
         ratingComboBox.setPromptText("Filter by Rating"); // set the prompt text for the year combobox
@@ -161,7 +161,16 @@ public class HomeController implements Initializable {
                 .toList();
     }
 
-    public void applyAllFilters(String searchQuery, Object genre, Object releaseYear, Object rating) {
+    public List<Movie> getMoviesBetweenYears(List<Movie> movies, int startYear, int endYear) {
+        if (movies == null) {
+            throw new IllegalArgumentException("movies must not be null");
+        }
+        return movies.stream()
+                .filter(Objects::nonNull)
+                .filter(movie -> movie.getReleaseYear() >= startYear && movie.getReleaseYear() <= endYear)
+                .toList();
+    }
+    public void applyAllFilters(String searchQuery, Object genre, Object releaseYear, Object rating, Object endReleaseYear) {
         List<Movie> filteredMovies = allMovies;
 
         if (!searchQuery.isEmpty()) {
@@ -171,7 +180,11 @@ public class HomeController implements Initializable {
             filteredMovies = filterByGenre(filteredMovies, Genre.valueOf(genre.toString()));
         }
         if (releaseYear != null && !releaseYear.toString().equals("No filter")) {
-            filteredMovies = filterByReleaseYear(filteredMovies, Integer.parseInt(releaseYear.toString()));
+            if (endReleaseYear != null && !endReleaseYear.equals("No filter")) {
+                filteredMovies = getMoviesBetweenYears(filteredMovies, Integer.parseInt(releaseYear.toString()), Integer.parseInt(endReleaseYear.toString()));
+            } else {
+                filteredMovies = filterByReleaseYear(filteredMovies, Integer.parseInt(releaseYear.toString()));
+            }
         }
         if (rating != null && !rating.toString().equals("No filter")) {
             filteredMovies = filterByRating(filteredMovies, Double.parseDouble(rating.toString()));
@@ -192,8 +205,13 @@ public class HomeController implements Initializable {
             MovieAPI.addParam(SearchParameter.GENRE, genre);
         }
 
-        String releaseYear = (String) releasedYearComboBox.getSelectionModel().getSelectedItem();
-        if (releaseYear != null && !releaseYear.equals("No filter")) {
+        String releaseYear = (String) releaseYearComboBox.getSelectionModel().getSelectedItem();
+        Integer endReleaseYear = (Integer) yearRangeComboBox.getSelectionModel().getSelectedItem();
+        String endReleaseYearStr = endReleaseYear != null ? String.valueOf(endReleaseYear) : null;
+
+        if (endReleaseYear != null && !endReleaseYear.equals("No filter")) {
+            MovieAPI.addParam(SearchParameter.YEAR,endReleaseYearStr );
+        } else if (releaseYear != null && !releaseYear.equals("No filter")) {
             MovieAPI.addParam(SearchParameter.YEAR, releaseYear);
         }
 
@@ -206,11 +224,14 @@ public class HomeController implements Initializable {
         observableMovies.clear();
         observableMovies.addAll(allMovies); // add all movies to the observable list
         sortedState = SortedState.NONE;
-        //applyAllFilters(searchQuery, genre, releaseYear, rating);
+        applyAllFilters(searchQuery, genre, releaseYear, rating, endReleaseYear);
         if (sortedState != SortedState.NONE) {
             sortMovies();
         }
     }
+
+
+
 
     public void sortBtnClicked(ActionEvent actionEvent) {
         sortMovies();
