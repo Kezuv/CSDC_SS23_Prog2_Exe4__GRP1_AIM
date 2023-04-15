@@ -19,10 +19,9 @@ import javafx.scene.control.TextField;
 import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Objects;
-import java.util.ResourceBundle;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class HomeController implements Initializable {
     @FXML
@@ -77,14 +76,15 @@ public class HomeController implements Initializable {
             releaseYearComboBox.getItems().add(String.valueOf(year)); // add each year from 1950 to current year to the year combobox
         }
 
-        yearRangeComboBox.setPromptText("Year Range"); // set the prompt text for the year combobox
+        yearRangeComboBox.setPromptText("Filter movies in range"); // set the prompt text for the year combobox
         yearRangeComboBox.getItems().add("No filter"); // add "No filter"
         yearRangeComboBox.setDisable(true); // disable the range combobox initially
+
         releaseYearComboBox.valueProperty().addListener((observableValue, oldValue, newValue) -> {
         if (!newValue.equals("No filter")) {
             int releaseYear = Integer.parseInt(String.valueOf(newValue));
             yearRangeComboBox.getItems().clear();
-            yearRangeComboBox.getItems().add("No filter"); // add a null value for the "No filter" option
+            yearRangeComboBox.getItems().add("No filter");
             for (int i = LocalDate.now().getYear(); i >= releaseYear; i--) {
                 yearRangeComboBox.getItems().add(i);
             }
@@ -167,9 +167,19 @@ public class HomeController implements Initializable {
         }
         return movies.stream()
                 .filter(Objects::nonNull)
-                .filter(movie -> movie.getReleaseYear() >= startYear && movie.getReleaseYear() <= endYear)
+                .filter(movie -> {
+                    int releaseYear = movie.getReleaseYear();
+                    return releaseYear >= startYear && releaseYear <= endYear;
+                })
                 .toList();
     }
+
+
+
+
+
+
+
     public void applyAllFilters(String searchQuery, Object genre, Object releaseYear, Object rating, Object endReleaseYear) {
         List<Movie> filteredMovies = allMovies;
 
@@ -179,13 +189,14 @@ public class HomeController implements Initializable {
         if (genre != null && !genre.toString().equals("No filter")) {
             filteredMovies = filterByGenre(filteredMovies, Genre.valueOf(genre.toString()));
         }
-        if (releaseYear != null && !releaseYear.toString().equals("No filter")) {
-            if (endReleaseYear != null && !endReleaseYear.equals("No filter")) {
-                filteredMovies = getMoviesBetweenYears(filteredMovies, Integer.parseInt(releaseYear.toString()), Integer.parseInt(endReleaseYear.toString()));
-            } else {
-                filteredMovies = filterByReleaseYear(filteredMovies, Integer.parseInt(releaseYear.toString()));
-            }
+
+        if (endReleaseYear != null && !endReleaseYear.equals("No filter")) {
+            filteredMovies = getMoviesBetweenYears(filteredMovies,
+                    Integer.parseInt((String) releaseYear), Integer.parseInt(endReleaseYear.toString()));
+        } else if (releaseYear != null && !releaseYear.toString().equals("No filter")) {
+            filteredMovies = filterByReleaseYear(filteredMovies, Integer.parseInt(releaseYear.toString()));
         }
+
         if (rating != null && !rating.toString().equals("No filter")) {
             filteredMovies = filterByRating(filteredMovies, Double.parseDouble(rating.toString()));
         }
@@ -210,7 +221,9 @@ public class HomeController implements Initializable {
         String endReleaseYearStr = endReleaseYear != null ? String.valueOf(endReleaseYear) : null;
 
         if (endReleaseYear != null && !endReleaseYear.equals("No filter")) {
-            MovieAPI.addParam(SearchParameter.YEAR,endReleaseYearStr );
+            for (int i = Integer.parseInt((String) releaseYear); i ==Integer.parseInt((String) endReleaseYearStr); ++i) {
+                MovieAPI.addParam(SearchParameter.YEAR, String.valueOf(i));
+            }
         } else if (releaseYear != null && !releaseYear.equals("No filter")) {
             MovieAPI.addParam(SearchParameter.YEAR, releaseYear);
         }
