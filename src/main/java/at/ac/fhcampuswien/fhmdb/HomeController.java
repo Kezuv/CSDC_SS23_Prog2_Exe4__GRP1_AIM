@@ -270,8 +270,8 @@ public class HomeController implements Initializable {
         longestTitle.setText("Longest Movie Title: " + getLongestMovieTitleName(allMovies));
         titleCount.setText("Total: " + getLongestMovieTitle(allMovies));
 
-        countDirectorsMovie.getItems().clear();
         countDirectorsMovie.setPromptText("Directors Movie Count"); // set the prompt text for the year combobox
+        countDirectorsMovie.getItems().clear();
         countDirectorsMovie.getItems().add("No filter"); // add "no filter" to the year combobox
         countDirectorsMovie.getItems().addAll(getDirectorsNames(allMovies));
         directorsCount.setText("Total: ");

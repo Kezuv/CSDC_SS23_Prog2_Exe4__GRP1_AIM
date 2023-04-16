@@ -28,17 +28,26 @@
          <JFXButton fx:id="sortBtn" onAction="#sortBtnClicked" styleClass="background-yellow" stylesheets="@styles.css" text="Sort" />
          <TextField fx:id="searchField" prefHeight="25.0" prefWidth="170.0" promptText="Search FHMDb" />
          <JFXComboBox fx:id="genreComboBox" focusColor="#f5c518" styleClass="filter-combo-box" stylesheets="@styles.css" />
-         <Label styleClass="text-yellow" stylesheets="@styles.css" text="From:">
+         <Label alignment="BOTTOM_LEFT" styleClass="text-yellow" stylesheets="@styles.css" text="From:">
             <font>
                <Font size="15.0" />
             </font>
+            <opaqueInsets>
+               <Insets />
+            </opaqueInsets>
+            <padding>
+               <Insets top="5.0" />
+            </padding>
          </Label>
          <JFXComboBox fx:id="releaseYearComboBox" focusColor="#f5c518" prefWidth="75.0" styleClass="filter-combo-box" stylesheets="@styles.css" />
          <VBox spacing="5" />
-         <Label styleClass="text-yellow" stylesheets="@styles.css" text="To:" textAlignment="CENTER">
+         <Label alignment="BASELINE_LEFT" styleClass="text-yellow" stylesheets="@styles.css" text="To:" textAlignment="CENTER">
             <font>
                <Font size="15.0" />
             </font>
+            <padding>
+               <Insets right="5.0" top="5.0" />
+            </padding>
          </Label>
          <JFXComboBox fx:id="yearRangeComboBox" focusColor="#f5c518" prefWidth="75.0" promptText="Year" styleClass="filter-combo-box" stylesheets="@styles.css" />
          <JFXComboBox fx:id="ratingComboBox" focusColor="#f5c518" styleClass="filter-combo-box" stylesheets="@styles.css" />
@@ -56,10 +65,10 @@
          <JFXListView fx:id="movieListView" prefWidth="568.0" stylesheets="@styles.css" VBox.vgrow="ALWAYS" />
          <HBox fx:id="content" maxHeight="40" styleClass="background-black" stylesheets="@styles.css" VBox.vgrow="ALWAYS">
             <children>
-               <HBox fx:id="directorsHBox" prefHeight="100" prefWidth="200.0">
+               <HBox fx:id="directorsHBox" spacing="20.0">
                   <children>
-                     <JFXComboBox fx:id="countDirectorsMovie" focusColor="#f5c518" prefHeight="20" prefWidth="130.0" promptText="Count Directors Movie" styleClass="filter-combo-box" stylesheets="@styles.css" />
-                     <Label fx:id="directorsCount" styleClass="text-yellow" stylesheets="@styles.css" text="directorsCount">
+                     <JFXComboBox fx:id="countDirectorsMovie" focusColor="#f5c518" promptText="Count Directors Movie" styleClass="filter-combo-box" stylesheets="@styles.css" />
+                     <Label fx:id="directorsCount" alignment="BOTTOM_LEFT" styleClass="text-yellow" stylesheets="@styles.css" text="directorsCount">
                         <font>
                            <Font size="15.0" />
                         </font></Label>
@@ -68,20 +77,35 @@
                      <Insets />
                   </opaqueInsets>
                </HBox>
-               <Label fx:id="mostPopularActor" styleClass="text-yellow" stylesheets="@styles.css" text="Most Popular Actor">
-                  <font>
-                     <Font size="15.0" />
-                  </font></Label>
-               <Label fx:id="longestTitle" styleClass="text-yellow" stylesheets="@styles.css" text="Longest Title">
-                  <font>
-                     <Font size="15.0" />
-                  </font>
-               </Label>
-               <Label fx:id="titleCount" styleClass="text-yellow" stylesheets="@styles.css" text="TitleCount">
-                  <font>
-                     <Font size="15.0" />
-                  </font>
-               </Label>
+               <HBox spacing="20.0">
+                  <children>
+                     <Label fx:id="mostPopularActor" alignment="BOTTOM_LEFT" styleClass="text-yellow" stylesheets="@styles.css" text="Most Popular Actor">
+                        <font>
+                           <Font size="15.0" />
+                        </font>
+                     </Label>
+                  </children>
+                  <padding>
+                     <Insets left="50.0" />
+                  </padding>
+               </HBox>
+               <HBox spacing="20.0">
+                  <children>
+                     <Label fx:id="longestTitle" alignment="BOTTOM_LEFT" styleClass="text-yellow" stylesheets="@styles.css" text="Longest Title">
+                        <font>
+                           <Font size="15.0" />
+                        </font>
+                     </Label>
+                     <Label fx:id="titleCount" alignment="BOTTOM_LEFT" styleClass="text-yellow" stylesheets="@styles.css" text="TitleCount">
+                        <font>
+                           <Font size="15.0" />
+                        </font>
+                     </Label>
+                  </children>
+                  <padding>
+                     <Insets left="50.0" />
+                  </padding>
+               </HBox>
             </children></HBox>
       </children>
    </VBox>
