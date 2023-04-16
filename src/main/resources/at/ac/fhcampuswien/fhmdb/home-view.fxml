@@ -54,8 +54,20 @@
    <VBox prefHeight="200.0" prefWidth="100.0" VBox.vgrow="ALWAYS">
       <children>
          <JFXListView fx:id="movieListView" prefWidth="568.0" stylesheets="@styles.css" VBox.vgrow="ALWAYS" />
-         <HBox fx:id="content" maxHeight="30" styleClass="background-black" stylesheets="@styles.css" VBox.vgrow="ALWAYS">
+         <HBox fx:id="content" maxHeight="40" styleClass="background-black" stylesheets="@styles.css" VBox.vgrow="ALWAYS">
             <children>
+               <HBox fx:id="directorsHBox" prefHeight="100" prefWidth="200.0">
+                  <children>
+                     <JFXComboBox fx:id="countDirectorsMovie" focusColor="#f5c518" prefHeight="20" prefWidth="130.0" promptText="Count Directors Movie" styleClass="filter-combo-box" stylesheets="@styles.css" />
+                     <Label fx:id="directorsCount" styleClass="text-yellow" stylesheets="@styles.css" text="directorsCount">
+                        <font>
+                           <Font size="15.0" />
+                        </font></Label>
+                  </children>
+                  <opaqueInsets>
+                     <Insets />
+                  </opaqueInsets>
+               </HBox>
                <Label fx:id="mostPopularActor" styleClass="text-yellow" stylesheets="@styles.css" text="Most Popular Actor">
                   <font>
                      <Font size="15.0" />
@@ -70,14 +82,6 @@
                      <Font size="15.0" />
                   </font>
                </Label>
-               <HBox prefHeight="100.0" prefWidth="200.0">
-                  <children>
-            
-                     <TextField fx:id="directorsField" prefHeight="25.0" prefWidth="170.0" />
-                     <JFXButton fx:id="directorsBtn" onAction="#countDirectorsMovies" styleClass="background-yellow" stylesheets="@styles.css" text="Count" />
-                     <Label fx:id="directorsCount" styleClass="text-yellow" stylesheets="@styles.css" text="directorsCount" />
-                  </children>
-               </HBox>
             </children></HBox>
       </children>
    </VBox>

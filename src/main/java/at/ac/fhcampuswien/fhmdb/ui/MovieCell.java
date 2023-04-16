@@ -8,6 +8,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseButton;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -33,9 +34,10 @@ public class MovieCell extends ListCell<Movie> {
 
     private final HBox header = new HBox();
     private final VBox details = new VBox();
+
     private final HBox team = new HBox();
     private final VBox directorsWriters = new VBox();
-    private boolean isExpanded = false;
+
 
     private String setUpList(List<String> type, String description){
 
@@ -59,6 +61,18 @@ public class MovieCell extends ListCell<Movie> {
             setText(null);
         } else {
             this.getStyleClass().add("movie-cell");
+
+
+            setOnMouseClicked(event -> {
+                if (event.getButton() == MouseButton.PRIMARY) {
+                    movie.setExpanded(true);
+                    updateItem(movie, false);
+                }
+                if (event.getButton() == MouseButton.SECONDARY){
+                    movie.setExpanded(false);
+                    updateItem(movie, false);
+                }
+            });
 
             //gernal
 
@@ -92,7 +106,7 @@ public class MovieCell extends ListCell<Movie> {
             layout.setMinWidth(getScene().getWindow().getWidth() * 0.975);
 
             //if !isExpanded (small / not selected)
-            if (!isExpanded){
+            if (!movie.isExpanded()){
 
                 //set Text
                 releaseYear.setText("(" + movie.getReleaseYear() + ")");
@@ -145,7 +159,9 @@ public class MovieCell extends ListCell<Movie> {
                 releaseYear.fontProperty().set(releaseYear.getFont().font(12));
 
                 //set layout
-                imgView.setFitHeight(100);
+                imgBox.setMaxWidth(300);
+                imgBox.setAlignment(Pos.CENTER);
+                imgView.setFitWidth(imgBox.getMaxWidth());
                 imgView.setPreserveRatio(true);
                 imgView.setSmooth(true);
                 imgView.setCache(true);
@@ -169,12 +185,19 @@ public class MovieCell extends ListCell<Movie> {
                         details.getChildren().add(team);
                 content.getChildren().add(details);
 
+                details.spacingProperty().set(20);
+                content.spacingProperty().set(50);
+                team.spacingProperty().set(50);
+                content.setPadding(new Insets(30,0,30,30));
                 layout.getChildren().clear();
                 layout.getChildren().add(content);
 
 
 
             }
+
+            //size Layout
+
             layout.setPadding(new Insets(10));
             layout.spacingProperty().set(10);
             layout.alignmentProperty().set(Pos.CENTER_LEFT);
@@ -184,11 +207,5 @@ public class MovieCell extends ListCell<Movie> {
         }
     }
 
-    @Override
-    public void startEdit() {
-        super.startEdit();
-        isExpanded = !isExpanded;
-        updateItem(getItem(), false);
-    }
 }
 
