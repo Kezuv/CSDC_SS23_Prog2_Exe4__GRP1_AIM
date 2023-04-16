@@ -8,11 +8,11 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
+
 import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -28,6 +28,13 @@ public class MovieCell extends ListCell<Movie> {
     private final Label releaseYear = new Label();
     private final ImageView imgView = new ImageView();
     private final VBox layout = new VBox();
+    private final VBox imgBox = new VBox();
+    private final HBox content = new HBox();
+
+    private final HBox header = new HBox();
+    private final VBox details = new VBox();
+    private final HBox team = new HBox();
+    private final VBox directorsWriters = new VBox();
     private boolean isExpanded = false;
 
     private String setUpList(List<String> type, String description){
@@ -52,7 +59,11 @@ public class MovieCell extends ListCell<Movie> {
             setText(null);
         } else {
             this.getStyleClass().add("movie-cell");
-            // set Text
+
+            //gernal
+
+            //set Text
+
             title.setText(movie.getTitle());
             description.setText(
                     movie.getDescription() != null
@@ -60,56 +71,118 @@ public class MovieCell extends ListCell<Movie> {
                             : "No description available"
             );
 
-            String genres = movie.getGenres()
+            String genres = "Genres: " + movie.getGenres()
                     .stream()
                     .map(Enum::toString)
                     .collect(Collectors.joining(", "));
             genre.setText(genres);
-            if (isExpanded){
-                directors.setText(setUpList(movie.getDirectors(), "Directors"));
-                writers.setText(setUpList(movie.getWriters(), "Writers"));
-                mainCast.setText(setUpList(movie.getMainCast(), "Main Cast"));
-                rating.setText("Rating: " + movie.getRating());
-                releaseYear.setText("Release Year: " + movie.getReleaseYear());
-            }
+            rating.setText(String.valueOf(movie.getRating()));
 
-            // color scheme
+            //set style
             title.getStyleClass().add("text-yellow");
+            title.fontProperty().set(title.getFont().font(20));
+
+            rating.getStyleClass().add("text-yellow");
+            rating.fontProperty().set(rating.getFont().font(20));
+
             description.getStyleClass().add("text-white");
             genre.getStyleClass().add("text-white");
-            rating.getStyleClass().add("text-white");
-            writers.getStyleClass().add("text-white");
-            directors.getStyleClass().add("text-white");
-            releaseYear.getStyleClass().add("text-white");
             genre.setStyle("-fx-font-style: italic");
             layout.setBackground(new Background(new BackgroundFill(Color.web("#454545"), null, null)));
 
+            //Width of the cell´s
+            layout.setPrefWidth(getScene().getWindow().getWidth() * 0.975);
+            layout.setMinWidth(getScene().getWindow().getWidth() * 0.975);
 
-            // layout
-            title.fontProperty().set(title.getFont().font(20));
-            description.setMaxWidth(this.getScene().getWidth() - 30);
-            description.setWrapText(true);
-            layout.setPadding(new Insets(10));
-            layout.spacingProperty().set(10);
-            layout.alignmentProperty().set(Pos.CENTER_LEFT);
-            if (isExpanded) {
+            //if !isExpanded (small / not selected)
+            if (!isExpanded){
+
+                //set Text
+                releaseYear.setText("(" + movie.getReleaseYear() + ")");
+
+
+                //set style
+                rating.getStyleClass().add("text-white");
+                rating.setFont(Font.font("System", FontWeight.BOLD, 15));
+                releaseYear.getStyleClass().clear();
+                releaseYear.getStyleClass().add("text-white");
+                releaseYear.setFont(Font.font("System", FontWeight.BOLD,15));
+
+                //set layout
+                //Region sets the Rating to the right & updating the HBox-settings
+                Region setRight = new Region();
+                HBox.setHgrow(setRight, Priority.ALWAYS);
+                setRight.maxWidthProperty().bind(header.widthProperty().subtract(title.widthProperty()).subtract(releaseYear.widthProperty()).subtract(rating.widthProperty()));
+                header.getChildren().clear();
+                header.getChildren().addAll(title, releaseYear, setRight, rating);
+                header.spacingProperty().set(5);
+                header.setAlignment(Pos.BASELINE_LEFT);
+
+
+                layout.getChildren().clear();
+                layout.getChildren().addAll(header, description, genre);
+
+            }
+            // if isExpanded (big / selected)
+            else {
+
+                //set Text
+                directors.setText(setUpList(movie.getDirectors(), "Directors"));
+                writers.setText(setUpList(movie.getWriters(), "Writers"));
+                mainCast.setText(setUpList(movie.getMainCast(), "Main Cast"));
+                releaseYear.setText("Release Year: " + movie.getReleaseYear());
+
                 try {
                     imgView.setImage(new Image(MovieAPI.getTrueImgUrl(movie.getImgUrl())));
-                    imgView.setFitHeight(100);
-                    imgView.setPreserveRatio(true);
-                    imgView.setSmooth(true);
-                    imgView.setCache(true);
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
-                layout.getChildren().clear();
-                layout.getChildren().addAll(imgView, title, description, directors, writers, mainCast, rating, releaseYear, genre);
-            } else {
-                layout.getChildren().clear();
-                layout.getChildren().addAll(title, description, genre);
-            }
 
+                //set style
+                writers.getStyleClass().add("text-white");
+                mainCast.getStyleClass().add("text-white");
+                directors.getStyleClass().add("text-white");
+                releaseYear.getStyleClass().clear();
+                releaseYear.getStyleClass().add("text-white");
+                releaseYear.fontProperty().set(releaseYear.getFont().font(12));
+
+                //set layout
+                imgView.setFitHeight(100);
+                imgView.setPreserveRatio(true);
+                imgView.setSmooth(true);
+                imgView.setCache(true);
+
+                content.getChildren().clear();
+
+                        imgBox.getChildren().clear();
+                        imgBox.getChildren().add(imgView);
+                content.getChildren().add(imgBox);
+
+                        details.getChildren().clear();
+                                header.getChildren().clear();
+                                header.getChildren().addAll(title, releaseYear, rating);
+                        details.getChildren().addAll(header, releaseYear, description, genre);
+
+
+                                team.getChildren().clear();
+                                        directorsWriters.getChildren().clear();
+                                        directorsWriters.getChildren().addAll(directors, writers);
+                                team.getChildren().addAll(directorsWriters, mainCast);
+                        details.getChildren().add(team);
+                content.getChildren().add(details);
+
+                layout.getChildren().clear();
+                layout.getChildren().add(content);
+
+
+
+            }
+            layout.setPadding(new Insets(10));
+            layout.spacingProperty().set(10);
+            layout.alignmentProperty().set(Pos.CENTER_LEFT);
             setGraphic(layout);
+
+
         }
     }
 

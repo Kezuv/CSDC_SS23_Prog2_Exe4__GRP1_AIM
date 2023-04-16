@@ -14,6 +14,7 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 
 import java.io.IOException;
@@ -26,9 +27,12 @@ import java.util.stream.IntStream;
 
 public class HomeController implements Initializable {
     @FXML
-    public JFXButton searchBtn;
+    public JFXButton searchBtn, directorsBtn;
     @FXML
-    public TextField searchField;
+    public TextField searchField, directorsField;
+
+    @FXML
+    public Label directorsCount = new Label();
     @FXML
     public JFXListView movieListView;
     @FXML
@@ -102,6 +106,10 @@ public class HomeController implements Initializable {
         for(double rating = 10.0; rating >= 0.5; rating -= 0.5) {
             ratingComboBox.getItems().add(String.valueOf(rating)); // add each rating from 10.0 to 0.5 to the rating combobox
         }
+
+        directorsField.setPromptText("movies from Director");
+        directorsBtn.setText("Count");
+        directorsCount.setText("Total: ");
     }
 
     // sort movies based on sortedState
@@ -116,6 +124,13 @@ public class HomeController implements Initializable {
             sortedState = SortedState.DESCENDING;
         }
     }
+
+
+    public void countDirectorsMovies(){
+        long count = countMoviesFrom(allMovies, directorsField.getText());
+        directorsCount.setText("Total: " + count);
+    }
+
 
     /*Commented out for now and will be removed after correct functions
     public List<Movie> filterByQuery(List<Movie> movies, String query){
@@ -198,6 +213,13 @@ public class HomeController implements Initializable {
                 .toList();
     }
 
+    public static long countMoviesFrom(List<Movie> movies, String director) {
+        return movies.stream()
+                .filter(movie -> movie.getDirectors().contains(director))
+                .count();
+    }
+
+    
 
     public void applyAllFilters(String searchQuery, Object genre, Object releaseYear, Object rating, Object endReleaseYear) {
 

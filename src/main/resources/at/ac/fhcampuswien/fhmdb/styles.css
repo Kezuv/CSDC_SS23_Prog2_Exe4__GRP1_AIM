@@ -38,3 +38,14 @@
     -fx-background-color: white;
     -fx-text-fill: #ffffff;
 }
+
+.rating {
+    position: absolute;
+    top: 50%;
+    right: 0;
+    /* Additional styling properties */
+}
+
+.isExpandable .rating {
+    display: none;
+}
