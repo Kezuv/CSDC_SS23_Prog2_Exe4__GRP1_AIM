@@ -156,7 +156,7 @@ public class HomeController implements Initializable {
     //If more movies has the same length, only the first one was returned
     public int getLongestMovieTitle(List<Movie> movies){
         return movies.stream()
-                .mapToInt(movie -> movie.getTitle().length())//<- .trim() before .length() would remove the spaces too
+                .mapToInt(movie -> movie.getTitle().trim().length())//<- .trim() before .length() would remove the spaces too
                 .max()
                 .orElse(0);//<- If nothing is there
     }
