@@ -98,6 +98,8 @@ public class MovieCell extends ListCell<Movie> {
             //set style
             title.getStyleClass().add("text-yellow");
             title.fontProperty().set(title.getFont().font(20));
+            releaseYear.getStyleClass().add("text-white");
+
 
 
             description.getStyleClass().add("text-white");
@@ -122,8 +124,6 @@ public class MovieCell extends ListCell<Movie> {
                 //set style
                 rating.getStyleClass().add("text-white");
                 rating.setFont(Font.font("System", FontWeight.BOLD, 15));
-                releaseYear.getStyleClass().clear();
-                releaseYear.getStyleClass().add("text-white");
                 releaseYear.setFont(Font.font("System", FontWeight.BOLD,15));
 
                 //set layout
@@ -158,8 +158,6 @@ public class MovieCell extends ListCell<Movie> {
                 writers.getStyleClass().add("text-white");
                 mainCast.getStyleClass().add("text-white");
                 directors.getStyleClass().add("text-white");
-                releaseYear.getStyleClass().clear();
-                releaseYear.getStyleClass().add("text-white");
                 releaseYear.fontProperty().set(releaseYear.getFont().font(12));
                 lengthInMinutes.getStyleClass().add("text-white");
 
