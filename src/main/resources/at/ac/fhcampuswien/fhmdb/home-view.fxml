@@ -28,16 +28,21 @@
          <JFXButton fx:id="sortBtn" onAction="#sortBtnClicked" styleClass="background-yellow" stylesheets="@styles.css" text="Sort" />
          <TextField fx:id="searchField" prefHeight="25.0" prefWidth="170.0" promptText="Search FHMDb" />
          <JFXComboBox fx:id="genreComboBox" focusColor="#f5c518" styleClass="filter-combo-box" stylesheets="@styles.css" />
-         <VBox spacing="5">
-            <JFXComboBox fx:id="releaseYearComboBox" focusColor="#f5c518" styleClass="filter-combo-box" stylesheets="@styles.css" />
-            <JFXComboBox fx:id="yearRangeComboBox" focusColor="#f5c518" styleClass="filter-combo-box" stylesheets="@styles.css" />
-         </VBox>
+         <Label styleClass="text-yellow" stylesheets="@styles.css" text="From:">
+            <font>
+               <Font size="15.0" />
+            </font>
+         </Label>
+         <JFXComboBox fx:id="releaseYearComboBox" focusColor="#f5c518" prefWidth="75.0" styleClass="filter-combo-box" stylesheets="@styles.css" />
+         <VBox spacing="5" />
+         <Label styleClass="text-yellow" stylesheets="@styles.css" text="To:" textAlignment="CENTER">
+            <font>
+               <Font size="15.0" />
+            </font>
+         </Label>
+         <JFXComboBox fx:id="yearRangeComboBox" focusColor="#f5c518" prefWidth="75.0" promptText="Year" styleClass="filter-combo-box" stylesheets="@styles.css" />
          <JFXComboBox fx:id="ratingComboBox" focusColor="#f5c518" styleClass="filter-combo-box" stylesheets="@styles.css" />
          <JFXButton fx:id="searchBtn" onAction="#searchBtnClicked" styleClass="background-yellow" stylesheets="@styles.css" text="Filter" />
-
-         <TextField fx:id="directorsField" prefHeight="25.0" prefWidth="170.0" />
-         <JFXButton fx:id="directorsBtn" onAction="#countDirectorsMovies" styleClass="background-yellow" stylesheets="@styles.css" text="Count" />
-         <Label fx:id="directorsCount" styleClass="background-yellow" stylesheets="@styles.css" />
       </children>
       <VBox.margin>
          <Insets />
@@ -46,11 +51,35 @@
          <Insets bottom="20.0" left="10.0" top="20.0" />
       </padding>
    </HBox>
-   <HBox fx:id="content" VBox.vgrow="ALWAYS">
+   <VBox prefHeight="200.0" prefWidth="100.0" VBox.vgrow="ALWAYS">
       <children>
-         <JFXListView fx:id="movieListView" prefWidth="568.0" stylesheets="@styles.css" />
-         <VBox prefWidth="500.0" styleClass="background-black" stylesheets="@styles.css" />
+         <JFXListView fx:id="movieListView" prefWidth="568.0" stylesheets="@styles.css" VBox.vgrow="ALWAYS" />
+         <HBox fx:id="content" maxHeight="30" styleClass="background-black" stylesheets="@styles.css" VBox.vgrow="ALWAYS">
+            <children>
+               <Label fx:id="mostPopularActor" styleClass="text-yellow" stylesheets="@styles.css" text="Most Popular Actor">
+                  <font>
+                     <Font size="15.0" />
+                  </font></Label>
+               <Label fx:id="longestTitle" styleClass="text-yellow" stylesheets="@styles.css" text="Longest Title">
+                  <font>
+                     <Font size="15.0" />
+                  </font>
+               </Label>
+               <Label fx:id="titleCount" styleClass="text-yellow" stylesheets="@styles.css" text="TitleCount">
+                  <font>
+                     <Font size="15.0" />
+                  </font>
+               </Label>
+               <HBox prefHeight="100.0" prefWidth="200.0">
+                  <children>
+            
+                     <TextField fx:id="directorsField" prefHeight="25.0" prefWidth="170.0" />
+                     <JFXButton fx:id="directorsBtn" onAction="#countDirectorsMovies" styleClass="background-yellow" stylesheets="@styles.css" text="Count" />
+                     <Label fx:id="directorsCount" styleClass="text-yellow" stylesheets="@styles.css" text="directorsCount" />
+                  </children>
+               </HBox>
+            </children></HBox>
       </children>
-   </HBox>
+   </VBox>
 
 </VBox>

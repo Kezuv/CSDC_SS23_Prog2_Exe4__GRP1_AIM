@@ -76,14 +76,11 @@ public class MovieCell extends ListCell<Movie> {
                     .map(Enum::toString)
                     .collect(Collectors.joining(", "));
             genre.setText(genres);
-            rating.setText(String.valueOf(movie.getRating()));
 
             //set style
             title.getStyleClass().add("text-yellow");
             title.fontProperty().set(title.getFont().font(20));
 
-            rating.getStyleClass().add("text-yellow");
-            rating.fontProperty().set(rating.getFont().font(20));
 
             description.getStyleClass().add("text-white");
             genre.getStyleClass().add("text-white");
@@ -99,6 +96,7 @@ public class MovieCell extends ListCell<Movie> {
 
                 //set Text
                 releaseYear.setText("(" + movie.getReleaseYear() + ")");
+                rating.setText(String.valueOf(movie.getRating()));
 
 
                 //set style

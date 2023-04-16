@@ -14,6 +14,7 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Insets;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
@@ -36,6 +37,12 @@ public class HomeController implements Initializable {
 
     @FXML
     public Label directorsCount = new Label();
+    @FXML
+    public Label longestTitle = new Label();
+    @FXML
+    public Label titleCount = new Label();
+    @FXML
+    public Label mostPopularActor = new Label();
     @FXML
     public JFXListView movieListView;
     @FXML
@@ -65,14 +72,6 @@ public class HomeController implements Initializable {
     public void initializeLayout() {
 
 
-        content.setPrefWidth(getScene().getWindow().getWidth() * 0.975);
-        content.setMinWidth(getScene().getWindow().getWidth() * 0.975);
-
-
-        content.prefWidthProperty().bind(((Pane) content.getParent()).widthProperty());
-
-        content.prefHeightProperty().bind(((Pane) content.getParent()).heightProperty());
-
 
         Genre[] genres = Genre.values(); // get all genres
         movieListView.setItems(observableMovies);   // set the items of the listview to the observable list
@@ -91,13 +90,13 @@ public class HomeController implements Initializable {
             genreComboBox.getItems().addAll(genres[i].name());    // add all genres to the genre combobox
         }
 
-        releaseYearComboBox.setPromptText("Filter by Release Year"); // set the prompt text for the year combobox
+        releaseYearComboBox.setPromptText("Year"); // set the prompt text for the year combobox
         releaseYearComboBox.getItems().add("No filter"); // add "no filter" to the year combobox
         for(int year = LocalDate.now().getYear(); year >= 1950; year--) {
             releaseYearComboBox.getItems().add(String.valueOf(year)); // add each year from 1950 to current year to the year combobox
         }
 
-        yearRangeComboBox.setPromptText("Filter movies in range"); // set the prompt text for the year combobox
+        yearRangeComboBox.setPromptText("Year"); // set the prompt text for the year combobox
         yearRangeComboBox.getItems().add("No filter"); // add "No filter"
         yearRangeComboBox.setDisable(true); // disable the range combobox initially
 
@@ -126,6 +125,11 @@ public class HomeController implements Initializable {
         directorsField.setPromptText("movies from Director");
         directorsBtn.setText("Count");
         directorsCount.setText("Total: ");
+        mostPopularActor.setText("Most Popular Actor: " + getMostPopularActor(allMovies));
+        longestTitle.setText("Longest Movie Title: " + getLongestMovieTitleName(allMovies));
+        titleCount.setText("Total: " + getLongestMovieTitle(allMovies));
+
+        content.spacingProperty().set(20);
     }
 
     // sort movies based on sortedState
@@ -176,7 +180,15 @@ public class HomeController implements Initializable {
                 .orElse(0);//<- If nothing is there
     }
 
-    public List<Movie> getMoviesBetweenYears(List<Movie> movies, int startYear, int endYear) {
+    public String getLongestMovieTitleName(List<Movie> movies) {
+        return movies.stream()
+                .map(Movie::getTitle)
+                .map(String::trim)
+                .max(Comparator.comparingInt(String::length))
+                .orElse("");
+    }
+
+        public List<Movie> getMoviesBetweenYears(List<Movie> movies, int startYear, int endYear) {
         if (movies == null) {
             throw new IllegalArgumentException("movies must not be null");
         }
@@ -231,6 +243,10 @@ public class HomeController implements Initializable {
         observableMovies.clear();
         observableMovies.addAll(allMovies); // add all movies to the observable list
         sortedState = SortedState.NONE;
+
+        mostPopularActor.setText("Most Popular Actor: " + getMostPopularActor(allMovies));
+        longestTitle.setText("Longest Movie Title: " + getLongestMovieTitleName(allMovies));
+        titleCount.setText("Total: " + getLongestMovieTitle(allMovies));
 
        // applyAllFilters(searchQuery, genre, releaseYear, rating, endReleaseYear);
         if (sortedState != SortedState.NONE) {
