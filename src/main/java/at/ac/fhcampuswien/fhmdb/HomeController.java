@@ -16,6 +16,9 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 
 import java.io.IOException;
 import java.net.URL;
@@ -45,6 +48,8 @@ public class HomeController implements Initializable {
     public JFXComboBox ratingComboBox;
     @FXML
     public JFXButton sortBtn;
+    @FXML
+    public HBox content;
     public List<Movie> allMovies;
     protected ObservableList<Movie> observableMovies = FXCollections.observableArrayList();
     protected SortedState sortedState;
@@ -58,6 +63,17 @@ public class HomeController implements Initializable {
     }
 
     public void initializeLayout() {
+
+
+        content.setPrefWidth(getScene().getWindow().getWidth() * 0.975);
+        content.setMinWidth(getScene().getWindow().getWidth() * 0.975);
+
+
+        content.prefWidthProperty().bind(((Pane) content.getParent()).widthProperty());
+
+        content.prefHeightProperty().bind(((Pane) content.getParent()).heightProperty());
+
+
         Genre[] genres = Genre.values(); // get all genres
         movieListView.setItems(observableMovies);   // set the items of the listview to the observable list
 

@@ -1,16 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import com.jfoenix.controls.JFXButton?>
-<?import com.jfoenix.controls.JFXComboBox?>
-<?import com.jfoenix.controls.JFXListView?>
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
+<?import com.jfoenix.controls.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
-<VBox prefHeight="331.0" prefWidth="570.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="at.ac.fhcampuswien.fhmdb.HomeController">
+<VBox prefHeight="331.0" prefWidth="570.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="at.ac.fhcampuswien.fhmdb.HomeController">
    <HBox alignment="CENTER_LEFT" prefHeight="42.0" prefWidth="347.0" spacing="20.0" style="-fx-background-color: black;">
       <padding>
          <Insets bottom="7.0" left="10.0" top="7.0" />
@@ -29,7 +25,7 @@
    </HBox>
    <HBox spacing="5.0" styleClass="background-black" stylesheets="@styles.css">
       <children>
-         <JFXButton fx:id="sortBtn" styleClass="background-yellow" stylesheets="@styles.css" text="Sort" onAction="#sortBtnClicked"/>
+         <JFXButton fx:id="sortBtn" onAction="#sortBtnClicked" styleClass="background-yellow" stylesheets="@styles.css" text="Sort" />
          <TextField fx:id="searchField" prefHeight="25.0" prefWidth="170.0" promptText="Search FHMDb" />
          <JFXComboBox fx:id="genreComboBox" focusColor="#f5c518" styleClass="filter-combo-box" stylesheets="@styles.css" />
          <VBox spacing="5">
@@ -37,11 +33,11 @@
             <JFXComboBox fx:id="yearRangeComboBox" focusColor="#f5c518" styleClass="filter-combo-box" stylesheets="@styles.css" />
          </VBox>
          <JFXComboBox fx:id="ratingComboBox" focusColor="#f5c518" styleClass="filter-combo-box" stylesheets="@styles.css" />
-         <JFXButton fx:id="searchBtn" styleClass="background-yellow" stylesheets="@styles.css" text="Filter" onAction="#searchBtnClicked"/>
+         <JFXButton fx:id="searchBtn" onAction="#searchBtnClicked" styleClass="background-yellow" stylesheets="@styles.css" text="Filter" />
 
-         <TextField fx:id="directorsField" prefHeight="25.0" prefWidth="170.0"  />
-         <JFXButton fx:id="directorsBtn" styleClass="background-yellow" stylesheets="@styles.css" text="Count" onAction="#countDirectorsMovies"/>
-         <Label fx:id="directorsCount" styleClass="background-yellow" stylesheets="@styles.css"/>
+         <TextField fx:id="directorsField" prefHeight="25.0" prefWidth="170.0" />
+         <JFXButton fx:id="directorsBtn" onAction="#countDirectorsMovies" styleClass="background-yellow" stylesheets="@styles.css" text="Count" />
+         <Label fx:id="directorsCount" styleClass="background-yellow" stylesheets="@styles.css" />
       </children>
       <VBox.margin>
          <Insets />
@@ -50,5 +46,11 @@
          <Insets bottom="20.0" left="10.0" top="20.0" />
       </padding>
    </HBox>
-   <JFXListView fx:id="movieListView" stylesheets="@styles.css" VBox.vgrow="ALWAYS" />
+   <HBox fx:id="content" VBox.vgrow="ALWAYS">
+      <children>
+         <JFXListView fx:id="movieListView" prefWidth="568.0" stylesheets="@styles.css" />
+         <VBox prefWidth="500.0" styleClass="background-black" stylesheets="@styles.css" />
+      </children>
+   </HBox>
+
 </VBox>
