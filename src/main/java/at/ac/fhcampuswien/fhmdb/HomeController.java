@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
 import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -116,6 +117,7 @@ public class HomeController implements Initializable {
         }
     }
 
+    /*Commented out for now and will be removed after correct functions
     public List<Movie> filterByQuery(List<Movie> movies, String query){
         if(query == null || query.isEmpty()) return movies;
         if(movies == null) {
@@ -128,8 +130,9 @@ public class HomeController implements Initializable {
                     movie.getDescription().toLowerCase().contains(query.toLowerCase())
                 )
                 .toList();
-    }
+    }*/
 
+    /*Commented out for now and will be removed after correct functions
     public List<Movie> filterByGenre(List<Movie> movies, Genre genre){
         if(genre == null) return movies;
         if(movies == null) {
@@ -139,8 +142,8 @@ public class HomeController implements Initializable {
                 .filter(Objects::nonNull)
                 .filter(movie -> movie.getGenres().contains(genre))
                 .toList();
-    }
-
+    }*/
+    /*Commented out for now and will be removed after correct functions
     public List<Movie> filterByReleaseYear(List<Movie> movies, int releaseYear) {
         if(movies == null) {
             throw new IllegalArgumentException("movies must not be null");
@@ -149,8 +152,9 @@ public class HomeController implements Initializable {
                 .filter(Objects::nonNull)
                 .filter(movie -> movie.getReleaseYear() == releaseYear)
                 .toList();
-    }
+    }*/
 
+    /*Commented out for now and will be removed after correct functions
     public List<Movie> filterByRating(List<Movie> movies, double minRating) {
         if(movies == null) {
             throw new IllegalArgumentException("movies must not be null");
@@ -159,6 +163,26 @@ public class HomeController implements Initializable {
                 .filter(Objects::nonNull)
                 .filter(movie -> movie.getRating() >= minRating && movie.getRating() < minRating +1)
                 .toList();
+    }*/
+
+    //If more actors has the same count, only the first one was returned
+    public String getMostPopularActor(List<Movie> movies){
+        return movies.stream()
+                .flatMap(movie -> movie.getMainCast().stream())
+                .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()))
+                .entrySet().stream()
+                .max(Map.Entry.comparingByValue())
+                .map(Map.Entry::getKey)
+                .orElse("");//<- If nothing is there
+    }
+
+
+    //If more movies has the same length, only the first one was returned
+    public int getLongestMovieTitle(List<Movie> movies){
+        return movies.stream()
+                .mapToInt(movie -> movie.getTitle().trim().length())//<- .trim() before .length() would remove the spaces too
+                .max()
+                .orElse(0);//<- If nothing is there
     }
 
     public List<Movie> getMoviesBetweenYears(List<Movie> movies, int startYear, int endYear) {
@@ -175,12 +199,8 @@ public class HomeController implements Initializable {
     }
 
 
-
-
-
-
-
     public void applyAllFilters(String searchQuery, Object genre, Object releaseYear, Object rating, Object endReleaseYear) {
+
         List<Movie> filteredMovies = allMovies;
 
         if (!searchQuery.isEmpty()) {
