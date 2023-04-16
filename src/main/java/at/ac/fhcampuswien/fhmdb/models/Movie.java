@@ -1,6 +1,10 @@
 package at.ac.fhcampuswien.fhmdb.models;
 
+import at.ac.fhcampuswien.fhmdb.api.MovieAPI;
 import com.google.gson.Gson;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -66,6 +70,10 @@ public class Movie {
 
     public boolean isExpanded() {
         return isExpanded;
+    }
+
+    public int getLengthInMinutes() {
+        return lengthInMinutes;
     }
 
     public void setExpanded(boolean expanded) {

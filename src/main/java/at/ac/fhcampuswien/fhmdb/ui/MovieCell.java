@@ -27,6 +27,7 @@ public class MovieCell extends ListCell<Movie> {
     private final Label mainCast = new Label();
     private final Label rating = new Label();
     private final Label releaseYear = new Label();
+    private final Label lengthInMinutes = new Label();
     private final ImageView imgView = new ImageView();
     private final VBox layout = new VBox();
     private final VBox imgBox = new VBox();
@@ -35,6 +36,7 @@ public class MovieCell extends ListCell<Movie> {
 
     private final HBox header = new HBox();
     private final VBox details = new VBox();
+    private final HBox yearAndLenght = new HBox();
 
     private final HBox team = new HBox();
     private final VBox directorsWriters = new VBox();
@@ -148,12 +150,9 @@ public class MovieCell extends ListCell<Movie> {
                 writers.setText(setUpList(movie.getWriters(), "Writers"));
                 mainCast.setText(setUpList(movie.getMainCast(), "Main Cast"));
                 releaseYear.setText("Release Year: " + movie.getReleaseYear());
+                lengthInMinutes.setText("Length: " + movie.getLengthInMinutes() + " min");
 
-                try {
-                    imgView.setImage(new Image(MovieAPI.getTrueImgUrl(movie.getImgUrl())));
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
+
 
                 //set style
                 writers.getStyleClass().add("text-white");
@@ -162,8 +161,15 @@ public class MovieCell extends ListCell<Movie> {
                 releaseYear.getStyleClass().clear();
                 releaseYear.getStyleClass().add("text-white");
                 releaseYear.fontProperty().set(releaseYear.getFont().font(12));
+                lengthInMinutes.getStyleClass().add("text-white");
 
                 //set layout
+
+                try {
+                    imgView.setImage(new Image(MovieAPI.getTrueImgUrl(movie.getImgUrl())));
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
                 imgBox.setMaxWidth(300);
                 imgBox.setAlignment(Pos.CENTER);
                 imgView.setFitWidth(imgBox.getMaxWidth());
@@ -184,7 +190,13 @@ public class MovieCell extends ListCell<Movie> {
                                 header.getChildren().addAll(title, setRight, rating);
                                 description.wrapTextProperty().set(true);
                                 description.setMaxWidth(550);
-                        details.getChildren().addAll(header, releaseYear, description, genre);
+
+                                yearAndLenght.getChildren().clear();
+                                yearAndLenght.getChildren().addAll(releaseYear, lengthInMinutes);
+                                yearAndLenght.spacingProperty().set(360);
+
+
+                        details.getChildren().addAll(header, yearAndLenght, description, genre);
 
 
                                 team.getChildren().clear();
