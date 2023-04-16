@@ -31,6 +31,7 @@ public class MovieCell extends ListCell<Movie> {
     private final VBox layout = new VBox();
     private final VBox imgBox = new VBox();
     private final HBox content = new HBox();
+    private final Region setRight = new Region();
 
     private final HBox header = new HBox();
     private final VBox details = new VBox();
@@ -41,12 +42,12 @@ public class MovieCell extends ListCell<Movie> {
 
     private String setUpList(List<String> type, String description){
 
-        String list = description+": ";
+        String list = description+": \n";
         for (int i = 0; i < type.size() ; i ++){
             if (i == type.size()-1 ){
-                list = list + type.get(i);
+                list = list + "     "+type.get(i);
             } else {
-                list = list + type.get(i) + ", ";
+                list = list + "     " + type.get(i) + ", \n";
             }
         }
         return list;
@@ -73,6 +74,7 @@ public class MovieCell extends ListCell<Movie> {
                     updateItem(movie, false);
                 }
             });
+
 
             //gernal
 
@@ -102,6 +104,8 @@ public class MovieCell extends ListCell<Movie> {
             layout.setBackground(new Background(new BackgroundFill(Color.web("#454545"), null, null)));
 
             //Width of the cell´s
+            HBox.setHgrow(setRight, Priority.ALWAYS);
+
             layout.setPrefWidth(getScene().getWindow().getWidth() * 0.975);
             layout.setMinWidth(getScene().getWindow().getWidth() * 0.975);
 
@@ -122,13 +126,14 @@ public class MovieCell extends ListCell<Movie> {
 
                 //set layout
                 //Region sets the Rating to the right & updating the HBox-settings
-                Region setRight = new Region();
-                HBox.setHgrow(setRight, Priority.ALWAYS);
-                setRight.maxWidthProperty().bind(header.widthProperty().subtract(title.widthProperty()).subtract(releaseYear.widthProperty()).subtract(rating.widthProperty()));
+
+                setRight.maxWidthProperty().bind(header.widthProperty().subtract(title.maxWidthProperty()).subtract(releaseYear.maxWidthProperty()).subtract(rating.maxWidthProperty()));
+
                 header.getChildren().clear();
                 header.getChildren().addAll(title, releaseYear, setRight, rating);
-                header.spacingProperty().set(5);
                 header.setAlignment(Pos.BASELINE_LEFT);
+                header.spacingProperty().set(5);
+
 
 
                 layout.getChildren().clear();
@@ -174,21 +179,29 @@ public class MovieCell extends ListCell<Movie> {
 
                         details.getChildren().clear();
                                 header.getChildren().clear();
-                                header.getChildren().addAll(title, releaseYear, rating);
+
+                                setRight.maxWidthProperty().bind(header.widthProperty().subtract(title.maxWidthProperty()).subtract(rating.maxWidthProperty()));
+                                header.getChildren().addAll(title, setRight, rating);
+                                description.wrapTextProperty().set(true);
+                                description.setMaxWidth(550);
                         details.getChildren().addAll(header, releaseYear, description, genre);
 
 
                                 team.getChildren().clear();
+                                        writers.setPadding(new Insets(20,0,0,0));
                                         directorsWriters.getChildren().clear();
                                         directorsWriters.getChildren().addAll(directors, writers);
                                 team.getChildren().addAll(directorsWriters, mainCast);
-                        details.getChildren().add(team);
-                content.getChildren().add(details);
+                                team.spacingProperty().set(50);
 
-                details.spacingProperty().set(20);
+                        details.getChildren().add(team);
+                        details.spacingProperty().set(20);
+                        details.prefWidthProperty().set(getScene().getWidth() - imgBox.getMaxWidth());
+
+                content.getChildren().add(details);
                 content.spacingProperty().set(50);
-                team.spacingProperty().set(50);
-                content.setPadding(new Insets(30,0,30,30));
+                content.setPadding(new Insets(20,0,20,20));
+
                 layout.getChildren().clear();
                 layout.getChildren().add(content);
 
