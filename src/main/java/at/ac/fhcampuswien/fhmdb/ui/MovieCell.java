@@ -10,6 +10,9 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
+
 import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -87,6 +90,9 @@ public class MovieCell extends ListCell<Movie> {
             genre.setStyle("-fx-font-style: italic");
             layout.setBackground(new Background(new BackgroundFill(Color.web("#454545"), null, null)));
 
+            //Width of the cell´s
+            layout.setPrefWidth(getScene().getWindow().getWidth() * 0.975);
+            layout.setMinWidth(getScene().getWindow().getWidth() * 0.975);
 
             //if !isExpanded (small / not selected)
             if (!isExpanded){
@@ -96,15 +102,21 @@ public class MovieCell extends ListCell<Movie> {
 
 
                 //set style
-                rating.getStyleClass().add("rating");
+                rating.getStyleClass().add("text-white");
+                rating.setFont(Font.font("System", FontWeight.BOLD, 15));
                 releaseYear.getStyleClass().clear();
-                releaseYear.getStyleClass().add("text-yellow");
-                releaseYear.fontProperty().set(releaseYear.getFont().font(20));
+                releaseYear.getStyleClass().add("text-white");
+                releaseYear.setFont(Font.font("System", FontWeight.BOLD,15));
 
                 //set layout
+                //Region sets the Rating to the right & updating the HBox-settings
+                Region setRight = new Region();
+                HBox.setHgrow(setRight, Priority.ALWAYS);
+                setRight.maxWidthProperty().bind(header.widthProperty().subtract(title.widthProperty()).subtract(releaseYear.widthProperty()).subtract(rating.widthProperty()));
                 header.getChildren().clear();
-                header.getChildren().addAll(title, releaseYear, rating);
-                header.spacingProperty().set(10);
+                header.getChildren().addAll(title, releaseYear, setRight, rating);
+                header.spacingProperty().set(5);
+                header.setAlignment(Pos.BASELINE_LEFT);
 
 
                 layout.getChildren().clear();
