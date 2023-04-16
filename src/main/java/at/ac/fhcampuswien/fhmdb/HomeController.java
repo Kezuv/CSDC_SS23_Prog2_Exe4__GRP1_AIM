@@ -96,7 +96,7 @@ public class HomeController implements Initializable {
             yearRangeComboBox.setDisable(false);
         } else {
             yearRangeComboBox.getItems().clear();
-            yearRangeComboBox.getItems().add("No filter"); // add a null value for the "No filter" option
+            yearRangeComboBox.getItems().add(null); // add a null value for the "No filter" option
             yearRangeComboBox.setDisable(true);
         }
         });
@@ -132,44 +132,6 @@ public class HomeController implements Initializable {
     }
 
 
-    /*Commented out for now and will be removed after correct functions
-    public List<Movie> filterByQuery(List<Movie> movies, String query){
-        if(query == null || query.isEmpty()) return movies;
-        if(movies == null) {
-            throw new IllegalArgumentException("movies must not be null");
-        }
-        return movies.stream()
-                .filter(Objects::nonNull)
-                .filter(movie ->
-                    movie.getTitle().toLowerCase().contains(query.toLowerCase()) ||
-                    movie.getDescription().toLowerCase().contains(query.toLowerCase())
-                )
-                .toList();
-    }*/
-
-    /*Commented out for now and will be removed after correct functions
-    public List<Movie> filterByGenre(List<Movie> movies, Genre genre){
-        if(genre == null) return movies;
-        if(movies == null) {
-            throw new IllegalArgumentException("movies must not be null");
-        }
-        return movies.stream()
-                .filter(Objects::nonNull)
-                .filter(movie -> movie.getGenres().contains(genre))
-                .toList();
-    }*/
-    /*Commented out for now and will be removed after correct functions
-    public List<Movie> filterByReleaseYear(List<Movie> movies, int releaseYear) {
-        if(movies == null) {
-            throw new IllegalArgumentException("movies must not be null");
-        }
-        return movies.stream()
-                .filter(Objects::nonNull)
-                .filter(movie -> movie.getReleaseYear() == releaseYear)
-                .toList();
-    }*/
-
-    /*Commented out for now and will be removed after correct functions
     public List<Movie> filterByRating(List<Movie> movies, double minRating) {
         if(movies == null) {
             throw new IllegalArgumentException("movies must not be null");
@@ -178,9 +140,8 @@ public class HomeController implements Initializable {
                 .filter(Objects::nonNull)
                 .filter(movie -> movie.getRating() >= minRating && movie.getRating() < minRating +1)
                 .toList();
-    }*/
+    }
 
-    //If more actors has the same count, only the first one was returned
     public String getMostPopularActor(List<Movie> movies){
         return movies.stream()
                 .flatMap(movie -> movie.getMainCast().stream())
@@ -192,7 +153,6 @@ public class HomeController implements Initializable {
     }
 
 
-    //If more movies has the same length, only the first one was returned
     public int getLongestMovieTitle(List<Movie> movies){
         return movies.stream()
                 .mapToInt(movie -> movie.getTitle().trim().length())//<- .trim() before .length() would remove the spaces too
@@ -219,33 +179,6 @@ public class HomeController implements Initializable {
                 .count();
     }
 
-    
-
-    public void applyAllFilters(String searchQuery, Object genre, Object releaseYear, Object rating, Object endReleaseYear) {
-
-        List<Movie> filteredMovies = allMovies;
-
-        if (!searchQuery.isEmpty()) {
-            filteredMovies = filterByQuery(filteredMovies, searchQuery);
-        }
-        if (genre != null && !genre.toString().equals("No filter")) {
-            filteredMovies = filterByGenre(filteredMovies, Genre.valueOf(genre.toString()));
-        }
-
-        if (endReleaseYear != null && !endReleaseYear.equals("No filter")) {
-            filteredMovies = getMoviesBetweenYears(filteredMovies,
-                    Integer.parseInt((String) releaseYear), Integer.parseInt(endReleaseYear.toString()));
-        } else if (releaseYear != null && !releaseYear.toString().equals("No filter")) {
-            filteredMovies = filterByReleaseYear(filteredMovies, Integer.parseInt(releaseYear.toString()));
-        }
-
-        if (rating != null && !rating.toString().equals("No filter")) {
-            filteredMovies = filterByRating(filteredMovies, Double.parseDouble(rating.toString()));
-        }
-
-        observableMovies.clear();
-        observableMovies.addAll(filteredMovies);
-    }
 
     public void searchBtnClicked(ActionEvent actionEvent) throws IOException {
         String searchQuery =  searchField.getText().trim().toLowerCase();
@@ -258,28 +191,32 @@ public class HomeController implements Initializable {
             MovieAPI.addParam(SearchParameter.GENRE, genre);
         }
 
-        String releaseYear = (String) releaseYearComboBox.getSelectionModel().getSelectedItem();
-        String endReleaseYearStr =  yearRangeComboBox.getSelectionModel().getSelectedItem() != null ? yearRangeComboBox.getSelectionModel().getSelectedItem().toString() : "no filter";
-        Integer endReleaseYear = !endReleaseYearStr.equals("no filter") ? Integer.parseInt(endReleaseYearStr) : null;
-
-        if (endReleaseYear != null) {
-            for (int i = Integer.parseInt(releaseYear); i ==endReleaseYear; ++i) {
-                MovieAPI.addParam(SearchParameter.YEAR, String.valueOf(i));
-            }
-        } else if (releaseYear != null && !releaseYear.equals("No filter")) {
-            MovieAPI.addParam(SearchParameter.YEAR, releaseYear);
-        }
-
         String rating = (String) ratingComboBox.getSelectionModel().getSelectedItem();
         if (rating != null && !rating.equals("No filter")) {
             MovieAPI.addParam(SearchParameter.RATING, rating);
         }
 
-        allMovies = Movie.initializeMovies(MovieAPI.getApiRequest());
+        String releaseYear = (String) releaseYearComboBox.getSelectionModel().getSelectedItem();
+        String endReleaseYearStr =  yearRangeComboBox.getSelectionModel().getSelectedItem() != null ? yearRangeComboBox.getSelectionModel().getSelectedItem().toString() : "No filter";
+        Integer endReleaseYear = !endReleaseYearStr.equals("No filter") ? Integer.parseInt(endReleaseYearStr) : null;
+
+        if (endReleaseYear != null){
+            allMovies = Movie.initializeMovies(MovieAPI.getApiRequest());
+            allMovies = getMoviesBetweenYears(allMovies, Integer.parseInt(releaseYear), endReleaseYear);
+
+        }
+        else if (releaseYear != null && !releaseYear.equals("No filter")) {
+            MovieAPI.addParam(SearchParameter.YEAR, releaseYear);
+            allMovies = Movie.initializeMovies(MovieAPI.getApiRequest());
+        } else {
+            allMovies = Movie.initializeMovies(MovieAPI.getApiRequest());
+        }
+
         observableMovies.clear();
         observableMovies.addAll(allMovies); // add all movies to the observable list
         sortedState = SortedState.NONE;
-        applyAllFilters(searchQuery, genre, releaseYear, rating, endReleaseYear);
+
+       // applyAllFilters(searchQuery, genre, releaseYear, rating, endReleaseYear);
         if (sortedState != SortedState.NONE) {
             sortMovies();
         }
