@@ -135,7 +135,7 @@ public class HomeController implements Initializable {
 
         mostPopularActor.setText("Most Popular Actor: " + getMostPopularActor(allMovies));
         longestTitle.setText("Longest Movie Title: " + getLongestMovieTitleName(allMovies));
-        titleCount.setText("Total: ");
+        titleCount.setText("Total: " + getLongestMovieTitle(allMovies));
 
         directorsHBox.setPadding(new Insets(0,0,0,5));
         content.spacingProperty().set(20);
@@ -177,7 +177,9 @@ public class HomeController implements Initializable {
 
     public int getLongestMovieTitle(List<Movie> movies){
         return movies.stream()
-                .mapToInt(movie -> movie.getTitle().trim().length())//<- .trim() before .length() would remove the spaces too
+                /*.replaceAll() would remove the spaces in the String and
+                .trim() before .length() would remove the spaces before and after the String*/
+                .mapToInt(movie -> movie.getTitle().trim().length())
                 .max()
                 .orElse(0);//<- If nothing is there
     }

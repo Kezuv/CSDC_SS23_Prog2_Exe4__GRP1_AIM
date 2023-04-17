@@ -18,10 +18,7 @@ public class MovieAPI {
         firstParam = false;
 
         switch (param) {
-            case CUSTOMSEARCH -> {
-                ;
-                customURL = customURL + "query=" + value;
-            }
+            case CUSTOMSEARCH -> customURL = customURL + "query=" + value;
             case GENRE -> customURL = customURL + "genre=" + value;
             case YEAR -> customURL = customURL + "releaseYear=" + value;
             case RATING -> customURL = customURL + "ratingFrom=" + value;
