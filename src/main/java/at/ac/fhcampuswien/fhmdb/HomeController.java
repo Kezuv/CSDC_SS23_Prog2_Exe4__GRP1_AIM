@@ -17,8 +17,6 @@ import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.input.MouseButton;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 
 import java.io.IOException;
@@ -33,7 +31,6 @@ public class HomeController implements Initializable {
     public JFXButton searchBtn, directorsBtn;
     @FXML
     public TextField searchField, directorsField;
-
     @FXML
     public Label directorsCount = new Label();
     @FXML
@@ -73,7 +70,6 @@ public class HomeController implements Initializable {
     }
 
     public void initializeLayout() {
-
         Genre[] genres = Genre.values(); // get all genres
         movieListView.setItems(observableMovies);   // set the items of the listview to the observable list
 
@@ -126,7 +122,6 @@ public class HomeController implements Initializable {
             }
         });
 
-
         ratingComboBox.setPromptText("Filter by Rating"); // set the prompt text for the year combobox
         ratingComboBox.getItems().add("No filter"); // add "no filter" to the year combobox
         for(double rating = 10.0; rating >= 0.5; rating -= 0.5) {
@@ -138,7 +133,6 @@ public class HomeController implements Initializable {
         countDirectorsMovie.getItems().add("No filter"); // add "no filter" to the year combobox
         countDirectorsMovie.getItems().addAll(getDirectorsNames(allMovies));
 
-
         mostPopularActor.setText("Most Popular Actor: " + getMostPopularActor(allMovies));
         longestTitle.setText("Longest Movie Title: " + getLongestMovieTitleName(allMovies));
         titleCount.setText("Total: ");
@@ -146,7 +140,6 @@ public class HomeController implements Initializable {
         directorsHBox.setPadding(new Insets(0,0,0,5));
         content.spacingProperty().set(20);
         content.setPadding(new Insets(10));
-
     }
 
     // sort movies based on sortedState
@@ -161,10 +154,6 @@ public class HomeController implements Initializable {
             sortedState = SortedState.DESCENDING;
         }
     }
-
-
-
-
 
     public List<Movie> filterByRating(List<Movie> movies, double minRating) {
         if(movies == null) {
@@ -185,7 +174,6 @@ public class HomeController implements Initializable {
                 .map(Map.Entry::getKey)
                 .orElse("");//<- If nothing is there
     }
-
 
     public int getLongestMovieTitle(List<Movie> movies){
         return movies.stream()
@@ -229,7 +217,6 @@ public class HomeController implements Initializable {
                 .collect(Collectors.toList());
     }
 
-
     public void searchBtnClicked(ActionEvent actionEvent) throws IOException {
         String searchQuery =  searchField.getText().trim().toLowerCase();
         if (searchQuery != null && !searchQuery.equals("")) {
@@ -261,7 +248,8 @@ public class HomeController implements Initializable {
         } else {
             allMovies = Movie.initializeMovies(MovieAPI.getApiRequest());
         }
-
+        directorsCount.setText("");
+        countDirectorsMovie.setValue("");
         observableMovies.clear();
         observableMovies.addAll(allMovies); // add all movies to the observable list
         sortedState = SortedState.NONE;
@@ -282,9 +270,6 @@ public class HomeController implements Initializable {
         }
     }
 
-
-
-
     public void sortBtnClicked(ActionEvent actionEvent) {
         sortMovies();
     }
@@ -298,6 +283,4 @@ public class HomeController implements Initializable {
         }
         initializeLayout();
     }
-
-
 }
