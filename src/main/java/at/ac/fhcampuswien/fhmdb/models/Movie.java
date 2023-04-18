@@ -1,6 +1,10 @@
 package at.ac.fhcampuswien.fhmdb.models;
 
+import at.ac.fhcampuswien.fhmdb.api.MovieAPI;
 import com.google.gson.Gson;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -12,6 +16,7 @@ public class Movie {
     private final List<String> directors, writers, mainCast;
     private final double rating;
     private final int releaseYear, lengthInMinutes;
+    private boolean isExpanded;
 
     public Movie(String id, String title, String description, String imgUrl, List<Genre> genres, List<String> directors, List<String> writers, List<String> mainCast, double rating, int releaseYear, int lengthInMinutes) throws IOException {
         this.id = id;
@@ -61,6 +66,18 @@ public class Movie {
 
     public double getRating() {
         return rating;
+    }
+
+    public boolean isExpanded() {
+        return isExpanded;
+    }
+
+    public int getLengthInMinutes() {
+        return lengthInMinutes;
+    }
+
+    public void setExpanded(boolean expanded) {
+        isExpanded = expanded;
     }
 
     public static List<Movie> initializeMovies(String data){

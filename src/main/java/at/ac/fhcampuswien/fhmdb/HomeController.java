@@ -14,8 +14,10 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Insets;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.HBox;
 
 import java.io.IOException;
 import java.net.URL;
@@ -23,28 +25,38 @@ import java.time.LocalDate;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 public class HomeController implements Initializable {
     @FXML
     public JFXButton searchBtn, directorsBtn;
     @FXML
     public TextField searchField, directorsField;
-
     @FXML
     public Label directorsCount = new Label();
     @FXML
+    public Label longestTitle = new Label();
+    @FXML
+    public Label titleCount = new Label();
+    @FXML
+    public Label mostPopularActor = new Label();
+    @FXML
     public JFXListView movieListView;
     @FXML
-    public JFXComboBox genreComboBox;
+    public JFXComboBox<String> genreComboBox;
     @FXML
     public JFXComboBox releaseYearComboBox;
     @FXML
-    public JFXComboBox yearRangeComboBox;
+    public JFXComboBox<java.io.Serializable> yearRangeComboBox;
     @FXML
-    public JFXComboBox ratingComboBox;
+    public JFXComboBox<String> ratingComboBox;
+    @FXML
+    public JFXComboBox countDirectorsMovie;
     @FXML
     public JFXButton sortBtn;
+    @FXML
+    public HBox content;
+    @FXML
+    private  HBox directorsHBox = new HBox();
     public List<Movie> allMovies;
     protected ObservableList<Movie> observableMovies = FXCollections.observableArrayList();
     protected SortedState sortedState;
@@ -63,9 +75,6 @@ public class HomeController implements Initializable {
 
         movieListView.setCellFactory(movieListView -> {
             MovieCell cell = new MovieCell(); // apply custom cells to the listview
-            cell.setOnMouseClicked(event -> {
-                cell.startEdit();
-            });
             return cell;
         });
 
@@ -75,15 +84,15 @@ public class HomeController implements Initializable {
             genreComboBox.getItems().addAll(genres[i].name());    // add all genres to the genre combobox
         }
 
-        releaseYearComboBox.setPromptText("Filter by Release Year"); // set the prompt text for the year combobox
+        releaseYearComboBox.setPromptText("Year"); // set the prompt text for the year combobox
         releaseYearComboBox.getItems().add("No filter"); // add "no filter" to the year combobox
         for(int year = LocalDate.now().getYear(); year >= 1950; year--) {
             releaseYearComboBox.getItems().add(String.valueOf(year)); // add each year from 1950 to current year to the year combobox
         }
 
-        yearRangeComboBox.setPromptText("Filter movies in range"); // set the prompt text for the year combobox
+        yearRangeComboBox.setPromptText("Year"); // set the prompt text for the year combobox
         yearRangeComboBox.getItems().add("No filter"); // add "No filter"
-        yearRangeComboBox.setDisable(true); // disable the range combobox initially
+        //yearRangeComboBox.setDisable(true); // disable the range combobox initially
 
         releaseYearComboBox.valueProperty().addListener((observableValue, oldValue, newValue) -> {
         if (!newValue.equals("No filter")) {
@@ -97,8 +106,20 @@ public class HomeController implements Initializable {
         } else {
             yearRangeComboBox.getItems().clear();
             yearRangeComboBox.getItems().add(null); // add a null value for the "No filter" option
-            yearRangeComboBox.setDisable(true);
+            //yearRangeComboBox.setDisable(true);
         }
+        });
+
+        countDirectorsMovie.setPromptText("Directors Movie Count"); // set the prompt text for the year combobox
+        countDirectorsMovie.getItems().clear();
+        countDirectorsMovie.getItems().add("No filter"); // add "no filter" to the year combobox
+        countDirectorsMovie.getItems().addAll(getDirectorsNames(allMovies));
+        directorsCount.setText("Total: 0");
+
+        countDirectorsMovie.valueProperty().addListener((observableValue, oldValue, newValue) -> {
+            if (!newValue.equals("No filter") || !newValue.equals(null)) {
+                directorsCount.setText("Total: " + countMoviesFrom(allMovies, newValue.toString()));
+            }
         });
 
         ratingComboBox.setPromptText("Filter by Rating"); // set the prompt text for the year combobox
@@ -107,9 +128,18 @@ public class HomeController implements Initializable {
             ratingComboBox.getItems().add(String.valueOf(rating)); // add each rating from 10.0 to 0.5 to the rating combobox
         }
 
-        directorsField.setPromptText("movies from Director");
-        directorsBtn.setText("Count");
-        directorsCount.setText("Total: ");
+        countDirectorsMovie.setPromptText("Directors Movie Count"); // set the prompt text for the year combobox
+        countDirectorsMovie.getItems().clear();
+        countDirectorsMovie.getItems().add("No filter"); // add "no filter" to the year combobox
+        countDirectorsMovie.getItems().addAll(getDirectorsNames(allMovies));
+
+        mostPopularActor.setText("Most Popular Actor: " + getMostPopularActor(allMovies));
+        longestTitle.setText("Longest Movie Title: " + getLongestMovieTitleName(allMovies));
+        titleCount.setText("Total: " + getLongestMovieTitle(allMovies));
+
+        directorsHBox.setPadding(new Insets(0,0,0,5));
+        content.spacingProperty().set(20);
+        content.setPadding(new Insets(10));
     }
 
     // sort movies based on sortedState
@@ -124,13 +154,6 @@ public class HomeController implements Initializable {
             sortedState = SortedState.DESCENDING;
         }
     }
-
-
-    public void countDirectorsMovies(){
-        long count = countMoviesFrom(allMovies, directorsField.getText());
-        directorsCount.setText("Total: " + count);
-    }
-
 
     public List<Movie> filterByRating(List<Movie> movies, double minRating) {
         if(movies == null) {
@@ -152,12 +175,21 @@ public class HomeController implements Initializable {
                 .orElse("");//<- If nothing is there
     }
 
-
     public int getLongestMovieTitle(List<Movie> movies){
         return movies.stream()
-                .mapToInt(movie -> movie.getTitle().trim().length())//<- .trim() before .length() would remove the spaces too
+                /*.replaceAll() would remove the spaces in the String and
+                .trim() before .length() would remove the spaces before and after the String*/
+                .mapToInt(movie -> movie.getTitle().trim().length())
                 .max()
                 .orElse(0);//<- If nothing is there
+    }
+
+    public String getLongestMovieTitleName(List<Movie> movies) {
+        return movies.stream()
+                .map(Movie::getTitle)
+                .map(String::trim)
+                .max(Comparator.comparingInt(String::length))
+                .orElse("");
     }
 
     public List<Movie> getMoviesBetweenYears(List<Movie> movies, int startYear, int endYear) {
@@ -179,6 +211,13 @@ public class HomeController implements Initializable {
                 .count();
     }
 
+    public static List<String> getDirectorsNames(List<Movie> movies) {
+        return movies.stream()
+                .flatMap(movie -> movie.getDirectors().stream())
+                .distinct() // <- removes duplicates
+                .sorted() // <- sort
+                .collect(Collectors.toList());
+    }
 
     public void searchBtnClicked(ActionEvent actionEvent) throws IOException {
         String searchQuery =  searchField.getText().trim().toLowerCase();
@@ -186,12 +225,12 @@ public class HomeController implements Initializable {
             MovieAPI.addParam(SearchParameter.CUSTOMSEARCH, searchQuery);
         }
 
-        String genre = (String) genreComboBox.getSelectionModel().getSelectedItem();
+        String genre = genreComboBox.getSelectionModel().getSelectedItem();
         if (genre != null && !genre.equals("No filter")) {
             MovieAPI.addParam(SearchParameter.GENRE, genre);
         }
 
-        String rating = (String) ratingComboBox.getSelectionModel().getSelectedItem();
+        String rating = ratingComboBox.getSelectionModel().getSelectedItem();
         if (rating != null && !rating.equals("No filter")) {
             MovieAPI.addParam(SearchParameter.RATING, rating);
         }
@@ -211,19 +250,27 @@ public class HomeController implements Initializable {
         } else {
             allMovies = Movie.initializeMovies(MovieAPI.getApiRequest());
         }
-
+        directorsCount.setText("");
+        countDirectorsMovie.setValue("");
         observableMovies.clear();
         observableMovies.addAll(allMovies); // add all movies to the observable list
         sortedState = SortedState.NONE;
+
+        mostPopularActor.setText("Most Popular Actor: " + getMostPopularActor(allMovies));
+        longestTitle.setText("Longest Movie Title: " + getLongestMovieTitleName(allMovies));
+        titleCount.setText("Total: " + getLongestMovieTitle(allMovies));
+
+        countDirectorsMovie.setPromptText("Directors Movie Count"); // set the prompt text for the year combobox
+        countDirectorsMovie.getItems().clear();
+        countDirectorsMovie.getItems().add("No filter"); // add "no filter" to the year combobox
+        countDirectorsMovie.getItems().addAll(getDirectorsNames(allMovies));
+        directorsCount.setText("Total: ");
 
        // applyAllFilters(searchQuery, genre, releaseYear, rating, endReleaseYear);
         if (sortedState != SortedState.NONE) {
             sortMovies();
         }
     }
-
-
-
 
     public void sortBtnClicked(ActionEvent actionEvent) {
         sortMovies();

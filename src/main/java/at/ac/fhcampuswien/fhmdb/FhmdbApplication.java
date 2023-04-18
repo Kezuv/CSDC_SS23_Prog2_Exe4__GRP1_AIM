@@ -16,7 +16,7 @@ public class FhmdbApplication extends Application {
     @Override
     public void start(Stage stage) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(FhmdbApplication.class.getResource("home-view.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), 890, 620);
+        Scene scene = new Scene(fxmlLoader.load(), 1500, 1000); //Size of the window raised to display all elements in the bottom bar
         scene.getStylesheets().add(Objects.requireNonNull(FhmdbApplication.class.getResource("styles.css")).toExternalForm());
         stage.setTitle("FHMDb!");
         stage.setScene(scene);
