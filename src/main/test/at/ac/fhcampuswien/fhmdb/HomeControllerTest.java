@@ -220,5 +220,58 @@ class HomeControllerTest {
         // then
         assertEquals(homeController.allMovies, homeController.observableMovies);
     }
+    @Test
+    public void getMoviesBetweenYears_in_boundries() {
+        List<Movie> movies = new ArrayList<>();
+        movies.add(new Movie("The Godfather", 1972));
+        movies.add(new Movie("The Shawshank Redemption", 1994));
+        movies.add(new Movie("The Dark Knight", 2008));
+        movies.add(new Movie("Pulp Fiction", 1994));
+        movies.add(new Movie("The Godfather: Part II", 1974));
+
+        List<Movie> expected = Arrays.asList(
+                new Movie("The Godfather", 1972),
+                new Movie("The Godfather: Part II", 1974),
+                new Movie("The Shawshank Redemption", 1994),
+                new Movie("Pulp Fiction", 1994)
+        );
+
+        List<Movie> actual = getMoviesBetweenYears(movies, 1972, 1994);
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    public void getMoviesBetweenYears_on_boundries() {
+        List<Movie> movies = new ArrayList<>();
+        movies.add(new Movie("The Godfather", 1972));
+        movies.add(new Movie("The Shawshank Redemption", 1994));
+        movies.add(new Movie("The Dark Knight", 2008));
+        movies.add(new Movie("Pulp Fiction", 1994));
+        movies.add(new Movie("The Godfather: Part II", 1974));
+
+        List<Movie> expected = Arrays.asList(
+                new Movie("The Godfather", 1972),
+                new Movie("The Godfather: Part II", 1974)
+        );
+
+        List<Movie> actual = getMoviesBetweenYears(movies, 1972, 1974);
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    public void getMoviesBetweenYears_outside_boundries() {
+        List<Movie> movies = new ArrayList<>();
+        movies.add(new Movie("The Godfather", 1972));
+        movies.add(new Movie("The Shawshank Redemption", 1994));
+        movies.add(new Movie("The Dark Knight", 2008));
+        movies.add(new Movie("Pulp Fiction", 1994));
+        movies.add(new Movie("The Godfather: Part II", 1974));
+
+        List<Movie> expected = new ArrayList<>();
+
+        List<Movie> actual = getMoviesBetweenYears(movies, 1950, 1960);
+        assertEquals(expected, actual);
+    }
+
 
 }

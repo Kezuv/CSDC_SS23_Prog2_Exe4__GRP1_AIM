@@ -50,6 +50,8 @@ public class HomeController implements Initializable {
     @FXML
     public JFXComboBox<String> ratingComboBox;
     @FXML
+    public JFXComboBox<String> ratingRangeComboBox;
+    @FXML
     public JFXComboBox countDirectorsMovie;
     @FXML
     public JFXButton sortBtn;
@@ -122,11 +124,30 @@ public class HomeController implements Initializable {
             }
         });
 
-        ratingComboBox.setPromptText("Filter by Rating"); // set the prompt text for the year combobox
+        ratingComboBox.setPromptText("Min"); // set the prompt text for the year combobox
         ratingComboBox.getItems().add("No filter"); // add "no filter" to the year combobox
         for(double rating = 10.0; rating >= 0.5; rating -= 0.5) {
             ratingComboBox.getItems().add(String.valueOf(rating)); // add each rating from 10.0 to 0.5 to the rating combobox
         }
+
+        ratingRangeComboBox.setPromptText("Max"); // set the prompt text for the year combobox
+        ratingRangeComboBox.getItems().add("No filter"); // add "no filter" to the year combobox
+        ratingComboBox.valueProperty().addListener((observableValue, oldValue, newValue) -> {
+            if (!newValue.equals("No filter")) {
+                double ratingComboBox = Double.parseDouble(String.valueOf(newValue));
+                ratingRangeComboBox.getItems().clear();
+                ratingRangeComboBox.getItems().add("No filter");
+                for (double rating = 10; rating >= ratingComboBox; rating-= 0.5) {
+                    ratingRangeComboBox.getItems().add(String.valueOf(rating));
+                }
+                ratingRangeComboBox.setDisable(false);
+            } else {
+                ratingRangeComboBox.getItems().clear();
+                ratingRangeComboBox.getItems().add(null); // add a null value for the "No filter" option
+            }
+        });
+
+
 
         countDirectorsMovie.setPromptText("Directors Movie Count"); // set the prompt text for the year combobox
         countDirectorsMovie.getItems().clear();
@@ -155,13 +176,13 @@ public class HomeController implements Initializable {
         }
     }
 
-    public List<Movie> filterByRating(List<Movie> movies, double minRating) {
+    public List<Movie> filterByRating(List<Movie> movies, double minRating, double maxRating) {
         if(movies == null) {
             throw new IllegalArgumentException("movies must not be null");
         }
         return movies.stream()
                 .filter(Objects::nonNull)
-                .filter(movie -> movie.getRating() >= minRating && movie.getRating() < minRating +1)
+                .filter(movie -> movie.getRating() >= minRating && movie.getRating() < maxRating)
                 .toList();
     }
 
@@ -250,6 +271,21 @@ public class HomeController implements Initializable {
         } else {
             allMovies = Movie.initializeMovies(MovieAPI.getApiRequest());
         }
+
+        String minRating = (String) ratingComboBox.getSelectionModel().getSelectedItem();
+        String maxRatingStr = ratingRangeComboBox.getSelectionModel().getSelectedItem() != null ? ratingRangeComboBox.getSelectionModel().getSelectedItem().toString() : "No filter";
+        if (maxRatingStr != null && !maxRatingStr.equals("No filter")){
+            allMovies = Movie.initializeMovies(MovieAPI.getApiRequest());
+            allMovies = filterByRating(allMovies, Double.parseDouble(minRating), Double.parseDouble(maxRatingStr));
+        }
+        else if (minRating != null && !minRating.equals("No filter")) {
+            MovieAPI.addParam(SearchParameter.RATING, minRating);
+            allMovies = Movie.initializeMovies(MovieAPI.getApiRequest());
+        } else {
+            allMovies = Movie.initializeMovies(MovieAPI.getApiRequest());
+        }
+
+
         directorsCount.setText("");
         countDirectorsMovie.setValue("");
         observableMovies.clear();
