@@ -50,7 +50,24 @@
             </padding>
          </Label>
          <JFXComboBox fx:id="yearRangeComboBox" focusColor="#f5c518" prefWidth="75.0" promptText="Year" styleClass="filter-combo-box" stylesheets="@styles.css" />
+         <Label alignment="BASELINE_LEFT" styleClass="text-yellow" stylesheets="@styles.css" text="Rating:" textAlignment="CENTER">
+            <font>
+               <Font size="15.0" />
+            </font>
+            <padding>
+               <Insets right="5.0" top="5.0" />
+            </padding>
+         </Label>
          <JFXComboBox fx:id="ratingComboBox" focusColor="#f5c518" styleClass="filter-combo-box" stylesheets="@styles.css" />
+         <Label alignment="BASELINE_LEFT" styleClass="text-yellow" stylesheets="@styles.css" text="to:" textAlignment="CENTER">
+            <font>
+               <Font size="15.0" />
+            </font>
+            <padding>
+               <Insets right="5.0" top="5.0" />
+            </padding>
+         </Label>
+         <JFXComboBox fx:id="ratingRangeComboBox" focusColor="#f5c518" styleClass="filter-combo-box" stylesheets="@styles.css" />
          <JFXButton fx:id="searchBtn" onAction="#searchBtnClicked" styleClass="background-yellow" stylesheets="@styles.css" text="Filter" />
       </children>
       <VBox.margin>
