@@ -28,9 +28,9 @@ import java.util.stream.Collectors;
 
 public class HomeController implements Initializable {
     @FXML
-    public JFXButton searchBtn, directorsBtn;
+    public JFXButton searchBtn;
     @FXML
-    public TextField searchField, directorsField;
+    public TextField searchField;
     @FXML
     public Label directorsCount = new Label();
     @FXML
@@ -64,7 +64,6 @@ public class HomeController implements Initializable {
     protected SortedState sortedState;
 
     public void initializeState() throws IOException {
-        System.out.println(MovieAPI.getCustomURL());
         allMovies = Movie.initializeMovies(MovieAPI.getApiRequest());
         observableMovies.clear();
         observableMovies.addAll(allMovies); // add all movies to the observable list
@@ -94,7 +93,6 @@ public class HomeController implements Initializable {
 
         yearRangeComboBox.setPromptText("Year"); // set the prompt text for the year combobox
         yearRangeComboBox.getItems().add("No filter"); // add "No filter"
-        //yearRangeComboBox.setDisable(true); // disable the range combobox initially
 
         releaseYearComboBox.valueProperty().addListener((observableValue, oldValue, newValue) -> {
         if (!newValue.equals("No filter")) {
@@ -108,7 +106,6 @@ public class HomeController implements Initializable {
         } else {
             yearRangeComboBox.getItems().clear();
             yearRangeComboBox.getItems().add(null); // add a null value for the "No filter" option
-            //yearRangeComboBox.setDisable(true);
         }
         });
 
@@ -147,8 +144,6 @@ public class HomeController implements Initializable {
             }
         });
 
-
-
         countDirectorsMovie.setPromptText("Directors Movie Count"); // set the prompt text for the year combobox
         countDirectorsMovie.getItems().clear();
         countDirectorsMovie.getItems().add("No filter"); // add "no filter" to the year combobox
@@ -163,9 +158,6 @@ public class HomeController implements Initializable {
         content.setPadding(new Insets(10));
     }
 
-    // sort movies based on sortedState
-    // by default sorted state is NONE
-    // afterwards it switches between ascending and descending
     public void sortMovies() {
         if (sortedState == SortedState.NONE || sortedState == SortedState.DESCENDING) {
             observableMovies.sort(Comparator.comparing(Movie::getTitle));
@@ -251,9 +243,9 @@ public class HomeController implements Initializable {
             MovieAPI.addParam(SearchParameter.GENRE, genre);
         }
 
-        String rating = ratingComboBox.getSelectionModel().getSelectedItem();
-        if (rating != null && !rating.equals("No filter")) {
-            MovieAPI.addParam(SearchParameter.RATING, rating);
+        String minRating = ratingComboBox.getSelectionModel().getSelectedItem();
+        if (minRating != null && !minRating.equals("No filter")) {
+            MovieAPI.addParam(SearchParameter.RATING, minRating);
         }
 
         String releaseYear = (String) releaseYearComboBox.getSelectionModel().getSelectedItem();
@@ -263,7 +255,6 @@ public class HomeController implements Initializable {
         if (endReleaseYear != null){
             allMovies = Movie.initializeMovies(MovieAPI.getApiRequest());
             allMovies = getMoviesBetweenYears(allMovies, Integer.parseInt(releaseYear), endReleaseYear);
-
         }
         else if (releaseYear != null && !releaseYear.equals("No filter")) {
             MovieAPI.addParam(SearchParameter.YEAR, releaseYear);
@@ -272,19 +263,10 @@ public class HomeController implements Initializable {
             allMovies = Movie.initializeMovies(MovieAPI.getApiRequest());
         }
 
-        String minRating = (String) ratingComboBox.getSelectionModel().getSelectedItem();
         String maxRatingStr = ratingRangeComboBox.getSelectionModel().getSelectedItem() != null ? ratingRangeComboBox.getSelectionModel().getSelectedItem().toString() : "No filter";
         if (maxRatingStr != null && !maxRatingStr.equals("No filter")){
-            allMovies = Movie.initializeMovies(MovieAPI.getApiRequest());
             allMovies = filterByRating(allMovies, Double.parseDouble(minRating), Double.parseDouble(maxRatingStr));
         }
-        else if (minRating != null && !minRating.equals("No filter")) {
-            MovieAPI.addParam(SearchParameter.RATING, minRating);
-            allMovies = Movie.initializeMovies(MovieAPI.getApiRequest());
-        } else {
-            allMovies = Movie.initializeMovies(MovieAPI.getApiRequest());
-        }
-
 
         directorsCount.setText("");
         countDirectorsMovie.setValue("");
@@ -302,7 +284,6 @@ public class HomeController implements Initializable {
         countDirectorsMovie.getItems().addAll(getDirectorsNames(allMovies));
         directorsCount.setText("Total: ");
 
-       // applyAllFilters(searchQuery, genre, releaseYear, rating, endReleaseYear);
         if (sortedState != SortedState.NONE) {
             sortMovies();
         }
