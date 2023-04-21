@@ -169,9 +169,6 @@ public class HomeController implements Initializable {
     }
 
     public List<Movie> filterByRating(List<Movie> movies, double minRating, double maxRating) {
-        if(movies == null) {
-            throw new IllegalArgumentException("movies must not be null");
-        }
         return movies.stream()
                 .filter(Objects::nonNull)
                 .filter(movie -> movie.getRating() >= minRating && movie.getRating() < maxRating)
@@ -206,9 +203,6 @@ public class HomeController implements Initializable {
     }
 
     public List<Movie> getMoviesBetweenYears(List<Movie> movies, int startYear, int endYear) {
-        if (movies == null) {
-            throw new IllegalArgumentException("movies must not be null");
-        }
         return movies.stream()
                 .filter(Objects::nonNull)
                 .filter(movie -> {

@@ -7,34 +7,35 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
 public class MovieAPI {
-    private static String customURL = "https://prog2.fh-campuswien.ac.at/movies";
+    private final static String baseURL = "https://prog2.fh-campuswien.ac.at/movies";
+    private static String customSearchParameter = "";
     private static boolean firstParam = true;
     public static String addParam(SearchParameter param, String value){
         if (firstParam){
-            customURL = customURL + "?";
+            customSearchParameter += "?";
         } else {
-            customURL = customURL + "&";
+            customSearchParameter += "&";
         }
         firstParam = false;
 
         switch (param) {
-            case CUSTOMSEARCH -> customURL = customURL + "query=" + value;
-            case GENRE -> customURL = customURL + "genre=" + value;
-            case YEAR -> customURL = customURL + "releaseYear=" + value;
-            case RATING -> customURL = customURL + "ratingFrom=" + value;
+            case CUSTOMSEARCH -> customSearchParameter += "query=" + value;
+            case GENRE -> customSearchParameter += "genre=" + value;
+            case YEAR -> customSearchParameter += "releaseYear=" + value;
+            case RATING -> customSearchParameter += "ratingFrom=" + value;
         }
-        return customURL;
+        return customSearchParameter;
     }
 
     public static void resetURL(){
-        customURL = "https://prog2.fh-campuswien.ac.at/movies";
+        customSearchParameter = "";
         firstParam = true;
     }
 
     public static String getApiRequest() throws IOException {
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder()
-                .url(customURL)
+                .url(baseURL+customSearchParameter)
                 .header("User-Agent", "http.agent")
                 .build();
 
