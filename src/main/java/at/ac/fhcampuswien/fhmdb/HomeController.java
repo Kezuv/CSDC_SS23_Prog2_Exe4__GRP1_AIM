@@ -264,8 +264,11 @@ public class HomeController implements Initializable {
         }
 
         String maxRatingStr = ratingRangeComboBox.getSelectionModel().getSelectedItem() != null ? ratingRangeComboBox.getSelectionModel().getSelectedItem().toString() : "No filter";
-        if (maxRatingStr != null && !maxRatingStr.equals("No filter")){
+        if (minRating != null && !maxRatingStr.equals("No filter")){
+            MovieAPI.addParam(SearchParameter.RATING, minRating);
             allMovies = filterByRating(allMovies, Double.parseDouble(minRating), Double.parseDouble(maxRatingStr));
+        }else {
+            allMovies = Movie.initializeMovies(MovieAPI.getApiRequest());
         }
 
         directorsCount.setText("");
