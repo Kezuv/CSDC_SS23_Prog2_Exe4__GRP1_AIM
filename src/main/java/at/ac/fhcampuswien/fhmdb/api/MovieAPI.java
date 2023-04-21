@@ -43,10 +43,6 @@ public class MovieAPI {
         return response.body().string();
     }
 
-    public static String getCustomURL() {
-        return customURL;
-    }
-
     public static String getTrueImgUrl(String url) throws IOException {
         Document metaCode = Jsoup.connect(url).get();
         Element element = metaCode.select("meta[property=og:image]").first();
