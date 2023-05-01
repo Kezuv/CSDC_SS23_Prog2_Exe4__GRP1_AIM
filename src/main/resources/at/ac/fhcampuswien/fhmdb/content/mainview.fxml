@@ -1,45 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
+<?import com.jfoenix.controls.*?>
+<?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
-<?import com.jfoenix.controls.JFXButton?>
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.text.Font?>
-<VBox xmlns="http://javafx.com/javafx"
-      xmlns:fx="http://javafx.com/fxml"
-      fx:controller="at.ac.fhcampuswien.fhmdb.ui.controller.MainViewController"
-      prefHeight="400.0" prefWidth="600.0">
-
-    <HBox alignment="CENTER_LEFT" prefHeight="42.0" prefWidth="347.0" spacing="20.0" style="-fx-background-color: black;">
-        <padding>
-            <Insets bottom="7.0" left="10.0" top="7.0" />
-        </padding>
-        <children>
-            <Label style="-fx-background-color: F5C518;" text="FHMDb">
-                <font>
-                    <Font name="Calibri Bold" size="24.0" />
-                </font>
-                <padding>
-                    <Insets left="2.0" right="2.0" />
-                </padding>
-            </Label>
-            <Label styleClass="text-white" stylesheets="@../styles/styles.css" text="Welcome to FHMDb!" />
-            <JFXButton fx:id="homeBtn" onAction="#clickHomeBtn" styleClass="background-yellow"
-                       stylesheets="@../styles/styles.css" text="Home"/>
-            <JFXButton fx:id="watchListBtn" onAction="#clickWatchListBtn" styleClass="background-yellow"
-                       stylesheets="@../styles/styles.css" text="Watchlist"/>
-            <JFXButton fx:id="aboutBtn" onAction="#clickAboutBtn" styleClass="background-yellow"
-                       stylesheets="@../styles/styles.css" text="About"/>
-            <Label styleClass="text-yellow" stylesheets="@../styles/styles.css" text="Logged-In User" />
-            <JFXButton fx:id="LogOutBtn" onAction="#clickLogOutBtn" styleClass="background-yellow"
-                       stylesheets="@../styles/styles.css" text="About"/>
-        </children>
-    </HBox>
-
-
-
+<VBox prefHeight="400.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="at.ac.fhcampuswien.fhmdb.ui.controller.MainViewController">
+   <BorderPane fx:id="mainViewContent" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" VBox.vgrow="ALWAYS">
+      <top>
+      
+          <HBox alignment="CENTER_LEFT" spacing="20.0" style="-fx-background-color: black;" BorderPane.alignment="CENTER">
+              <padding>
+                  <Insets bottom="7.0" left="10.0" top="7.0" />
+              </padding>
+              <children>
+                  <Label style="-fx-background-color: F5C518;" text="FHMDb">
+                      <font>
+                          <Font name="Calibri Bold" size="24.0" />
+                      </font>
+                      <padding>
+                          <Insets left="2.0" right="2.0" />
+                      </padding>
+                  </Label>
+                  <Label styleClass="text-white" stylesheets="@../styles/styles.css" text="Welcome to FHMDb!" />
+                  <JFXButton fx:id="homeBtn" onAction="#clickHomeBtn" styleClass="background-yellow" stylesheets="@../styles/styles.css" text="Home" />
+                  <JFXButton fx:id="watchListBtn" onAction="#clickWatchListBtn" styleClass="background-yellow" stylesheets="@../styles/styles.css" text="Watchlist" />
+                  <JFXButton fx:id="aboutBtn" onAction="#clickAboutBtn" styleClass="background-yellow" stylesheets="@../styles/styles.css" text="About" />
+                  <Label fx:id="userNameLabel" styleClass="text-yellow" stylesheets="@../styles/styles.css" text="Logged-In User" />
+                  <JFXButton fx:id="logOutBtn" onAction="#clickLogOutBtn" styleClass="background-yellow" stylesheets="@../styles/styles.css" text="About" />
+              </children>
+          </HBox>
+      </top>
+      <center>
+         <AnchorPane fx:id="contentView" BorderPane.alignment="CENTER" />
+      </center>
+   </BorderPane>
 </VBox>
