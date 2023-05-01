@@ -10,6 +10,7 @@ public class MovieAPI {
     private final static String baseURL = "https://prog2.fh-campuswien.ac.at/movies";
     private static String customSearchParameter = "";
     private static boolean firstParam = true;
+
     public static String addParam(SearchParameter param, String value){
         if (firstParam){
             customSearchParameter += "?";
