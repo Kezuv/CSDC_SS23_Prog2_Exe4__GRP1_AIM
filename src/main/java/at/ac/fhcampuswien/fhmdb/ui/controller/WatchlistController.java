@@ -15,12 +15,11 @@ import javafx.scene.layout.HBox;
 
 import java.io.IOException;
 import java.net.URL;
-import java.time.LocalDate;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-public class WatchListController implements Initializable {
+public class WatchlistController implements Initializable {
     @FXML
     public Label directorsCount = new Label();
     @FXML
