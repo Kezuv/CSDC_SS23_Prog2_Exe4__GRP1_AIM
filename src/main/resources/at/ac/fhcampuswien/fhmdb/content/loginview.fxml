@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import com.jfoenix.controls.*?>
-<?import javafx.geometry.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-
-
-    <VBox prefHeight="331.0" prefWidth="570.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="at.ac.fhcampuswien.fhmdb.ui.controller.LoginViewController">
+<?import com.jfoenix.controls.JFXButton?>
+<VBox prefHeight="331.0" prefWidth="570.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="at.ac.fhcampuswien.fhmdb.ui.controller.LoginViewController">
     <HBox alignment="CENTER_LEFT" prefHeight="42.0" prefWidth="347.0" spacing="20.0" style="-fx-background-color: black;">
         <padding>
             <Insets bottom="7.0" left="10.0" top="7.0" />
@@ -33,36 +33,42 @@
             <Insets bottom="20.0" left="10.0" top="20.0" />
         </padding>
     </HBox>
-    <VBox prefHeight="200.0" prefWidth="100.0" VBox.vgrow="ALWAYS"  style="-fx-background-color: black;">
+    <VBox prefHeight="200.0" prefWidth="100.0" style="-fx-background-color: black;" VBox.vgrow="ALWAYS">
         <padding>
             <Insets bottom="25.0" left="150" top="30.0" />
         </padding>
         <children>
-            <TextField fx:id="username" prefHeight="20.0" prefWidth="70.0" promptText="User Name"/>
-            <Label alignment="BOTTOM_LEFT" styleClass="text-red" stylesheets="@../styles/styles.css" text="username error">
+            <TextField fx:id="username" maxWidth="150.0" prefHeight="26.0" prefWidth="115.0" promptText="User Name" translateX="50.0" translateY="40.0">
+            <VBox.margin>
+               <Insets />
+            </VBox.margin></TextField>
+            <Label styleClass="text-red" stylesheets="@../styles/styles.css" text="username error" translateX="50.0" translateY="40.0">
             <font>
                 <Font size="8.0" />
             </font>
             <opaqueInsets>
                 <Insets />
             </opaqueInsets>
-            <padding>
-                <Insets top="2.0" />
-            </padding>
+            <VBox.margin>
+               <Insets />
+            </VBox.margin>
             </Label>
-            <TextField fx:id="password" prefHeight="20.0" prefWidth="70.0" promptText="password" />
-            <Label alignment="BOTTOM_LEFT" styleClass="text-red" stylesheets="@../styles/styles.css" text="password error">
+            <TextField fx:id="password" maxWidth="150.0" prefHeight="20.0" prefWidth="70.0" promptText="password" translateX="50.0" translateY="40.0">
+            <VBox.margin>
+               <Insets />
+            </VBox.margin></TextField>
+            <Label styleClass="text-red" stylesheets="@../styles/styles.css" text="password error" translateX="50.0" translateY="40.0">
                 <font>
                     <Font size="8.0" />
                 </font>
                 <opaqueInsets>
                     <Insets />
                 </opaqueInsets>
-                <padding>
-                    <Insets top="2.0" />
-                </padding>
+            <VBox.margin>
+               <Insets />
+            </VBox.margin>
             </Label>
-            <JFXButton fx:id=""  styleClass="background-yellow" stylesheets="@../styles/styles.css" text="Login" />
+            <JFXButton fx:id="" styleClass="background-yellow" stylesheets="@../styles/styles.css" text="Login" />
 
 
         </children>
