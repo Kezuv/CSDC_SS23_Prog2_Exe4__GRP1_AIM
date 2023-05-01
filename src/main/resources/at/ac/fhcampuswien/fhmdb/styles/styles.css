@@ -15,6 +15,10 @@
     -fx-text-fill: #f5c518;
 }
 
+.text-yellow {
+    -fx-text-fill: #7676a7;
+}
+
 .text-white {
     -fx-text-fill: #ffffff;
 }
