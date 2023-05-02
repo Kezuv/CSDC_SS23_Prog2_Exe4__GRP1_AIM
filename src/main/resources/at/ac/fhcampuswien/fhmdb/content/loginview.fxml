@@ -5,8 +5,12 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane style="-fx-background-color: black;" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="at.ac.fhcampuswien.fhmdb.ui.controller.LoginViewController" BorderPane.alignment="CENTER">
-    <VBox BorderPane.alignment="CENTER" VBox.vgrow="ALWAYS">
+<AnchorPane style="-fx-alignment: center; " xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="at.ac.fhcampuswien.fhmdb.ui.controller.LoginViewController" BorderPane.alignment="CENTER" >
+    <VBox style="-fx-background-color: black; " VBox.vgrow="ALWAYS" alignment="CENTER"
+          AnchorPane.bottomAnchor="0.0"
+          AnchorPane.topAnchor="0.0"
+          AnchorPane.leftAnchor="0.0"
+          AnchorPane.rightAnchor="0.0">
 
         <children>
             <TextField fx:id="username" maxWidth="150.0" prefHeight="26.0" prefWidth="115.0" promptText="User Name">

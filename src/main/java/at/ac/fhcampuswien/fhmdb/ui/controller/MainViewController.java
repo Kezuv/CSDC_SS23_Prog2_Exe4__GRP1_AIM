@@ -31,7 +31,8 @@ public class MainViewController implements Initializable {
 
     public void clickHomeBtn(ActionEvent actionEvent) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/at/ac/fhcampuswien/fhmdb/content/home.fxml"));
-        contentView = fxmlLoader.load();
+        AnchorPane root = fxmlLoader.load();
+        mainViewContent.setCenter(root);
     }
 
     public void clickWatchListBtn(ActionEvent actionEvent) throws IOException {
@@ -45,14 +46,19 @@ public class MainViewController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/at/ac/fhcampuswien/fhmdb/content/loginview.fxml"));
+        AnchorPane view = null;
+        try {
+            view = fxmlLoader.load();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        mainViewContent.setCenter(view);
     }
 
     public void clickLogOutBtn(ActionEvent actionEvent) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/at/ac/fhcampuswien/fhmdb/content/loginview.fxml"));
-       AnchorPane view = fxmlLoader.load();
-
-        //contentView = fxmlLoader.load();
+        AnchorPane view = fxmlLoader.load();
         mainViewContent.setCenter(view);
     }
 
