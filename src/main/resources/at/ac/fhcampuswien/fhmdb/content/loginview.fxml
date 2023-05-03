@@ -12,18 +12,11 @@
         <children>
          <VBox alignment="CENTER_LEFT" maxHeight="500.0" maxWidth="500.0" prefHeight="500.0" prefWidth="500.0" styleClass="background-light-black" stylesheets="@../styles/styles.css">
             <children>
-                <Label style="-fx-font-size: 40" styleClass="text-yellow" stylesheets="@../styles/styles.css">
-                    Welcome to FHMDb!
-                </Label>
-                <Label style="-fx-font-size: 25" styleClass="text-white" stylesheets="@../styles/styles.css">
-                    Please log in to use
-                </Label>
-                <Label style="-fx-font-size: 25" styleClass="text-white" stylesheets="@../styles/styles.css">
-                    our complete service.
-                </Label>
-                <Label style="-fx-font-size: 10" styleClass="text-white" stylesheets="@../styles/styles.css">
-                    ©Ibrahim Abrakel, Manuel Stefan Ambross, Armin Foucek
-                </Label>
+                <Label style="-fx-font-size: 40" styleClass="text-yellow" stylesheets="@../styles/styles.css">Welcome to FHMDb!</Label>
+                <Label style="-fx-font-size: 25" styleClass="text-white" stylesheets="@../styles/styles.css">Please log in to use</Label>
+                <Label style="-fx-font-size: 25" styleClass="text-white" stylesheets="@../styles/styles.css">our complete service.</Label>
+                <Label style="-fx-font-size: 10" styleClass="text-white" stylesheets="@../styles/styles.css">©Ibrahim Abrakel, Manuel Stefan Ambross, Armin Foucek</Label>
+                <Label style="-fx-font-size: 10" styleClass="text-white" stylesheets="@../styles/styles.css" onMouseClicked="#openMoreInfo">(Click here!)</Label>
             </children>
             <HBox.margin>
                <Insets right="50.0" />
