@@ -15,12 +15,17 @@
     -fx-text-fill: #f5c518;
 }
 
-.text-red {
+.text-purple {
     -fx-text-fill: #7676a7;
 }
 
 .text-white {
     -fx-text-fill: #ffffff;
+}
+
+.text-red {
+    -fx-text-fill: red;
+    -fx-font-size: 20
 }
 
 .list-view .list-cell:even {

@@ -1,32 +1,21 @@
 package at.ac.fhcampuswien.fhmdb.ui.controller;
 
-import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.TextField;
+import javafx.event.ActionEvent;
+import javafx.scene.input.MouseEvent;
 
 public class LoginViewController {
+    public void clickLoginBtn(ActionEvent actionEvent) {
+    }
 
-    @FXML
-    private TextField username;
+    public void clickRegisterBtn(ActionEvent actionEvent) {
+    }
 
-    @FXML
-    private TextField password;
-
-    @FXML
-    private Button loginButton;
-
-    @FXML
-    private Button registerButton;
-
-    @FXML
-    public void initialize() {
-        // Set up functionality for login and register buttons
-        loginButton.setOnAction(event -> {
-            // Add code to handle login button click
-        });
-
-        registerButton.setOnAction(event -> {
-            // Add code to handle register button click
-        });
+    public void openMoreInfo(MouseEvent mouseEvent) {
+        String url = "https://www.youtube.com/watch?v=dQw4w9WgXcQ";
+        try {
+            java.awt.Desktop.getDesktop().browse(java.net.URI.create(url));
+        } catch (java.io.IOException e) {
+            System.out.println("Could not open webpage: " + url);
+        }
     }
 }
