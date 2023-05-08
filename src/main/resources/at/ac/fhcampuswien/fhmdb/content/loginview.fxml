@@ -1,14 +1,85 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
+<?import com.jfoenix.controls.*?>
+<?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="at.ac.fhcampuswien.fhmdb.Loginview"
-            prefHeight="400.0" prefWidth="600.0">
+<AnchorPane style="-fx-alignment: center;" BorderPane.alignment="CENTER" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="at.ac.fhcampuswien.fhmdb.ui.controller.LoginViewController">
+    <HBox alignment="CENTER_LEFT" style="-fx-background-color: black; " AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" VBox.vgrow="ALWAYS">
+
+        <children>
+         <VBox alignment="CENTER_LEFT" maxHeight="500.0" maxWidth="500.0" prefHeight="500.0" prefWidth="500.0" styleClass="background-light-black" stylesheets="@../styles/styles.css">
+            <children>
+                <Label style="-fx-font-size: 40" styleClass="text-yellow" stylesheets="@../styles/styles.css">Welcome to FHMDb!</Label>
+                <Label style="-fx-font-size: 25" styleClass="text-white" stylesheets="@../styles/styles.css">Please log in to use</Label>
+                <Label style="-fx-font-size: 25" styleClass="text-white" stylesheets="@../styles/styles.css">our complete service.</Label>
+                <Label style="-fx-font-size: 10" styleClass="text-white" stylesheets="@../styles/styles.css">©Ibrahim Abrakel, Manuel Stefan Ambross, Armin Foucek</Label>
+                <Label style="-fx-font-size: 10" styleClass="text-white" stylesheets="@../styles/styles.css" onMouseClicked="#openMoreInfo">(Click here!)</Label>
+            </children>
+            <HBox.margin>
+               <Insets right="50.0" />
+            </HBox.margin>
+            <padding>
+               <Insets left="20.0" />
+            </padding>
+         </VBox>
+            <VBox maxHeight="500.0" maxWidth="500.0" prefHeight="500.0" prefWidth="500.0" styleClass="background-light-black" stylesheets="@../styles/styles.css">
+
+                <Label alignment="CENTER_LEFT" style="-fx-font-size: 20" styleClass="text-yellow" stylesheets="@../styles/styles.css">Username</Label>
+                <TextField fx:id="username" maxWidth="250.0" prefHeight="30.0" promptText="User Name">
+                    <VBox.margin>
+                        <Insets />
+                    </VBox.margin>
+            </TextField>
+                <Label fx:id="usernameError" styleClass="text-red" stylesheets="@../styles/styles.css" text="username error">
+                    <font>
+                        <Font size="8.0" />
+                    </font>
+                    <opaqueInsets>
+                        <Insets />
+                    </opaqueInsets>
+                    <VBox.margin>
+                        <Insets />
+                    </VBox.margin>
+               <padding>
+                  <Insets bottom="30.0" />
+               </padding>
+                </Label>
+                <Label alignment="CENTER_LEFT" style="-fx-font-size: 20" styleClass="text-yellow" stylesheets="@../styles/styles.css">Password</Label>
+                <TextField fx:id="Password" maxWidth="250.0" prefHeight="30.0" promptText="password">
+                    <VBox.margin>
+                        <Insets />
+                    </VBox.margin>
+            </TextField>
+                <Label fx:id="passwordError" styleClass="text-red" stylesheets="@../styles/styles.css" text="password error">
+                    <font>
+                        <Font size="8.0" />
+                    </font>
+                    <opaqueInsets>
+                        <Insets />
+                    </opaqueInsets>
+                    <VBox.margin>
+                        <Insets />
+                    </VBox.margin>
+                </Label>
+                <HBox spacing="50.0">
+                    <JFXButton fx:id="loginBtn" minWidth="100.0" onAction="#clickLoginBtn" styleClass="background-yellow" stylesheets="@../styles/styles.css" text="Login" />
+                    <JFXButton fx:id="registerBtn" minWidth="100.0" onAction="#clickRegisterBtn" styleClass="background-yellow" stylesheets="@../styles/styles.css" text="Register" />
+                </HBox>
+            <padding>
+               <Insets left="20.0" top="150.0" />
+            </padding>
+            </VBox>
+        </children>
+      <opaqueInsets>
+         <Insets />
+      </opaqueInsets>
+      <padding>
+         <Insets left="100.0" />
+      </padding>
+
+    </HBox>
 
 </AnchorPane>

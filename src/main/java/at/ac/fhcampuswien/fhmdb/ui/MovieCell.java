@@ -2,13 +2,13 @@ package at.ac.fhcampuswien.fhmdb.ui;
 
 import at.ac.fhcampuswien.fhmdb.api.MovieAPI;
 import at.ac.fhcampuswien.fhmdb.models.Movie;
+import com.jfoenix.controls.JFXButton;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseButton;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -38,6 +38,8 @@ public class MovieCell extends ListCell<Movie> {
     private final HBox yearAndLength = new HBox();
     private final HBox team = new HBox();
     private final VBox directorsWriters = new VBox();
+    private final JFXButton showDetailsBtn = new JFXButton();
+    private final JFXButton watchListAddBtn = new JFXButton();
 
     private String setUpList(List<String> type, String description){
         String list = description+": \n";
@@ -61,16 +63,22 @@ public class MovieCell extends ListCell<Movie> {
         } else {
             this.getStyleClass().add("movie-cell");
 
-            setOnMouseClicked(event -> {
-                if (event.getButton() == MouseButton.PRIMARY) {
+            showDetailsBtn.setOnMouseClicked(event -> {
+                if (movie.isExpanded()) {
+                    movie.setExpanded(false);
+                    updateItem(movie, false);
+                } else {
                     movie.setExpanded(true);
                     updateItem(movie, false);
                 }
-                if (event.getButton() == MouseButton.SECONDARY){
-                    movie.setExpanded(false);
-                    updateItem(movie, false);
-                }
             });
+
+            //TODO add function for MouseClicked on watchListAddBtn
+            watchListAddBtn.setOnMouseClicked(event -> {
+                //add code / function here
+                System.out.println("Watchlist Button clicked!");
+            });
+
             //set Text
             title.setText(movie.getTitle());
             description.setText(
@@ -92,6 +100,12 @@ public class MovieCell extends ListCell<Movie> {
             genre.getStyleClass().add("text-white");
             genre.setStyle("-fx-font-style: italic");
             layout.setBackground(new Background(new BackgroundFill(Color.web("#454545"), null, null)));
+            showDetailsBtn.getStyleClass().add("background-yellow");
+            watchListAddBtn.getStyleClass().add("background-yellow");
+            //TODO made a function to change watchListAddBtnText if it is already in
+            watchListAddBtn.setText("Add Watchlist");
+
+
             //Width of the cell´s
             HBox.setHgrow(setRight, Priority.ALWAYS);
             layout.setPrefWidth(getScene().getWindow().getWidth() * 0.975);
@@ -102,6 +116,7 @@ public class MovieCell extends ListCell<Movie> {
                 //set Text
                 releaseYear.setText("(" + movie.getReleaseYear() + ")");
                 rating.setText(String.valueOf(movie.getRating()));
+                showDetailsBtn.setText("Show Details");
                 //set style
                 rating.getStyleClass().add("text-white");
                 rating.setFont(Font.font("System", FontWeight.BOLD, 15));
@@ -109,7 +124,7 @@ public class MovieCell extends ListCell<Movie> {
                 //set layout
                 setRight.maxWidthProperty().bind(header.widthProperty().subtract(title.maxWidthProperty()).subtract(releaseYear.maxWidthProperty()).subtract(rating.maxWidthProperty()));
                 header.getChildren().clear();
-                header.getChildren().addAll(title, releaseYear, setRight, rating);
+                header.getChildren().addAll(title, releaseYear, setRight, rating, showDetailsBtn, watchListAddBtn);
                 header.setAlignment(Pos.BASELINE_LEFT);
                 header.spacingProperty().set(5);
                 layout.getChildren().clear();
@@ -123,6 +138,7 @@ public class MovieCell extends ListCell<Movie> {
                 mainCast.setText(setUpList(movie.getMainCast(), "Main Cast"));
                 releaseYear.setText("Release Year: " + movie.getReleaseYear());
                 lengthInMinutes.setText("Length: " + movie.getLengthInMinutes() + " min");
+                showDetailsBtn.setText("Close Details");
                 //set style
                 writers.getStyleClass().add("text-white");
                 mainCast.getStyleClass().add("text-white");
@@ -149,7 +165,7 @@ public class MovieCell extends ListCell<Movie> {
                         details.getChildren().clear();
                                 header.getChildren().clear();
                                 setRight.maxWidthProperty().bind(header.widthProperty().subtract(title.maxWidthProperty()).subtract(rating.maxWidthProperty()));
-                                header.getChildren().addAll(title, setRight, rating);
+                                header.getChildren().addAll(title, setRight, rating, showDetailsBtn, watchListAddBtn);
                                 description.wrapTextProperty().set(true);
                                 description.setMaxWidth(550);
                                 yearAndLength.getChildren().clear();
@@ -157,7 +173,7 @@ public class MovieCell extends ListCell<Movie> {
                                 yearAndLength.spacingProperty().set(360);
                         details.getChildren().addAll(header, yearAndLength, description, genre);
                                 team.getChildren().clear();
-                                        writers.setPadding(new Insets(20,0,0,0));
+                                        writers.setPadding(new Insets(20,0,20,0));
                                         directorsWriters.getChildren().clear();
                                         directorsWriters.getChildren().addAll(directors, writers);
                                 team.getChildren().addAll(directorsWriters, mainCast);
@@ -167,7 +183,7 @@ public class MovieCell extends ListCell<Movie> {
                         details.prefWidthProperty().set(getScene().getWidth() - imgBox.getMaxWidth());
                 content.getChildren().add(details);
                 content.spacingProperty().set(50);
-                content.setPadding(new Insets(20,0,20,20));
+                content.setPadding(new Insets(0,0,0,20));
                 layout.getChildren().clear();
                 layout.getChildren().add(content);
             }
