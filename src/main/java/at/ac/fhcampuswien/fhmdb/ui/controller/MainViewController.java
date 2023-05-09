@@ -2,6 +2,8 @@ package at.ac.fhcampuswien.fhmdb.ui.controller;
 
 import at.ac.fhcampuswien.fhmdb.models.User;
 import com.jfoenix.controls.JFXButton;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -28,7 +30,7 @@ public class MainViewController implements Initializable {
     private Region setRight = new Region();
     private Region setCenter = new Region();
 
-    private static boolean logedIn = false;
+    private static BooleanProperty loggedInProperty = new SimpleBooleanProperty(false);
 
     private static User activeUser;
 
@@ -37,8 +39,10 @@ public class MainViewController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
+        loggedInProperty.addListener((observable, oldValue, newValue) -> {
+            checkIfLoggedIn();
+        });
         checkIfLoggedIn();
-
 
         loggoutBtn.setText("Logout");
 
@@ -87,7 +91,7 @@ public class MainViewController implements Initializable {
     }
 
     public void clickHomeBtn(ActionEvent actionEvent) throws IOException {
-        if (logedIn) {
+        if (isLogedIn()) {
             changeBtnColors(homeBtn);
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/at/ac/fhcampuswien/fhmdb/content/home.fxml"));
             AnchorPane root = fxmlLoader.load();
@@ -96,7 +100,7 @@ public class MainViewController implements Initializable {
     }
 
     public void clickWatchListBtn(ActionEvent actionEvent) throws IOException {
-        if (logedIn) {
+        if (isLogedIn()) {
             changeBtnColors(watchListBtn);
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/at/ac/fhcampuswien/fhmdb/content/watchlist.fxml"));
             AnchorPane root = fxmlLoader.load();
@@ -105,7 +109,7 @@ public class MainViewController implements Initializable {
     }
 
     public void clickAboutBtn(ActionEvent actionEvent) throws IOException {
-        if (logedIn) {
+        if (isLogedIn()) {
             changeBtnColors(aboutBtn);
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/at/ac/fhcampuswien/fhmdb/content/about.fxml"));
             AnchorPane root = fxmlLoader.load();
@@ -114,15 +118,15 @@ public class MainViewController implements Initializable {
     }
 
     public void clickLogoutBtn(ActionEvent actionEvent) throws IOException {
-        if (logedIn) {
-            changeBtnColors(loggoutBtn);
+        if (isLogedIn()) {
+            loggedInProperty.set(false);
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/at/ac/fhcampuswien/fhmdb/content/loginview.fxml"));
             AnchorPane view = fxmlLoader.load();
             mainViewContent.setCenter(view);
         }
     }
     private void checkIfLoggedIn(){
-        if (!logedIn){
+        if (!isLogedIn()){
             userNameLabel.setText("");
             homeBtn.getStyleClass().addAll("background-light-black", "text-white");
             aboutBtn.getStyleClass().addAll("background-light-black", "text-white");
@@ -132,20 +136,20 @@ public class MainViewController implements Initializable {
             if (activeUser != null){
                 userNameLabel.setText(activeUser.getUsername());
             }
-            homeBtn.getStyleClass().addAll("background-yellow", "text-white");
-            aboutBtn.getStyleClass().addAll("background-yellow", "text-white");
-            watchListBtn.getStyleClass().addAll("background-yellow", "text-white");
-            loggoutBtn.getStyleClass().addAll("background-yellow", "text-white");
+            loggoutBtn.getStyleClass().removeAll("background-light-black", "text-white");
+            homeBtn.getStyleClass().removeAll("background-light-black", "text-white");
+            aboutBtn.getStyleClass().removeAll("background-light-black", "text-white");
+            watchListBtn.getStyleClass().removeAll("background-light-black", "text-white");
         }
     }
 
     public static boolean isLogedIn() {
-        return logedIn;
+        return loggedInProperty.get();
     }
 
 
     public static void setLogedIn(boolean logedIn) {
-        MainViewController.logedIn = logedIn;
+        loggedInProperty.set(logedIn);
     }
 
     public static User getActiveUser() {

@@ -1,13 +1,10 @@
 package at.ac.fhcampuswien.fhmdb.ui.controller;
 
 import at.ac.fhcampuswien.fhmdb.repos.UserRepository;
-import at.ac.fhcampuswien.fhmdb.models.User;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.control.TextField;
-
-import java.io.IOException;
 import java.sql.SQLException;
 
 public class LoginViewController {
@@ -15,15 +12,35 @@ public class LoginViewController {
     public TextField usernameField;
     @FXML
     public TextField passwordField;
-    public void clickLoginBtn(ActionEvent actionEvent) throws SQLException {
-        // Get username and password from TextField
-        new User(usernameField.getText(), passwordField.getText());
+    public void clickLoginBtn(ActionEvent actionEvent){
+        if (usernameField.getText() != null && !usernameField.getText().equals("") &&
+                passwordField.getText() != null && !passwordField.getText().equals("")){
 
+            try {
+                MainViewController.setActiveUser(UserRepository.userLogIn(usernameField.getText(), passwordField.getText()));
+                MainViewController.setLogedIn(true);
+                System.out.println("login succeed!");
+            } catch (SQLException e) {
+                //TODO ALLERT when Username or Password is false - Exception?
+                System.out.println("Username or Password false");
+                throw new RuntimeException(e);
+            }
+        }
 
     }
 
-    public void clickRegisterBtn(ActionEvent actionEvent) throws IOException {
-
+    public void clickRegisterBtn(ActionEvent actionEvent) {
+        if (usernameField.getText() != null && !usernameField.getText().equals("") &&
+                passwordField.getText() != null && !passwordField.getText().equals("")){
+            try {
+                UserRepository.registerUser(usernameField.getText(), passwordField.getText());
+                System.out.println("Register complete!");
+            } catch (SQLException e) {
+                System.out.println("Register failed - user exist?");
+                //TODO ALERT USER EXIST - EXCEPTION ?
+                throw new RuntimeException(e);
+            }
+        }
     }
 
     public void openMoreInfo(MouseEvent mouseEvent) {

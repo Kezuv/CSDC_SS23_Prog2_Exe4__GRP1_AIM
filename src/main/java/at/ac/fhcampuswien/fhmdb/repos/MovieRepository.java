@@ -25,9 +25,9 @@ public class MovieRepository {
     }
 
     //Add all movies to database
-    public void addMovies(List<Movie> movies) throws SQLException {
+    public static void addMovies(List<Movie> movies) throws SQLException {
         for (Movie movie : movies) {
-            movieDao.create(movieToMovieEntity(movie));
+            movieDao.createIfNotExists(movieToMovieEntity(movie));
         }
     }
 
@@ -59,7 +59,7 @@ public class MovieRepository {
     }
 
     //Converts Movie object to MovieEntity
-    private MovieEntity movieToMovieEntity (Movie movie){
+    private static MovieEntity movieToMovieEntity(Movie movie){
         return new MovieEntity(movie.getId(), movie.getTitle(), movie.getDescription(),
                 movie.getImgUrl(), genresToString(movie.getGenres()), listToString(movie.getDirectors()), listToString(movie.getWriters()),
                 listToString(movie.getMainCast()), movie.getRating(), movie.getReleaseYear(), movie.getLengthInMinutes());
@@ -73,7 +73,7 @@ public class MovieRepository {
     }
 
     //In-class converter from List<Genre> to String
-    private String genresToString (List<Genre> genres){
+    private static String genresToString(List<Genre> genres){
         StringBuilder genreString = new StringBuilder();
         for (Genre genre : genres) {
             genreString.append(genre.name()).append(",");
@@ -94,7 +94,7 @@ public class MovieRepository {
     }
 
     //In-class converter from List<String> to String
-    private String listToString (List<String> list){
+    private static String listToString(List<String> list){
         return String.join(",", list);
     }
 

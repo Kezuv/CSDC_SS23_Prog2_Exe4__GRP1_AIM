@@ -16,24 +16,19 @@ public class UserRepository {
     }
 
 
-    //Add new user in database (Need User Object)
-    public static void addToUsers(User user) throws SQLException {
-        userDao.createIfNotExists(userToUserEntity(user));
+    //Register new user in database (Need User Object)
+    public static void registerUser(String username, String password) throws SQLException {
+        userDao.createIfNotExists(new UserEntity(username,password));
     }
 
-    //Asks if user exists (Needs a String and returns a UserEntity object -> Getter is there)
-    /*public static User getUserbyUsername(String username) throws SQLException{
-        UserEntity getUser = userDao.queryForId(username);
-        return new User(getUser.getUsername(), getUser.getPassword());
-    }
-    */
     //Converts User object to UserEntity object
     private static UserEntity userToUserEntity (User user){
         return new UserEntity(user.getUsername(), user.getPassword());
     }
 
-    public static User userLogIn(User userToLogIn) throws SQLException {
-            List<UserEntity> allUsers = userDao.queryForMatching(new UserEntity(userToLogIn.getUsername(), userToLogIn.getPassword()));
+    public static User userLogIn(String username, String password) throws SQLException {
+            List<UserEntity> allUsers = userDao.queryForMatching(new UserEntity(username, password));
+            // TODO what happend when two users have the same username & password?
             return new User(allUsers.get(0).getUsername(), allUsers.get(0).getPassword(), allUsers.get(0).getId());
     }
 
