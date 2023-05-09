@@ -16,6 +16,7 @@ public class WatchlistRepository {
         this.watchlistDao = DaoManager.createDao(connectionSource, WatchlistMovieEntity.class);
     }
 
+    //Returns all movies in the watchlist for a user
     public List<MovieEntity> getAllMoviesForUser(UserEntity user) throws SQLException {
         List<MovieEntity> movies = new ArrayList<>();
         QueryBuilder<WatchlistMovieEntity, Long> queryBuilder = watchlistDao.queryBuilder();
@@ -27,7 +28,9 @@ public class WatchlistRepository {
         return movies;
     }
 
-    public boolean add(WatchlistMovieEntity watchlistMovie) throws SQLException {
+    //In-class function to check if a movie exists and add it to the watchlist
+    //Can be set to public for usage in other contexts maybe?
+    private boolean add(WatchlistMovieEntity watchlistMovie) throws SQLException {
         if (watchlistDao.idExists(watchlistMovie.getId())) {
             return false; // already exists
         }
@@ -35,12 +38,15 @@ public class WatchlistRepository {
         return true;
     }
 
+    //Add a movie for a user in the watchlist
     public boolean addMovieForUser(UserEntity user, MovieEntity movie) throws SQLException {
         WatchlistMovieEntity watchlistMovie = new WatchlistMovieEntity(user, movie);
         return add(watchlistMovie);
     }
 
-    public boolean delete(WatchlistMovieEntity watchlistMovie) throws SQLException {
+    //In-class function to check if a movie exists and remove it from the watchlist
+    //Can be set to public for usage in other contexts maybe?
+    private boolean delete(WatchlistMovieEntity watchlistMovie) throws SQLException {
         if (!watchlistDao.idExists(watchlistMovie.getId())) {
             return false; // doesn't exist
         }
@@ -48,6 +54,7 @@ public class WatchlistRepository {
         return true;
     }
 
+    //Removes a movie from the watchlist for a user
     public boolean deleteMovieForUser(UserEntity user, MovieEntity movie) throws SQLException {
         QueryBuilder<WatchlistMovieEntity, Long> queryBuilder = watchlistDao.queryBuilder();
         queryBuilder.where().eq("username", user.getUsername()).and().eq("id", movie.getId());

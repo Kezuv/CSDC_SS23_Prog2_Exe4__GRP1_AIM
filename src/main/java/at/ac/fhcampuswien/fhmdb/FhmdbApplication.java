@@ -22,8 +22,5 @@ public class FhmdbApplication extends Application {
         stage.setTitle("FHMDb!");
         stage.setScene(scene);
         stage.show();
-
-        //Implementing h2 database below
-
     }
 }
