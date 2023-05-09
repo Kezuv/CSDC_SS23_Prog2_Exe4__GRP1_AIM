@@ -18,8 +18,9 @@ public class UserRepository {
     }
 
     //Asks if user exists (Needs a String and returns a UserEntity object -> Getter is there)
-    public static UserEntity getUserbyUsername(String username) throws SQLException{
-        return userDao.queryForId(username);
+    public static User getUserbyUsername(String username) throws SQLException{
+        UserEntity getUser = userDao.queryForId(username);
+        return new User(getUser.getUsername(), getUser.getPassword());
     }
 
     //Converts User object to UserEntity object

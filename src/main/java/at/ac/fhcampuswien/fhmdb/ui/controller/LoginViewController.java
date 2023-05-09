@@ -24,7 +24,7 @@ public class LoginViewController {
         String username = this.username.getText();
         String password = this.password.getText();
         User enteredUser = new User(username, password);
-        UserEntity checkUser = UserRepository.getUserbyUsername(username);
+        /*UserEntity checkUser = UserRepository.getUserbyUsername(username);
 
         //Check if user already exists
         if(!(checkUser == null) && username.equals(checkUser.getUsername())){
@@ -43,7 +43,7 @@ public class LoginViewController {
             } catch (SQLException e) {
                 System.out.println("Fehler beim Hinzufügen des Benutzers zur Datenbank: " + e.getMessage());
             }
-        }
+        }*/
     }
 
     public void clickRegisterBtn(ActionEvent actionEvent) throws IOException {
