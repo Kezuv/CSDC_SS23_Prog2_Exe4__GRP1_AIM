@@ -1,8 +1,11 @@
 package at.ac.fhcampuswien.fhmdb.models;
 
+import at.ac.fhcampuswien.fhmdb.repos.WatchlistRepository;
+import at.ac.fhcampuswien.fhmdb.ui.controller.MainViewController;
 import com.google.gson.Gson;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -77,6 +80,15 @@ public class Movie {
 
     public void setExpanded(boolean expanded) {
         isExpanded = expanded;
+    }
+
+    public boolean isOnWatchList() {
+        try {
+            return WatchlistRepository.checkIfMovieIsOnWatchList(MainViewController.getActiveUser(), this);
+        } catch (SQLException e) {
+            //TODO Handle SQL Exception
+            throw new RuntimeException(e);
+        }
     }
 
     public static List<Movie> initializeMovies(String data){

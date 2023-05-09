@@ -42,12 +42,12 @@ public class MovieRepository {
     }
 
     //In-class function to get all MovieEntity´s from the database
-    private List<MovieEntity> getAllMovieEntities() throws SQLException {
+    private static List<MovieEntity> getAllMovieEntities() throws SQLException {
         return movieDao.queryForAll();
     }
 
     //Get all movies from database as a List<Movie>
-    public List<Movie> getAllMovies() throws SQLException, IOException {
+    public static List<Movie> getAllMovies() throws SQLException, IOException {
         List<MovieEntity> movieEntities = getAllMovieEntities();
         List<Movie> movies = new ArrayList<>();
 
@@ -59,14 +59,14 @@ public class MovieRepository {
     }
 
     //Converts Movie object to MovieEntity
-    private static MovieEntity movieToMovieEntity(Movie movie){
+    public static MovieEntity movieToMovieEntity(Movie movie){
         return new MovieEntity(movie.getId(), movie.getTitle(), movie.getDescription(),
                 movie.getImgUrl(), genresToString(movie.getGenres()), listToString(movie.getDirectors()), listToString(movie.getWriters()),
                 listToString(movie.getMainCast()), movie.getRating(), movie.getReleaseYear(), movie.getLengthInMinutes());
     }
 
     //Converts MovieEntity to movie object -> For watchlist usage maybe?
-    public Movie movieEntityToMovie (MovieEntity movie) throws IOException {
+    public static Movie movieEntityToMovie(MovieEntity movie) throws IOException {
         return new Movie(movie.getId(), movie.getTitle(), movie.getDescription(),
                 movie.getImgUrl(), stringToGenres(movie.getGenres()), stringToList(movie.getDirectors()), stringToList(movie.getWriters()),
                 stringToList(movie.getMainCast()), movie.getRating(), movie.getReleaseYear(), movie.getLengthInMinutes());
@@ -83,7 +83,7 @@ public class MovieRepository {
     }
 
     //In-class converter from String to List<Genre>
-    private List<Genre> stringToGenres(String genreString) {
+    private static List<Genre> stringToGenres(String genreString) {
         List<Genre> genres = new ArrayList<>();
         String[] genreNames = genreString.split(",");
         for (String genreName : genreNames) {
@@ -99,7 +99,7 @@ public class MovieRepository {
     }
 
     //In-class converter from String to List<String>
-    private List<String> stringToList (String str){
+    private static List<String> stringToList(String str){
         return Arrays.asList(str.split(","));
     }
 

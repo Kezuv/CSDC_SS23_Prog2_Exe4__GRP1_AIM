@@ -30,7 +30,7 @@ public class DataBase {
             createConnectionSource();
             userDao = DaoManager.createDao(connectionSource, UserEntity.class);
             movieDao = DaoManager.createDao(connectionSource, MovieEntity.class);
-           // watchlistDao = DaoManager.createDao(connectionSource, WatchlistMovieEntity.class);
+            watchlistDao = DaoManager.createDao(connectionSource, WatchlistMovieEntity.class);
             createTables();
         }catch(SQLException e){
             System.out.println(e.getMessage());
@@ -49,7 +49,7 @@ public class DataBase {
     private static void createTables() throws SQLException {
         TableUtils.createTableIfNotExists(connectionSource, UserEntity.class);
         TableUtils.createTableIfNotExists(connectionSource, MovieEntity.class);
-      //  TableUtils.createTableIfNotExists(connectionSource, WatchlistMovieEntity.class);
+        TableUtils.createTableIfNotExists(connectionSource, WatchlistMovieEntity.class);
     }
 
     private static void createConnectionSource() throws SQLException {
@@ -63,7 +63,7 @@ public class DataBase {
         return this.movieDao;
     }
 
-    /*public Dao<WatchlistMovieEntity, Long> getWatchlistDao() {
+    public Dao<WatchlistMovieEntity, Long> getWatchlistDao() {
         return watchlistDao;
-    }*/
+    }
 }

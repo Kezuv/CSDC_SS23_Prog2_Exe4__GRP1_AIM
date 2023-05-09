@@ -22,8 +22,8 @@ public class UserRepository {
     }
 
     //Converts User object to UserEntity object
-    private static UserEntity userToUserEntity (User user){
-        return new UserEntity(user.getUsername(), user.getPassword());
+    public static UserEntity userToUserEntity (User user){
+        return new UserEntity(user.getId(), user.getUsername(), user.getPassword());
     }
 
     public static User userLogIn(String username, String password) throws SQLException {

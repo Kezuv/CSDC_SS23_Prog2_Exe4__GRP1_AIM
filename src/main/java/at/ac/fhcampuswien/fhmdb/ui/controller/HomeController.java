@@ -22,6 +22,7 @@ import javafx.scene.layout.HBox;
 
 import java.io.IOException;
 import java.net.URL;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.function.Function;
@@ -69,6 +70,12 @@ public class HomeController implements Initializable {
         observableMovies.clear();
         observableMovies.addAll(allMovies); // add all movies to the observable list
         sortedState = SortedState.NONE;
+        try {
+            MovieRepository.addMovies(allMovies);
+        } catch (SQLException e) {
+            //TODO what happend when movies cannot be added? z.B. if they are allready exist
+            throw new RuntimeException(e);
+        }
     }
 
     public void initializeLayout() {
