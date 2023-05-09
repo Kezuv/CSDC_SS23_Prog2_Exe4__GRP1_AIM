@@ -28,7 +28,7 @@
             <VBox maxHeight="500.0" maxWidth="500.0" prefHeight="500.0" prefWidth="500.0" styleClass="background-light-black" stylesheets="@../styles/styles.css">
 
                 <Label alignment="CENTER_LEFT" style="-fx-font-size: 20" styleClass="text-yellow" stylesheets="@../styles/styles.css">Username</Label>
-                <TextField fx:id="username" maxWidth="250.0" prefHeight="30.0" promptText="User Name">
+                <TextField fx:id="usernameField" maxWidth="250.0" prefHeight="30.0" promptText="User Name">
                     <VBox.margin>
                         <Insets />
                     </VBox.margin>
@@ -48,7 +48,7 @@
                     </padding>
                 </Label>
                 <Label alignment="CENTER_LEFT" style="-fx-font-size: 20" styleClass="text-yellow" stylesheets="@../styles/styles.css">Password</Label>
-                <TextField fx:id="password" maxWidth="250.0" prefHeight="30.0" promptText="password">
+                <TextField fx:id="passwordField" maxWidth="250.0" prefHeight="30.0" promptText="password">
                     <VBox.margin>
                         <Insets />
                     </VBox.margin>

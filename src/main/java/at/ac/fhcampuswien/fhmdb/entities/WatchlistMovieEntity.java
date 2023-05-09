@@ -1,16 +1,14 @@
-package at.ac.fhcampuswien.fhmdb.database;
+package at.ac.fhcampuswien.fhmdb.entities;
 
-import at.ac.fhcampuswien.fhmdb.models.User;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
 @DatabaseTable(tableName = "Watchlist")
 public class WatchlistMovieEntity {
-    @DatabaseField(id = true)
-    private long id;
-    @DatabaseField(foreign = true, columnName = "username", canBeNull = false, foreignAutoRefresh = true)
+    long id;
+    @DatabaseField(foreign = true, columnName = "User", canBeNull = false, foreignAutoRefresh = true)
     private UserEntity user;
-    @DatabaseField(foreign = true, columnName = "id", canBeNull = false, foreignAutoRefresh = true)
+    @DatabaseField(foreign = true, columnName = "MovieId", canBeNull = false, foreignAutoRefresh = true)
     private MovieEntity movie;
 
     public WatchlistMovieEntity(){};

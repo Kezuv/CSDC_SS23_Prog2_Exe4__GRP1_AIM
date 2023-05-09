@@ -1,5 +1,8 @@
-package at.ac.fhcampuswien.fhmdb.database;
+package at.ac.fhcampuswien.fhmdb.repos;
 
+import at.ac.fhcampuswien.fhmdb.entities.MovieEntity;
+import at.ac.fhcampuswien.fhmdb.entities.UserEntity;
+import at.ac.fhcampuswien.fhmdb.entities.WatchlistMovieEntity;
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.dao.DaoManager;
 import com.j256.ormlite.stmt.QueryBuilder;

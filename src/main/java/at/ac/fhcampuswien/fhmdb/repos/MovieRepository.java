@@ -1,5 +1,7 @@
-package at.ac.fhcampuswien.fhmdb.database;
+package at.ac.fhcampuswien.fhmdb.repos;
 
+import at.ac.fhcampuswien.fhmdb.database.DataBase;
+import at.ac.fhcampuswien.fhmdb.entities.MovieEntity;
 import at.ac.fhcampuswien.fhmdb.models.Genre;
 import at.ac.fhcampuswien.fhmdb.models.Movie;
 import com.j256.ormlite.dao.Dao;
@@ -14,7 +16,7 @@ public class MovieRepository {
     public static Dao<MovieEntity, String> movieDao;
 
     static{
-        movieDao = DatabaseMovie.getDatabaseMovie().getMovieDao();
+        movieDao = DataBase.getDatabaseUser().getMovieDao();
     }
 
     //Add a single movie to database

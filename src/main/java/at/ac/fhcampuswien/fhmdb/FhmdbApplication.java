@@ -1,7 +1,6 @@
 package at.ac.fhcampuswien.fhmdb;
 
-import at.ac.fhcampuswien.fhmdb.database.DatabaseUser;
-import at.ac.fhcampuswien.fhmdb.database.UserRepository;
+import at.ac.fhcampuswien.fhmdb.repos.UserRepository;
 import at.ac.fhcampuswien.fhmdb.models.User;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -26,12 +25,5 @@ public class FhmdbApplication extends Application {
         stage.setScene(scene);
         stage.show();
 
-        try {
-            UserRepository.addToUsers(new User("Test22", "pass"));
-            User armin = UserRepository.getUserbyUsername("Test22");
-            System.out.println(armin.toString());
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
     }
 }
