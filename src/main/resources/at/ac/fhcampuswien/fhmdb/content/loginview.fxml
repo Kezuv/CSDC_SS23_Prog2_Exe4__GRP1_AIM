@@ -16,7 +16,7 @@
                     <Label style="-fx-font-size: 25" styleClass="text-white" stylesheets="@../styles/styles.css">Please log in to use</Label>
                     <Label style="-fx-font-size: 25" styleClass="text-white" stylesheets="@../styles/styles.css">our complete service.</Label>
                     <Label style="-fx-font-size: 10" styleClass="text-white" stylesheets="@../styles/styles.css">©Ibrahim Abrakel, Manuel Stefan Ambross, Armin Foucek</Label>
-                    <Label style="-fx-font-size: 10" styleClass="text-white" stylesheets="@../styles/styles.css" onMouseClicked="#openMoreInfo">(Click here!)</Label>
+                    <Label onMouseClicked="#openMoreInfo" style="-fx-font-size: 10" styleClass="text-white" stylesheets="@../styles/styles.css">(Click here!)</Label>
                 </children>
                 <HBox.margin>
                     <Insets right="50.0" />
@@ -28,32 +28,18 @@
             <VBox maxHeight="500.0" maxWidth="500.0" prefHeight="500.0" prefWidth="500.0" styleClass="background-light-black" stylesheets="@../styles/styles.css">
 
                 <Label alignment="CENTER_LEFT" style="-fx-font-size: 20" styleClass="text-yellow" stylesheets="@../styles/styles.css">Username</Label>
-                <TextField fx:id="usernameField" maxWidth="250.0" prefHeight="30.0" promptText="User Name">
+                <TextField fx:id="usernameField" maxWidth="250.0" prefHeight="30.0" promptText="username">
                     <VBox.margin>
                         <Insets />
                     </VBox.margin>
                 </TextField>
-                <Label fx:id="usernameError" styleClass="text-red" stylesheets="@../styles/styles.css" text="username error">
-                    <font>
-                        <Font size="8.0" />
-                    </font>
-                    <opaqueInsets>
-                        <Insets />
-                    </opaqueInsets>
-                    <VBox.margin>
-                        <Insets />
-                    </VBox.margin>
-                    <padding>
-                        <Insets bottom="30.0" />
-                    </padding>
-                </Label>
                 <Label alignment="CENTER_LEFT" style="-fx-font-size: 20" styleClass="text-yellow" stylesheets="@../styles/styles.css">Password</Label>
-                <TextField fx:id="passwordField" maxWidth="250.0" prefHeight="30.0" promptText="password">
+                <PasswordField fx:id="passwordField" maxWidth="250.0" prefHeight="30.0" promptText="password">
                     <VBox.margin>
                         <Insets />
                     </VBox.margin>
-                </TextField>
-                <Label fx:id="passwordError" styleClass="text-red" stylesheets="@../styles/styles.css" text="password error">
+                </PasswordField>
+                <Label fx:id="loginError" minHeight="30" stylesheets="@../styles/styles.css">
                     <font>
                         <Font size="8.0" />
                     </font>
@@ -68,6 +54,17 @@
                     <JFXButton fx:id="loginBtn" minWidth="100.0" onAction="#clickLoginBtn" styleClass="background-yellow" stylesheets="@../styles/styles.css" text="Login" />
                     <JFXButton fx:id="registerBtn" minWidth="100.0" onAction="#clickRegisterBtn" styleClass="background-yellow" stylesheets="@../styles/styles.css" text="Register" />
                 </HBox>
+                <Label fx:id="registerSuccess" stylesheets="@../styles/styles.css">
+                    <font>
+                        <Font size="20.0" />
+                    </font>
+                    <opaqueInsets>
+                        <Insets />
+                    </opaqueInsets>
+                    <VBox.margin>
+                        <Insets />
+                    </VBox.margin>
+                </Label>
                 <padding>
                     <Insets left="20.0" top="150.0" />
                 </padding>

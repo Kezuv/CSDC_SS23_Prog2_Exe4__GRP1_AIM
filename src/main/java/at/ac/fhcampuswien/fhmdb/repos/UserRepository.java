@@ -26,7 +26,7 @@ public class UserRepository {
         return new UserEntity(user.getId(), user.getUsername(), user.getPassword());
     }
 
-    public static User userLogIn(String username, String password) throws SQLException {
+    public static User userLogIn(String username, String password) throws SQLException, IndexOutOfBoundsException {
             List<UserEntity> allUsers = userDao.queryForMatching(new UserEntity(username, password));
             // TODO what happend when two users have the same username & password?
             return new User(allUsers.get(0).getUsername(), allUsers.get(0).getPassword(), allUsers.get(0).getId());
