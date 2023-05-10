@@ -1,11 +1,10 @@
 package at.ac.fhcampuswien.fhmdb.models;
 
-import at.ac.fhcampuswien.fhmdb.api.MovieAPI;
+import at.ac.fhcampuswien.fhmdb.Exceptions.MovieExceptions;
 import com.google.gson.Gson;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 
 import java.io.IOException;
+import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,7 +17,15 @@ public class Movie {
     private final int releaseYear, lengthInMinutes;
     private boolean isExpanded;
 
-    public Movie(String id, String title, String description, String imgUrl, List<Genre> genres, List<String> directors, List<String> writers, List<String> mainCast, double rating, int releaseYear, int lengthInMinutes) throws IOException {
+    public Movie(String id, String title, String description, String imgUrl, List<Genre> genres, List<String> directors, List<String> writers, List<String> mainCast, double rating, int releaseYear, int lengthInMinutes) throws MovieExceptions.MovieNotFoundException, InvalidParameterException, IOException {
+        if (id == null || id.isEmpty() || title == null || title.isEmpty() || genres == null || genres.isEmpty() || rating < 0 || rating > 10 || releaseYear < 0 || lengthInMinutes < 0) {
+            throw new InvalidParameterException("Invalid parameters when creating a movie.");
+        }
+
+        if (imgUrl == null || imgUrl.isEmpty()) {
+            throw new MovieExceptions.MovieNotFoundException("Movie image not found.");
+        }
+
         this.id = id;
         this.title = title;
         this.description = description;
@@ -80,11 +87,15 @@ public class Movie {
         isExpanded = expanded;
     }
 
-    public static List<Movie> initializeMovies(String data){
+    public static List<Movie> initializeMovies(String data) throws InvalidParameterException {
+        if (data == null || data.isEmpty()) {
+            throw new InvalidParameterException("Invalid parameter when initializing movies.");
+        }
+
         Gson gson = new Gson();
         Movie[] movies = gson.fromJson(data, Movie[].class);
         List<Movie> moviesList = new ArrayList<>();
-        for (Movie movie : movies){
+        for (Movie movie : movies) {
             moviesList.add(movie);
         }
         return moviesList;
