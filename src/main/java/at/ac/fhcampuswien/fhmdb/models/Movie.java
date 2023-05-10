@@ -17,6 +17,7 @@ public class Movie {
     private final double rating;
     private final int releaseYear, lengthInMinutes;
     private boolean isExpanded;
+    private boolean onWatchList;
 
     public Movie(String id, String title, String description, String imgUrl, List<Genre> genres, List<String> directors, List<String> writers, List<String> mainCast, double rating, int releaseYear, int lengthInMinutes) throws IOException {
         this.id = id;
@@ -83,8 +84,12 @@ public class Movie {
     }
 
     public boolean isOnWatchList() {
+        return onWatchList;
+    }
+
+    public void upDateOnWatchList() {
         try {
-            return WatchlistRepository.checkIfMovieIsOnWatchList(MainViewController.getActiveUser(), this);
+            onWatchList = WatchlistRepository.checkIfMovieIsOnWatchList(MainViewController.getActiveUser(), this);
         } catch (SQLException e) {
             //TODO Handle SQL Exception
             throw new RuntimeException(e);

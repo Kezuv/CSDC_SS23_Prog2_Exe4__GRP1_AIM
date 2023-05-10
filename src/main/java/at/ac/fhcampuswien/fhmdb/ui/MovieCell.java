@@ -81,12 +81,11 @@ public class MovieCell extends ListCell<Movie> {
                 try {
                     if (!movie.isOnWatchList()) {
                         WatchlistRepository.addMovieToWatchList(MainViewController.getActiveUser(), movie);
-                        updateItem(movie,false);
-
                     } else {
                         WatchlistRepository.removeMovieFromWatchlist(MainViewController.getActiveUser(), movie);
-                        updateItem(movie,false);
                     }
+                    movie.upDateOnWatchList();
+                    updateItem(movie,false);
                 }catch (SQLException e) {
                     //TODO what happend if movie already exist on watchlist? - Exceptionhandling
                     throw new RuntimeException(e);
@@ -117,7 +116,7 @@ public class MovieCell extends ListCell<Movie> {
             showDetailsBtn.getStyleClass().add("background-yellow");
             watchListAddBtn.getStyleClass().add("background-yellow");
             if (!movie.isOnWatchList()) {
-                watchListAddBtn.setText("Add Watchlist");
+                watchListAddBtn.setText("Add to Watchlist");
             } else {
                 watchListAddBtn.setText("Remove Watchlist");
             }

@@ -68,7 +68,10 @@ public class HomeController implements Initializable {
     public void initializeState() throws IOException {
         allMovies = Movie.initializeMovies(MovieAPI.getApiRequest());
         observableMovies.clear();
-        observableMovies.addAll(allMovies); // add all movies to the observable list
+        observableMovies.addAll(allMovies);// add all movies to the observable list
+        for (Movie m : allMovies){
+            m.upDateOnWatchList();
+        }
         sortedState = SortedState.NONE;
         try {
             MovieRepository.addMovies(allMovies);

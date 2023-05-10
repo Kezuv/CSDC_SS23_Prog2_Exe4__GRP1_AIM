@@ -50,6 +50,9 @@ public class WatchlistController implements Initializable {
         }
         observableWatchList.clear();
         observableWatchList.addAll(watchListMovies); // add all movies to the observable list
+        for (Movie m : watchListMovies){
+            m.upDateOnWatchList();
+        }
     }
 
     public void initializeLayout() {
