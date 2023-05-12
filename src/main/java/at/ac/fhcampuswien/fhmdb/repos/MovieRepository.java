@@ -1,5 +1,7 @@
 package at.ac.fhcampuswien.fhmdb.repos;
 
+import at.ac.fhcampuswien.fhmdb.Exceptions.DBExceptions;
+import at.ac.fhcampuswien.fhmdb.Exceptions.RepositoryExceptions;
 import at.ac.fhcampuswien.fhmdb.database.DataBase;
 import at.ac.fhcampuswien.fhmdb.entities.MovieEntity;
 import at.ac.fhcampuswien.fhmdb.models.Genre;
@@ -15,39 +17,63 @@ import java.util.List;
 public class MovieRepository {
     public static Dao<MovieEntity, String> movieDao;
 
-    static{
-        movieDao = DataBase.getDatabaseUser().getMovieDao();
+    static {
+        try {
+            movieDao = DataBase.getDatabaseUser().getMovieDao();
+        } catch (Exception e) {
+            RepositoryExceptions.handleRepositoryException(e);
+        }
     }
 
     //Add a single movie to database
-    public void addToMovie (Movie movie) throws SQLException {
-        movieDao.create(movieToMovieEntity(movie));
+    public void addToMovie(Movie movie) {
+        try {
+            movieDao.create(movieToMovieEntity(movie));
+        } catch (SQLException e) {
+            throw new RepositoryExceptions.AddMovieException(e.getMessage());
+        }
     }
 
     //Add all movies to database
-    public static void addMovies(List<Movie> movies) throws SQLException {
-        for (Movie movie : movies) {
-            movieDao.createIfNotExists(movieToMovieEntity(movie));
+    public static void addMovies(List<Movie> movies) {
+        try {
+            for (Movie movie : movies) {
+                movieDao.createIfNotExists(movieToMovieEntity(movie));
+            }
+        } catch (SQLException e) {
+            throw new RepositoryExceptions.AddMovieException(e.getMessage());
         }
     }
 
     //Gets MovieEntity with id (FHMD) for database check etc...
-    public MovieEntity getMovieEntity (String id) throws SQLException{
-        return movieDao.queryForId(id);
+    public MovieEntity getMovieEntity(String id) {
+        try {
+            return movieDao.queryForId(id);
+        } catch (SQLException e) {
+            throw new RepositoryExceptions.GetMovieEntityException(e.getMessage());
+        }
     }
 
     //Get movie object with id (FHMD) for usages? maybe?
-    public Movie getMovie (String id) throws SQLException, IOException {
-        return movieEntityToMovie(movieDao.queryForId(id));
+    public Movie getMovie(String id) {
+        try {
+            return movieEntityToMovie(movieDao.queryForId(id));
+        } catch (SQLException e) {
+            throw new RepositoryExceptions.GetMovieException(e.getMessage());
+        }
     }
 
     //In-class function to get all MovieEntity´s from the database
-    private static List<MovieEntity> getAllMovieEntities() throws SQLException {
-        return movieDao.queryForAll();
+    private static List<MovieEntity> getAllMovieEntities() {
+        try {
+            return movieDao.queryForAll();
+        } catch (SQLException e) {
+            throw new RepositoryExceptions.GetAllMoviesException(e.getMessage());
+        }
     }
 
     //Get all movies from database as a List<Movie>
-    public static List<Movie> getAllMovies() throws SQLException, IOException {
+    public static List<Movie> getAllMovies() {
         List<MovieEntity> movieEntities = getAllMovieEntities();
         List<Movie> movies = new ArrayList<>();
 
@@ -66,21 +92,29 @@ public class MovieRepository {
     }
 
     //Converts MovieEntity to movie object -> For watchlist usage maybe?
-    public static Movie movieEntityToMovie(MovieEntity movie) throws IOException {
-        return new Movie(movie.getId(), movie.getTitle(), movie.getDescription(),
-                movie.getImgUrl(), stringToGenres(movie.getGenres()), stringToList(movie.getDirectors()), stringToList(movie.getWriters()),
-                stringToList(movie.getMainCast()), movie.getRating(), movie.getReleaseYear(), movie.getLengthInMinutes());
+    public static Movie movieEntityToMovie(MovieEntity movie) {
+        try {
+            return new Movie(movie.getId(), movie.getTitle(), movie.getDescription(),
+                    movie.getImgUrl(), stringToGenres(movie.getGenres()), stringToList(movie.getDirectors()), stringToList(movie.getWriters()),
+                    stringToList(movie.getMainCast()), movie.getRating(), movie.getReleaseYear(), movie.getLengthInMinutes());
+        } catch (IOException e) {
+            throw new RepositoryExceptions.GetMovieException(e.getMessage());
+        }
     }
 
+
     //In-class converter from List<Genre> to String
-    private static String genresToString(List<Genre> genres){
-        StringBuilder genreString = new StringBuilder();
-        for (Genre genre : genres) {
-            genreString.append(genre.name()).append(",");
-        }
-        String result = genreString.toString().replaceAll(", $", "");
-        return result;
+    public static String genresToString(List<Genre> genres) {
+
+            StringBuilder genreString = new StringBuilder();
+            for (Genre genre : genres) {
+                genreString.append(genre.name()).append(",");
+            }
+            String result = genreString.toString().replaceAll(", $", "");
+            return result;
+
     }
+
 
     //In-class converter from String to List<Genre>
     private static List<Genre> stringToGenres(String genreString) {

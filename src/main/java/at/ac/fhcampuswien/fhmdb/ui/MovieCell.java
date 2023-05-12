@@ -78,18 +78,13 @@ public class MovieCell extends ListCell<Movie> {
 
             watchListAddBtn.setOnMouseClicked(event -> {
 
-                try {
-                    if (!movie.isOnWatchList()) {
-                        WatchlistRepository.addMovieToWatchList(MainViewController.getActiveUser(), movie);
-                    } else {
-                        WatchlistRepository.removeMovieFromWatchlist(MainViewController.getActiveUser(), movie);
-                    }
-                    movie.upDateOnWatchList();
-                    updateItem(movie,false);
-                }catch (SQLException e) {
-                    //TODO what happend if movie already exist on watchlist? - Exceptionhandling
-                    throw new RuntimeException(e);
+                if (!movie.isOnWatchList()) {
+                    WatchlistRepository.addMovieToWatchList(MainViewController.getActiveUser(), movie);
+                } else {
+                    WatchlistRepository.removeMovieFromWatchlist(MainViewController.getActiveUser(), movie);
                 }
+                movie.upDateOnWatchList();
+                updateItem(movie,false);
             });
 
             //set Text
