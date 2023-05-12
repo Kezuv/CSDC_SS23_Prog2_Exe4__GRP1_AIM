@@ -1,5 +1,7 @@
 package at.ac.fhcampuswien.fhmdb.ui.controller;
 
+import at.ac.fhcampuswien.fhmdb.Exceptions.ControllerExceptions;
+import at.ac.fhcampuswien.fhmdb.Exceptions.RepositoryExceptions;
 import at.ac.fhcampuswien.fhmdb.repos.UserRepository;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -17,9 +19,9 @@ public class LoginViewController {
     @FXML
     public Label loginError, registerSuccess;
 
-    public void clickLoginBtn(ActionEvent actionEvent){
+    public void clickLoginBtn(ActionEvent actionEvent) {
         if (usernameField.getText() != null && !usernameField.getText().equals("") &&
-                passwordField.getText() != null && !passwordField.getText().equals("")){
+                passwordField.getText() != null && !passwordField.getText().equals("")) {
             clearNotifications();
             try {
                 MainViewController.setActiveUser(UserRepository.userLogIn(usernameField.getText(), passwordField.getText()));
@@ -27,11 +29,7 @@ public class LoginViewController {
                 loginError.getStyleClass().add("text-green");
                 loginError.setText("Login succeed!");
                 System.out.println("Login succeed!");
-            } catch (SQLException e) {
-                //TODO ALLERT when Username or Password is false - Exception?
-                System.out.println("Username or Password false");
-                throw new RuntimeException(e);
-            } catch (IndexOutOfBoundsException e){
+            } catch ( RepositoryExceptions.UserLoginException ule) {
                 loginError.getStyleClass().add("text-red");
                 loginError.setText("Username or password wrong. Please try again.");
             }
@@ -41,26 +39,24 @@ public class LoginViewController {
 
     public void clickRegisterBtn(ActionEvent actionEvent) {
         if (usernameField.getText() != null && !usernameField.getText().equals("") &&
-                passwordField.getText() != null && !passwordField.getText().equals("")){
+                passwordField.getText() != null && !passwordField.getText().equals("")) {
             clearNotifications();
-            try {
-                UserRepository.registerUser(usernameField.getText(), passwordField.getText());
-                System.out.println("Register complete!");
-                registerSuccess.getStyleClass().add("text-green");
-                registerSuccess.setText("Register complete! Please Log In.");
-                usernameField.clear();
-                passwordField.clear();
-                loginError.setStyle("");
-
-            } catch (SQLException e) {
+            String username = usernameField.getText();
+            if (UserRepository.isUserExists(username)) {
                 registerSuccess.getStyleClass().add("text-red");
-                registerSuccess.setText("Register failed!");
-                System.out.println("Register failed - user exist?");
-                //TODO ALERT USER EXIST - EXCEPTION ?
-                throw new RuntimeException(e);
+                registerSuccess.setText("Register failed! Username "+ username +" already exists " );
+                throw new ControllerExceptions.RegistrationException("Username already exists: " + username);
             }
+            UserRepository.registerUser(username, passwordField.getText());
+            System.out.println("Register complete!");
+            registerSuccess.getStyleClass().add("text-green");
+            registerSuccess.setText("Register complete! Please Log In.");
+            usernameField.clear();
+            passwordField.clear();
+            loginError.setStyle("");
         }
     }
+
 
     public void openMoreInfo(MouseEvent mouseEvent) {
         String url = "https://www.youtube.com/watch?v=dQw4w9WgXcQ";
@@ -68,13 +64,18 @@ public class LoginViewController {
             java.awt.Desktop.getDesktop().browse(java.net.URI.create(url));
         } catch (java.io.IOException e) {
             System.out.println("Could not open webpage: " + url);
+            throw new ControllerExceptions.WebPageOpenException("Error opening webpage: " + e.getMessage());
         }
     }
 
-    private void clearNotifications(){
-        loginError.setText("");
-        loginError.getStyleClass().clear();
-        registerSuccess.setText("");
-        registerSuccess.getStyleClass().clear();
+    private void clearNotifications() {
+        try {
+            loginError.setText("");
+            loginError.getStyleClass().clear();
+            registerSuccess.setText("");
+            registerSuccess.getStyleClass().clear();
+        } catch (Exception e) {
+            throw new ControllerExceptions.ClearNotificationsException("Error clearing notifications: " + e.getMessage());
+        }
     }
 }

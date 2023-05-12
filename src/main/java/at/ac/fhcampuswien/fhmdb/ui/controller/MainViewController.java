@@ -1,5 +1,6 @@
 package at.ac.fhcampuswien.fhmdb.ui.controller;
 
+import at.ac.fhcampuswien.fhmdb.Exceptions.ControllerExceptions;
 import at.ac.fhcampuswien.fhmdb.models.User;
 import com.jfoenix.controls.JFXButton;
 import javafx.beans.property.BooleanProperty;
@@ -92,37 +93,57 @@ public class MainViewController implements Initializable {
 
     public void clickHomeBtn(ActionEvent actionEvent) throws IOException {
         if (isLogedIn()) {
-            changeBtnColors(homeBtn);
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/at/ac/fhcampuswien/fhmdb/content/home.fxml"));
-            AnchorPane root = fxmlLoader.load();
-            mainViewContent.setCenter(root);
+            try {
+                changeBtnColors(homeBtn);
+                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/at/ac/fhcampuswien/fhmdb/content/home.fxml"));
+                AnchorPane root = fxmlLoader.load();
+                mainViewContent.setCenter(root);
+            } catch (IOException e) {
+                System.out.println("Error loading Home: " + e.getMessage());
+                throw new ControllerExceptions.HomeButtonException("Error loading Home page: " + e.getMessage());
+            }
         }
     }
 
     public void clickWatchListBtn(ActionEvent actionEvent) throws IOException {
         if (isLogedIn()) {
-            changeBtnColors(watchListBtn);
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/at/ac/fhcampuswien/fhmdb/content/watchlist.fxml"));
-            AnchorPane root = fxmlLoader.load();
-            mainViewContent.setCenter(root);
+            try {
+                changeBtnColors(watchListBtn);
+                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/at/ac/fhcampuswien/fhmdb/content/watchlist.fxml"));
+                AnchorPane root = fxmlLoader.load();
+                mainViewContent.setCenter(root);
+            } catch (IOException e) {
+                System.out.println("Error loading watchlist.fxml: " + e.getMessage());
+                throw new ControllerExceptions.WatchListButtonException("Error loading watchlist page: " + e.getMessage());
+            }
         }
     }
 
     public void clickAboutBtn(ActionEvent actionEvent) throws IOException {
         if (isLogedIn()) {
-            changeBtnColors(aboutBtn);
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/at/ac/fhcampuswien/fhmdb/content/about.fxml"));
-            AnchorPane root = fxmlLoader.load();
-            mainViewContent.setCenter(root);
+            try {
+                changeBtnColors(aboutBtn);
+                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/at/ac/fhcampuswien/fhmdb/content/about.fxml"));
+                AnchorPane root = fxmlLoader.load();
+                mainViewContent.setCenter(root);
+            } catch (IOException e) {
+                System.out.println("Error loading about.fxml: " + e.getMessage());
+                throw new ControllerExceptions.AboutButtonException("Error loading about page: " + e.getMessage());
+            }
         }
     }
 
     public void clickLogoutBtn(ActionEvent actionEvent) throws IOException {
         if (isLogedIn()) {
-            loggedInProperty.set(false);
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/at/ac/fhcampuswien/fhmdb/content/loginview.fxml"));
-            AnchorPane view = fxmlLoader.load();
-            mainViewContent.setCenter(view);
+            try {
+                loggedInProperty.set(false);
+                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/at/ac/fhcampuswien/fhmdb/content/loginview.fxml"));
+                AnchorPane view = fxmlLoader.load();
+                mainViewContent.setCenter(view);
+            } catch (IOException e) {
+                System.out.println("Error loading loginview.fxml: " + e.getMessage());
+                throw new ControllerExceptions.LogoutButtonException("Error loading login page: " + e.getMessage());
+            }
         }
     }
     private void checkIfLoggedIn(){

@@ -1,5 +1,6 @@
 package at.ac.fhcampuswien.fhmdb.ui.controller;
 
+import at.ac.fhcampuswien.fhmdb.Exceptions.ControllerExceptions;
 import at.ac.fhcampuswien.fhmdb.api.MovieAPI;
 import at.ac.fhcampuswien.fhmdb.api.SearchParameter;
 import at.ac.fhcampuswien.fhmdb.models.Genre;
@@ -65,18 +66,19 @@ public class HomeController implements Initializable {
     protected ObservableList<Movie> observableMovies = FXCollections.observableArrayList();
     protected SortedState sortedState;
 
-    public void initializeState() throws IOException {
-        allMovies = Movie.initializeMovies(MovieAPI.getApiRequest());
-        observableMovies.clear();
-        observableMovies.addAll(allMovies);// add all movies to the observable list
-        for (Movie m : allMovies){
-            m.upDateOnWatchList();
-        }
-        sortedState = SortedState.NONE;
+    public void initializeState() {
         try {
+            allMovies = Movie.initializeMovies(MovieAPI.getApiRequest());
+            observableMovies.clear();
+            observableMovies.addAll(allMovies);
+
+            for (Movie m : allMovies) {
+                m.upDateOnWatchList();
+            }
+            sortedState = SortedState.NONE;
             MovieRepository.addMovies(allMovies);
-        } catch (SQLException e) {
-            //TODO what happend when movies cannot be added? z.B. if they are allready exist
+        } catch (IOException e) {
+            ControllerExceptions.handleHomeControllerException(e);
             throw new RuntimeException(e);
         }
     }
@@ -300,11 +302,7 @@ public class HomeController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        try {
-            initializeState();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        initializeState();
         initializeLayout();
     }
 }
