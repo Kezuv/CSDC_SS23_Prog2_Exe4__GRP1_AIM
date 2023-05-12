@@ -53,11 +53,6 @@ public class UserRepository {
         }
     }
 
-    //Included for purposes (Converts UserEntity to User object)
-    public static User userEntityToUser (UserEntity user){
-        return new User(user.getUsername(), user.getPassword());
-    }
-
     public static boolean isUserExists(String username) {
         try {
             // Query the user table for a user with the given username

@@ -91,7 +91,6 @@ public class Movie {
         try {
             onWatchList = WatchlistRepository.checkIfMovieIsOnWatchList(MainViewController.getActiveUser(), this);
         } catch (SQLException e) {
-            //TODO Handle SQL Exception
             throw new RuntimeException(e);
         }
     }

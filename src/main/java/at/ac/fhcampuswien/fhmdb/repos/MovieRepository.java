@@ -25,15 +25,6 @@ public class MovieRepository {
         }
     }
 
-    //Add a single movie to database
-    public void addToMovie(Movie movie) {
-        try {
-            movieDao.create(movieToMovieEntity(movie));
-        } catch (SQLException e) {
-            throw new RepositoryExceptions.AddMovieException(e.getMessage());
-        }
-    }
-
     //Add all movies to database
     public static void addMovies(List<Movie> movies) {
         try {
@@ -45,23 +36,6 @@ public class MovieRepository {
         }
     }
 
-    //Gets MovieEntity with id (FHMD) for database check etc...
-    public MovieEntity getMovieEntity(String id) {
-        try {
-            return movieDao.queryForId(id);
-        } catch (SQLException e) {
-            throw new RepositoryExceptions.GetMovieEntityException(e.getMessage());
-        }
-    }
-
-    //Get movie object with id (FHMD) for usages? maybe?
-    public Movie getMovie(String id) {
-        try {
-            return movieEntityToMovie(movieDao.queryForId(id));
-        } catch (SQLException e) {
-            throw new RepositoryExceptions.GetMovieException(e.getMessage());
-        }
-    }
 
     //In-class function to get all MovieEntity´s from the database
     private static List<MovieEntity> getAllMovieEntities() {
@@ -72,17 +46,6 @@ public class MovieRepository {
         }
     }
 
-    //Get all movies from database as a List<Movie>
-    public static List<Movie> getAllMovies() {
-        List<MovieEntity> movieEntities = getAllMovieEntities();
-        List<Movie> movies = new ArrayList<>();
-
-        for (MovieEntity entity : movieEntities) {
-            Movie movie = movieEntityToMovie(entity);
-            movies.add(movie);
-        }
-        return movies;
-    }
 
     //Converts Movie object to MovieEntity
     public static MovieEntity movieToMovieEntity(Movie movie){
