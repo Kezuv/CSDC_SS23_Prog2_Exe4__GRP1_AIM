@@ -5,6 +5,7 @@ import at.ac.fhcampuswien.fhmdb.api.SearchParameter;
 import at.ac.fhcampuswien.fhmdb.models.Genre;
 import at.ac.fhcampuswien.fhmdb.models.Movie;
 import at.ac.fhcampuswien.fhmdb.models.SortedState;
+import at.ac.fhcampuswien.fhmdb.repos.MovieRepository;
 import at.ac.fhcampuswien.fhmdb.ui.MovieCell;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
@@ -21,6 +22,7 @@ import javafx.scene.layout.HBox;
 
 import java.io.IOException;
 import java.net.URL;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.function.Function;
@@ -66,8 +68,17 @@ public class HomeController implements Initializable {
     public void initializeState() throws IOException {
         allMovies = Movie.initializeMovies(MovieAPI.getApiRequest());
         observableMovies.clear();
-        observableMovies.addAll(allMovies); // add all movies to the observable list
+        observableMovies.addAll(allMovies);// add all movies to the observable list
+        for (Movie m : allMovies){
+            m.upDateOnWatchList();
+        }
         sortedState = SortedState.NONE;
+        try {
+            MovieRepository.addMovies(allMovies);
+        } catch (SQLException e) {
+            //TODO what happend when movies cannot be added? z.B. if they are allready exist
+            throw new RuntimeException(e);
+        }
     }
 
     public void initializeLayout() {

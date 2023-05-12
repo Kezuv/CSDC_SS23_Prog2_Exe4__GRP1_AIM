@@ -1,10 +1,11 @@
 package at.ac.fhcampuswien.fhmdb.models;
 
-import at.ac.fhcampuswien.fhmdb.Exceptions.MovieExceptions;
+import at.ac.fhcampuswien.fhmdb.repos.WatchlistRepository;
+import at.ac.fhcampuswien.fhmdb.ui.controller.MainViewController;
 import com.google.gson.Gson;
 
 import java.io.IOException;
-import java.security.InvalidParameterException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,16 +17,9 @@ public class Movie {
     private final double rating;
     private final int releaseYear, lengthInMinutes;
     private boolean isExpanded;
+    private boolean onWatchList;
 
-    public Movie(String id, String title, String description, String imgUrl, List<Genre> genres, List<String> directors, List<String> writers, List<String> mainCast, double rating, int releaseYear, int lengthInMinutes) throws MovieExceptions.MovieNotFoundException, InvalidParameterException, IOException {
-        if (id == null || id.isEmpty() || title == null || title.isEmpty() || genres == null || genres.isEmpty() || rating < 0 || rating > 10 || releaseYear < 0 || lengthInMinutes < 0) {
-            throw new InvalidParameterException("Invalid parameters when creating a movie.");
-        }
-
-        if (imgUrl == null || imgUrl.isEmpty()) {
-            throw new MovieExceptions.MovieNotFoundException("Movie image not found.");
-        }
-
+    public Movie(String id, String title, String description, String imgUrl, List<Genre> genres, List<String> directors, List<String> writers, List<String> mainCast, double rating, int releaseYear, int lengthInMinutes) throws IOException {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -38,6 +32,8 @@ public class Movie {
         this.releaseYear = releaseYear;
         this.lengthInMinutes = lengthInMinutes;
     }
+
+    public String getId() {return id;}
 
     public String getTitle() {
         return title;
@@ -87,15 +83,24 @@ public class Movie {
         isExpanded = expanded;
     }
 
-    public static List<Movie> initializeMovies(String data) throws InvalidParameterException {
-        if (data == null || data.isEmpty()) {
-            throw new InvalidParameterException("Invalid parameter when initializing movies.");
-        }
+    public boolean isOnWatchList() {
+        return onWatchList;
+    }
 
+    public void upDateOnWatchList() {
+        try {
+            onWatchList = WatchlistRepository.checkIfMovieIsOnWatchList(MainViewController.getActiveUser(), this);
+        } catch (SQLException e) {
+            //TODO Handle SQL Exception
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static List<Movie> initializeMovies(String data){
         Gson gson = new Gson();
         Movie[] movies = gson.fromJson(data, Movie[].class);
         List<Movie> moviesList = new ArrayList<>();
-        for (Movie movie : movies) {
+        for (Movie movie : movies){
             moviesList.add(movie);
         }
         return moviesList;

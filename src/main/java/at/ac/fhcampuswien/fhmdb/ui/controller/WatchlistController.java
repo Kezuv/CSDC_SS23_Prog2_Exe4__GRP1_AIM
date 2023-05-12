@@ -1,7 +1,9 @@
 package at.ac.fhcampuswien.fhmdb.ui.controller;
 
 import at.ac.fhcampuswien.fhmdb.api.MovieAPI;
+import at.ac.fhcampuswien.fhmdb.entities.WatchlistMovieEntity;
 import at.ac.fhcampuswien.fhmdb.models.Movie;
+import at.ac.fhcampuswien.fhmdb.repos.WatchlistRepository;
 import at.ac.fhcampuswien.fhmdb.ui.MovieCell;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXListView;
@@ -15,6 +17,7 @@ import javafx.scene.layout.HBox;
 
 import java.io.IOException;
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -40,9 +43,16 @@ public class WatchlistController implements Initializable {
     protected ObservableList<Movie> observableWatchList = FXCollections.observableArrayList();
 
     public void initializeState() throws IOException {
-        watchListMovies = Movie.initializeMovies(MovieAPI.getApiRequest());
+        try {
+            watchListMovies = WatchlistRepository.getAllMoviesForUser(MainViewController.getActiveUser());
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
         observableWatchList.clear();
         observableWatchList.addAll(watchListMovies); // add all movies to the observable list
+        for (Movie m : watchListMovies){
+            m.upDateOnWatchList();
+        }
     }
 
     public void initializeLayout() {

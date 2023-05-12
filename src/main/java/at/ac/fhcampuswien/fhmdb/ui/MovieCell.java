@@ -2,6 +2,8 @@ package at.ac.fhcampuswien.fhmdb.ui;
 
 import at.ac.fhcampuswien.fhmdb.api.MovieAPI;
 import at.ac.fhcampuswien.fhmdb.models.Movie;
+import at.ac.fhcampuswien.fhmdb.repos.WatchlistRepository;
+import at.ac.fhcampuswien.fhmdb.ui.controller.MainViewController;
 import com.jfoenix.controls.JFXButton;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -9,13 +11,13 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseButton;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -74,10 +76,20 @@ public class MovieCell extends ListCell<Movie> {
                 }
             });
 
-            //TODO add function for MouseClicked on watchListAddBtn
             watchListAddBtn.setOnMouseClicked(event -> {
-                //add code / function here
-                System.out.println("Watchlist Button clicked!");
+
+                try {
+                    if (!movie.isOnWatchList()) {
+                        WatchlistRepository.addMovieToWatchList(MainViewController.getActiveUser(), movie);
+                    } else {
+                        WatchlistRepository.removeMovieFromWatchlist(MainViewController.getActiveUser(), movie);
+                    }
+                    movie.upDateOnWatchList();
+                    updateItem(movie,false);
+                }catch (SQLException e) {
+                    //TODO what happend if movie already exist on watchlist? - Exceptionhandling
+                    throw new RuntimeException(e);
+                }
             });
 
             //set Text
@@ -103,8 +115,11 @@ public class MovieCell extends ListCell<Movie> {
             layout.setBackground(new Background(new BackgroundFill(Color.web("#454545"), null, null)));
             showDetailsBtn.getStyleClass().add("background-yellow");
             watchListAddBtn.getStyleClass().add("background-yellow");
-            //TODO made a function to change watchListAddBtnText if it is already in
-            watchListAddBtn.setText("Add Watchlist");
+            if (!movie.isOnWatchList()) {
+                watchListAddBtn.setText("Add to Watchlist");
+            } else {
+                watchListAddBtn.setText("Remove Watchlist");
+            }
 
 
             //Width of the cell´s
