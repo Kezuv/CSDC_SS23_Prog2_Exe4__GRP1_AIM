@@ -19,7 +19,7 @@ import java.util.ResourceBundle;
 public class MainViewController implements Initializable {
 
     @FXML
-    public JFXButton homeBtn, watchListBtn, aboutBtn, loggoutBtn;
+    public JFXButton homeBtn, watchListBtn, loggoutBtn;
     @FXML
     public Label userNameLabel, fhmdbLogo, welcomeText;
     @FXML
@@ -53,7 +53,7 @@ public class MainViewController implements Initializable {
         HBox.setHgrow(setRight, Priority.ALWAYS);
         setRight.maxWidthProperty().bind(header.widthProperty());
         header.getChildren().clear();
-        header.getChildren().addAll(fhmdbLogo, welcomeText,setCenter, homeBtn, watchListBtn, aboutBtn, setRight, userNameLabel, loggoutBtn);
+        header.getChildren().addAll(fhmdbLogo, welcomeText,setCenter, homeBtn, watchListBtn, setRight, userNameLabel, loggoutBtn);
 
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/at/ac/fhcampuswien/fhmdb/content/loginview.fxml"));
         AnchorPane view = null;
@@ -70,22 +70,14 @@ public class MainViewController implements Initializable {
         if (pressedBtn.equals(homeBtn)) {
             homeBtn.getStyleClass().addAll("background-light-black", "text-white");
             watchListBtn.getStyleClass().removeAll("background-light-black", "text-white");
-            aboutBtn.getStyleClass().removeAll("background-light-black", "text-white");
             loggoutBtn.getStyleClass().removeAll("background-light-black", "text-white");
         } else if (pressedBtn.equals(watchListBtn)) {
             watchListBtn.getStyleClass().addAll("background-light-black", "text-white");
             homeBtn.getStyleClass().removeAll("background-light-black", "text-white");
-            aboutBtn.getStyleClass().removeAll("background-light-black", "text-white");
-            loggoutBtn.getStyleClass().removeAll("background-light-black", "text-white");
-        } else if (pressedBtn.equals(aboutBtn)) {
-            aboutBtn.getStyleClass().addAll("background-light-black", "text-white");
-            homeBtn.getStyleClass().removeAll("background-light-black", "text-white");
-            watchListBtn.getStyleClass().removeAll("background-light-black", "text-white");
             loggoutBtn.getStyleClass().removeAll("background-light-black", "text-white");
         } else if (pressedBtn.equals(loggoutBtn)) {
             loggoutBtn.getStyleClass().addAll("background-light-black", "text-white");
             homeBtn.getStyleClass().removeAll("background-light-black", "text-white");
-            aboutBtn.getStyleClass().removeAll("background-light-black", "text-white");
             watchListBtn.getStyleClass().removeAll("background-light-black", "text-white");
         }
 
@@ -119,20 +111,6 @@ public class MainViewController implements Initializable {
         }
     }
 
-    public void clickAboutBtn(ActionEvent actionEvent) throws IOException {
-        if (isLogedIn()) {
-            try {
-                changeBtnColors(aboutBtn);
-                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/at/ac/fhcampuswien/fhmdb/content/about.fxml"));
-                AnchorPane root = fxmlLoader.load();
-                mainViewContent.setCenter(root);
-            } catch (IOException e) {
-                System.out.println("Error loading about.fxml: " + e.getMessage());
-                throw new MovieApiException.AboutButtonException("Error loading about page: " + e.getMessage());
-            }
-        }
-    }
-
     public void clickLogoutBtn(ActionEvent actionEvent) throws IOException {
         if (isLogedIn()) {
             try {
@@ -150,7 +128,6 @@ public class MainViewController implements Initializable {
         if (!isLogedIn()){
             userNameLabel.setText("");
             homeBtn.getStyleClass().addAll("background-light-black", "text-white");
-            aboutBtn.getStyleClass().addAll("background-light-black", "text-white");
             watchListBtn.getStyleClass().addAll("background-light-black", "text-white");
             loggoutBtn.getStyleClass().addAll("background-light-black", "text-white");
         } else {
@@ -159,7 +136,6 @@ public class MainViewController implements Initializable {
             }
             loggoutBtn.getStyleClass().removeAll("background-light-black", "text-white");
             homeBtn.getStyleClass().removeAll("background-light-black", "text-white");
-            aboutBtn.getStyleClass().removeAll("background-light-black", "text-white");
             watchListBtn.getStyleClass().removeAll("background-light-black", "text-white");
         }
     }

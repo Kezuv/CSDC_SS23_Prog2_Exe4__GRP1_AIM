@@ -61,31 +61,8 @@ public class WatchlistRepository {
     }
 
 
-    //In-class function to check if a movie exists and add it to the watchlist
-    //Can be set to public for usage in other contexts maybe?
-    private boolean add(WatchlistMovieEntity watchlistMovie) throws SQLException {
-        if (watchlistDao.idExists(watchlistMovie.getId())) {
-            return false; // already exists
-        }
-        watchlistDao.create(watchlistMovie);
-        return true;
-    }
 
-    //Add a movie for a user in the watchlist
-    public boolean addMovieForUser(UserEntity user, MovieEntity movie) throws SQLException {
-        WatchlistMovieEntity watchlistMovie = new WatchlistMovieEntity(user, movie);
-        return add(watchlistMovie);
-    }
 
-    //In-class function to check if a movie exists and remove it from the watchlist
-    //Can be set to public for usage in other contexts maybe?
-    private static boolean delete(WatchlistMovieEntity watchlistMovie) throws SQLException {
-        if (!watchlistDao.idExists(watchlistMovie.getId())) {
-            return false; // doesn't exist
-        }
-        watchlistDao.delete(watchlistMovie);
-        return true;
-    }
 
     //Removes a movie from the watchlist for a user
     public static boolean removeMovieFromWatchlist(User user, Movie movie) throws DatabaseException.RemoveMovieFromWatchlistException {
