@@ -1,5 +1,6 @@
-package at.ac.fhcampuswien.fhmdb.database;
+package at.ac.fhcampuswien.fhmdb.entities;
 
+import at.ac.fhcampuswien.fhmdb.models.Movie;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 

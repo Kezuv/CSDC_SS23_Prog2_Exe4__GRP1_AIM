@@ -1,10 +1,12 @@
 package at.ac.fhcampuswien.fhmdb.ui.controller;
 
+import at.ac.fhcampuswien.fhmdb.Exceptions.MovieApiException;
 import at.ac.fhcampuswien.fhmdb.api.MovieAPI;
 import at.ac.fhcampuswien.fhmdb.api.SearchParameter;
 import at.ac.fhcampuswien.fhmdb.models.Genre;
 import at.ac.fhcampuswien.fhmdb.models.Movie;
 import at.ac.fhcampuswien.fhmdb.models.SortedState;
+import at.ac.fhcampuswien.fhmdb.repos.MovieRepository;
 import at.ac.fhcampuswien.fhmdb.ui.MovieCell;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
@@ -63,11 +65,21 @@ public class HomeController implements Initializable {
     protected ObservableList<Movie> observableMovies = FXCollections.observableArrayList();
     protected SortedState sortedState;
 
-    public void initializeState() throws IOException {
-        allMovies = Movie.initializeMovies(MovieAPI.getApiRequest());
-        observableMovies.clear();
-        observableMovies.addAll(allMovies); // add all movies to the observable list
-        sortedState = SortedState.NONE;
+    public void initializeState() {
+        try {
+            allMovies = Movie.initializeMovies(MovieAPI.getApiRequest());
+            observableMovies.clear();
+            observableMovies.addAll(allMovies);
+
+            for (Movie m : allMovies) {
+                m.upDateOnWatchList();
+            }
+            sortedState = SortedState.NONE;
+            MovieRepository.addMovies(allMovies);
+        } catch (IOException e) {
+            MovieApiException.handleHomeControllerException(e);
+            throw new RuntimeException(e);
+        }
     }
 
     public void initializeLayout() {
@@ -289,11 +301,7 @@ public class HomeController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        try {
-            initializeState();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        initializeState();
         initializeLayout();
     }
 }

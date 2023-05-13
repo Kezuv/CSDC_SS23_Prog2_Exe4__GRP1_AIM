@@ -26,9 +26,8 @@
                   <Label fx:id="welcomeText" styleClass="text-white" stylesheets="@../styles/styles.css" text="Welcome to FHMDb!" />
                   <JFXButton fx:id="homeBtn" onAction="#clickHomeBtn" styleClass="background-yellow" stylesheets="@../styles/styles.css" text="Home" />
                   <JFXButton fx:id="watchListBtn" onAction="#clickWatchListBtn" styleClass="background-yellow" stylesheets="@../styles/styles.css" text="Watchlist" />
-                  <JFXButton fx:id="aboutBtn" onAction="#clickAboutBtn" styleClass="background-yellow" stylesheets="@../styles/styles.css" text="About" />
                   <Label fx:id="userNameLabel" alignment="CENTER_RIGHT" styleClass="text-yellow" stylesheets="@../styles/styles.css" text="Logged-In User" />
-                  <JFXButton fx:id="loggingBtn" alignment="CENTER_RIGHT" onAction="#clickLogOutBtn" styleClass="background-yellow" stylesheets="@../styles/styles.css" text="Login">
+                  <JFXButton fx:id="loggoutBtn" alignment="CENTER_RIGHT" onAction="#clickLogoutBtn" styleClass="background-yellow" stylesheets="@../styles/styles.css" text="Login">
                   <HBox.margin>
                      <Insets right="20.0" />
                   </HBox.margin></JFXButton>

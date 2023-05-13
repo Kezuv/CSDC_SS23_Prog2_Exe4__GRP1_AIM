@@ -28,6 +28,11 @@
     -fx-font-size: 20
 }
 
+.text-green {
+    -fx-text-fill: #5fc622;
+    -fx-font-size: 20;
+}
+
 .list-view .list-cell:even {
     -fx-background-color: black;
     -fx-text-fill: white;
