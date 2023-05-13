@@ -1,6 +1,6 @@
 package at.ac.fhcampuswien.fhmdb.ui.controller;
 
-import at.ac.fhcampuswien.fhmdb.Exceptions.ControllerExceptions;
+import at.ac.fhcampuswien.fhmdb.Exceptions.MovieApiException;
 import at.ac.fhcampuswien.fhmdb.models.User;
 import com.jfoenix.controls.JFXButton;
 import javafx.beans.property.BooleanProperty;
@@ -65,6 +65,7 @@ public class MainViewController implements Initializable {
         mainViewContent.setCenter(view);
     }
 
+    //TODO reduce codereuse
     private void changeBtnColors(JFXButton pressedBtn){
         if (pressedBtn.equals(homeBtn)) {
             homeBtn.getStyleClass().addAll("background-light-black", "text-white");
@@ -82,7 +83,7 @@ public class MainViewController implements Initializable {
 
     }
 
-    public void clickHomeBtn(ActionEvent actionEvent) {
+    public void clickHomeBtn(ActionEvent actionEvent) throws IOException {
         if (isLogedIn()) {
             try {
                 changeBtnColors(homeBtn);
@@ -91,12 +92,12 @@ public class MainViewController implements Initializable {
                 mainViewContent.setCenter(root);
             } catch (IOException e) {
                 System.out.println("Error loading Home: " + e.getMessage());
-                throw new ControllerExceptions.HomeButtonException("Error loading Home page: " + e.getMessage());
+                throw new MovieApiException.HomeButtonException("Error loading Home page: " + e.getMessage());
             }
         }
     }
 
-    public void clickWatchListBtn(ActionEvent actionEvent) {
+    public void clickWatchListBtn(ActionEvent actionEvent) throws IOException {
         if (isLogedIn()) {
             try {
                 changeBtnColors(watchListBtn);
@@ -105,12 +106,12 @@ public class MainViewController implements Initializable {
                 mainViewContent.setCenter(root);
             } catch (IOException e) {
                 System.out.println("Error loading watchlist.fxml: " + e.getMessage());
-                throw new ControllerExceptions.WatchListButtonException("Error loading watchlist page: " + e.getMessage());
+                throw new MovieApiException.WatchListButtonException("Error loading watchlist page: " + e.getMessage());
             }
         }
     }
 
-    public void clickLogoutBtn(ActionEvent actionEvent) {
+    public void clickLogoutBtn(ActionEvent actionEvent) throws IOException {
         if (isLogedIn()) {
             try {
                 loggedInProperty.set(false);
@@ -119,7 +120,7 @@ public class MainViewController implements Initializable {
                 mainViewContent.setCenter(view);
             } catch (IOException e) {
                 System.out.println("Error loading loginview.fxml: " + e.getMessage());
-                throw new ControllerExceptions.LogoutButtonException("Error loading login page: " + e.getMessage());
+                throw new MovieApiException.LogoutButtonException("Error loading login page: " + e.getMessage());
             }
         }
     }

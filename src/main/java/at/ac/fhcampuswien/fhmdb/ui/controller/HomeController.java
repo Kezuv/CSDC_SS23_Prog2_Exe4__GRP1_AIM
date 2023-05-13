@@ -1,6 +1,6 @@
 package at.ac.fhcampuswien.fhmdb.ui.controller;
 
-import at.ac.fhcampuswien.fhmdb.Exceptions.ControllerExceptions;
+import at.ac.fhcampuswien.fhmdb.Exceptions.MovieApiException;
 import at.ac.fhcampuswien.fhmdb.api.MovieAPI;
 import at.ac.fhcampuswien.fhmdb.api.SearchParameter;
 import at.ac.fhcampuswien.fhmdb.models.Genre;
@@ -23,7 +23,6 @@ import javafx.scene.layout.HBox;
 
 import java.io.IOException;
 import java.net.URL;
-import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.function.Function;
@@ -78,7 +77,7 @@ public class HomeController implements Initializable {
             sortedState = SortedState.NONE;
             MovieRepository.addMovies(allMovies);
         } catch (IOException e) {
-            ControllerExceptions.handleHomeControllerException(e);
+            MovieApiException.handleHomeControllerException(e);
             throw new RuntimeException(e);
         }
     }

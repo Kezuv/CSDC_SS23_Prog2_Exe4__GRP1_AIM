@@ -1,10 +1,9 @@
 package at.ac.fhcampuswien.fhmdb.database;
 
-import at.ac.fhcampuswien.fhmdb.Exceptions.DBExceptions;
+import at.ac.fhcampuswien.fhmdb.Exceptions.DatabaseException;
 import at.ac.fhcampuswien.fhmdb.entities.MovieEntity;
 import at.ac.fhcampuswien.fhmdb.entities.UserEntity;
 import at.ac.fhcampuswien.fhmdb.entities.WatchlistMovieEntity;
-import at.ac.fhcampuswien.fhmdb.repos.WatchlistRepository;
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.dao.DaoManager;
 import com.j256.ormlite.jdbc.JdbcConnectionSource;
@@ -26,7 +25,7 @@ public class DataBase {
 
     private static DataBase instance;
 
-    private DataBase() throws DBExceptions.ConnectionException, DBExceptions.TableCreationException, DBExceptions.DaoInitializationException {
+    private DataBase() throws DatabaseException.ConnectionException, DatabaseException.TableCreationException, DatabaseException.DaoInitializationException {
         try {
             createConnectionSource();
             userDao = DaoManager.createDao(connectionSource, UserEntity.class);
@@ -34,15 +33,15 @@ public class DataBase {
             watchlistDao = DaoManager.createDao(connectionSource, WatchlistMovieEntity.class);
             createTables();
         } catch (SQLException e) {
-            throw new DBExceptions.ConnectionException("Error creating connection source: " + e.getMessage());
-        } catch (DBExceptions.TableCreationException tce) {
-            throw new DBExceptions.TableCreationException("Error creating tables: " + tce.getMessage());
+            throw new DatabaseException.ConnectionException("Error creating connection source: " + e.getMessage());
+        } catch (DatabaseException.TableCreationException tce) {
+            throw new DatabaseException.TableCreationException("Error creating tables: " + tce.getMessage());
         } catch (Exception ex) {
-            throw new DBExceptions.DaoInitializationException("Error initializing DAOs: " + ex.getMessage());
+            throw new DatabaseException.DaoInitializationException("Error initializing DAOs: " + ex.getMessage());
         }
     }
 
-    public static DataBase getDatabaseUser() throws DBExceptions.ConnectionException, DBExceptions.TableCreationException, DBExceptions.DaoInitializationException {
+    public static DataBase getDatabaseUser() throws DatabaseException.ConnectionException, DatabaseException.TableCreationException, DatabaseException.DaoInitializationException {
         if(instance == null){
             instance = new DataBase();
         }
@@ -51,21 +50,21 @@ public class DataBase {
 
 
 
-    private static void createTables() throws DBExceptions.TableCreationException {
+    private static void createTables() throws DatabaseException.TableCreationException {
         try {
             TableUtils.createTableIfNotExists(connectionSource, UserEntity.class);
             TableUtils.createTableIfNotExists(connectionSource, MovieEntity.class);
             TableUtils.createTableIfNotExists(connectionSource, WatchlistMovieEntity.class);
         } catch (SQLException e) {
-            throw new DBExceptions.TableCreationException("Error creating tables: " + e.getMessage());
+            throw new DatabaseException.TableCreationException("Error creating tables: " + e.getMessage());
         }
     }
 
-    private static void createConnectionSource() throws DBExceptions.ConnectionException {
+    private static void createConnectionSource() throws DatabaseException.ConnectionException {
         try {
             connectionSource = new JdbcConnectionSource(databaseUrl, user, password);
         } catch (SQLException e) {
-            throw new DBExceptions.ConnectionException("Error creating connection source: " + e.getMessage());
+            throw new DatabaseException.ConnectionException("Error creating connection source: " + e.getMessage());
         }
     }
 

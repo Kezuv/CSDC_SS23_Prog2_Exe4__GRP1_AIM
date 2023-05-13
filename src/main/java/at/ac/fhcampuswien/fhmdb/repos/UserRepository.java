@@ -1,7 +1,6 @@
 package at.ac.fhcampuswien.fhmdb.repos;
 
-import at.ac.fhcampuswien.fhmdb.Exceptions.DBExceptions;
-import at.ac.fhcampuswien.fhmdb.Exceptions.RepositoryExceptions;
+import at.ac.fhcampuswien.fhmdb.Exceptions.DatabaseException;
 import at.ac.fhcampuswien.fhmdb.database.DataBase;
 import at.ac.fhcampuswien.fhmdb.entities.UserEntity;
 import at.ac.fhcampuswien.fhmdb.models.User;
@@ -16,19 +15,19 @@ public class UserRepository {
     static {
         try {
             userDao = DataBase.getDatabaseUser().getUserDao();
-        } catch (DBExceptions.ConnectionException | DBExceptions.TableCreationException |
-                 DBExceptions.DaoInitializationException e) {
+        } catch (DatabaseException.ConnectionException | DatabaseException.TableCreationException |
+                 DatabaseException.DaoInitializationException e) {
             throw new RuntimeException(e);
         }
     }
 
 
     //Register new user in database (Need User Object)
-    public static void registerUser(String username, String password) throws RepositoryExceptions.RegisterUserException {
+    public static void registerUser(String username, String password) throws DatabaseException.RegisterUserException {
         try {
             userDao.createIfNotExists(new UserEntity(username, password));
         } catch (SQLException e) {
-            throw new RepositoryExceptions.RegisterUserException("Failed to register user", e);
+            throw new DatabaseException.RegisterUserException("Failed to register user", e);
         }
     }
 
@@ -37,20 +36,25 @@ public class UserRepository {
         return new UserEntity(user.getId(), user.getUsername(), user.getPassword());
     }
 
-    public static User userLogIn(String username, String password) throws RepositoryExceptions.UserLoginException {
+    public static User userLogIn(String username, String password) throws DatabaseException.UserLoginException {
         try {
             List<UserEntity> allUsers = userDao.queryForMatching(new UserEntity(username, password));
             if (!allUsers.isEmpty()) {
                 UserEntity userEntity = allUsers.get(0);
                 return new User(userEntity.getUsername(), userEntity.getPassword(), userEntity.getId());
             } else {
-                throw new RepositoryExceptions.UserLoginException("User not found");
+                throw new DatabaseException.UserLoginException("User not found");
             }
         } catch (SQLException e) {
-            throw new RepositoryExceptions.UserExistsException("Failed to log in user, ", e);
+            throw new DatabaseException.RegisterUserException("Failed to log in user, ", e);
         } catch (IndexOutOfBoundsException e) {
-            throw new RepositoryExceptions.UserLoginException("User not found"+ e.getMessage());
+            throw new DatabaseException.UserLoginException("User not found"+ e.getMessage());
         }
+    }
+
+    //Included for purposes (Converts UserEntity to User object)
+    public static User userEntityToUser (UserEntity user){
+        return new User(user.getUsername(), user.getPassword());
     }
 
     public static boolean isUserExists(String username) {

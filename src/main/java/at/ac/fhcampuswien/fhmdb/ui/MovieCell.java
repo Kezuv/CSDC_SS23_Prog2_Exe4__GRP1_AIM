@@ -1,5 +1,6 @@
 package at.ac.fhcampuswien.fhmdb.ui;
 
+import at.ac.fhcampuswien.fhmdb.Exceptions.DatabaseException;
 import at.ac.fhcampuswien.fhmdb.api.MovieAPI;
 import at.ac.fhcampuswien.fhmdb.models.Movie;
 import at.ac.fhcampuswien.fhmdb.repos.WatchlistRepository;
@@ -75,17 +76,18 @@ public class MovieCell extends ListCell<Movie> {
                     updateItem(movie, false);
                 }
             });
+            try {
+                watchListAddBtn.setOnMouseClicked(event -> {
 
-            watchListAddBtn.setOnMouseClicked(event -> {
-
-                if (!movie.isOnWatchList()) {
-                    WatchlistRepository.addMovieToWatchList(MainViewController.getActiveUser(), movie);
-                } else {
-                    WatchlistRepository.removeMovieFromWatchlist(MainViewController.getActiveUser(), movie);
-                }
-                movie.upDateOnWatchList();
-                updateItem(movie,false);
-            });
+                    if (!movie.isOnWatchList()) {
+                        WatchlistRepository.addMovieToWatchList(MainViewController.getActiveUser(), movie);
+                    } else {
+                        WatchlistRepository.removeMovieFromWatchlist(MainViewController.getActiveUser(), movie);
+                    }
+                    movie.upDateOnWatchList();
+                    updateItem(movie, false);
+                });
+            } catch (DatabaseException.AddMovieToWatchlistException | DatabaseException.RemoveMovieFromWatchlistException ignored){}
 
             //set Text
             title.setText(movie.getTitle());
