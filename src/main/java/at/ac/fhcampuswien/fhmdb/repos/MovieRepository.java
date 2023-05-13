@@ -1,7 +1,6 @@
 package at.ac.fhcampuswien.fhmdb.repos;
 
-import at.ac.fhcampuswien.fhmdb.Exceptions.DBExceptions;
-import at.ac.fhcampuswien.fhmdb.Exceptions.RepositoryExceptions;
+import at.ac.fhcampuswien.fhmdb.Exceptions.DatabaseException;
 import at.ac.fhcampuswien.fhmdb.database.DataBase;
 import at.ac.fhcampuswien.fhmdb.entities.MovieEntity;
 import at.ac.fhcampuswien.fhmdb.models.Genre;
@@ -21,7 +20,7 @@ public class MovieRepository {
         try {
             movieDao = DataBase.getDatabaseUser().getMovieDao();
         } catch (Exception e) {
-            RepositoryExceptions.handleRepositoryException(e);
+            DatabaseException.handleRepositoryException(e);
         }
     }
 
@@ -30,7 +29,7 @@ public class MovieRepository {
         try {
             movieDao.create(movieToMovieEntity(movie));
         } catch (SQLException e) {
-            throw new RepositoryExceptions.AddMovieException(e.getMessage());
+            throw new DatabaseException.AddMovieException(e.getMessage());
         }
     }
 
@@ -41,16 +40,17 @@ public class MovieRepository {
                 movieDao.createIfNotExists(movieToMovieEntity(movie));
             }
         } catch (SQLException e) {
-            throw new RepositoryExceptions.AddMovieException(e.getMessage());
+            throw new DatabaseException.AddMovieException(e.getMessage());
         }
     }
 
     //Gets MovieEntity with id (FHMD) for database check etc...
+    /*
     public MovieEntity getMovieEntity(String id) {
         try {
             return movieDao.queryForId(id);
         } catch (SQLException e) {
-            throw new RepositoryExceptions.GetMovieEntityException(e.getMessage());
+            throw new DatabaseException.GetMovieEntityException(e.getMessage());
         }
     }
 
@@ -59,7 +59,7 @@ public class MovieRepository {
         try {
             return movieEntityToMovie(movieDao.queryForId(id));
         } catch (SQLException e) {
-            throw new RepositoryExceptions.GetMovieException(e.getMessage());
+            throw new DatabaseException.GetMovieException(e.getMessage());
         }
     }
 
@@ -68,11 +68,12 @@ public class MovieRepository {
         try {
             return movieDao.queryForAll();
         } catch (SQLException e) {
-            throw new RepositoryExceptions.GetAllMoviesException(e.getMessage());
+            throw new DatabaseException.GetAllMoviesException(e.getMessage());
         }
     }
 
     //Get all movies from database as a List<Movie>
+    /*
     public static List<Movie> getAllMovies() {
         List<MovieEntity> movieEntities = getAllMovieEntities();
         List<Movie> movies = new ArrayList<>();
@@ -83,7 +84,7 @@ public class MovieRepository {
         }
         return movies;
     }
-
+    */
     //Converts Movie object to MovieEntity
     public static MovieEntity movieToMovieEntity(Movie movie){
         return new MovieEntity(movie.getId(), movie.getTitle(), movie.getDescription(),
@@ -98,7 +99,7 @@ public class MovieRepository {
                     movie.getImgUrl(), stringToGenres(movie.getGenres()), stringToList(movie.getDirectors()), stringToList(movie.getWriters()),
                     stringToList(movie.getMainCast()), movie.getRating(), movie.getReleaseYear(), movie.getLengthInMinutes());
         } catch (IOException e) {
-            throw new RepositoryExceptions.GetMovieException(e.getMessage());
+            throw new DatabaseException.GetMovieException(e.getMessage());
         }
     }
 

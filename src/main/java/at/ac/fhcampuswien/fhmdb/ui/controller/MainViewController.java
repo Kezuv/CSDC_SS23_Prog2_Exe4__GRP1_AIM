@@ -1,6 +1,6 @@
 package at.ac.fhcampuswien.fhmdb.ui.controller;
 
-import at.ac.fhcampuswien.fhmdb.Exceptions.ControllerExceptions;
+import at.ac.fhcampuswien.fhmdb.Exceptions.MovieApiException;
 import at.ac.fhcampuswien.fhmdb.models.User;
 import com.jfoenix.controls.JFXButton;
 import javafx.beans.property.BooleanProperty;
@@ -100,7 +100,7 @@ public class MainViewController implements Initializable {
                 mainViewContent.setCenter(root);
             } catch (IOException e) {
                 System.out.println("Error loading Home: " + e.getMessage());
-                throw new ControllerExceptions.HomeButtonException("Error loading Home page: " + e.getMessage());
+                throw new MovieApiException.HomeButtonException("Error loading Home page: " + e.getMessage());
             }
         }
     }
@@ -114,7 +114,7 @@ public class MainViewController implements Initializable {
                 mainViewContent.setCenter(root);
             } catch (IOException e) {
                 System.out.println("Error loading watchlist.fxml: " + e.getMessage());
-                throw new ControllerExceptions.WatchListButtonException("Error loading watchlist page: " + e.getMessage());
+                throw new MovieApiException.WatchListButtonException("Error loading watchlist page: " + e.getMessage());
             }
         }
     }
@@ -128,7 +128,7 @@ public class MainViewController implements Initializable {
                 mainViewContent.setCenter(root);
             } catch (IOException e) {
                 System.out.println("Error loading about.fxml: " + e.getMessage());
-                throw new ControllerExceptions.AboutButtonException("Error loading about page: " + e.getMessage());
+                throw new MovieApiException.AboutButtonException("Error loading about page: " + e.getMessage());
             }
         }
     }
@@ -142,7 +142,7 @@ public class MainViewController implements Initializable {
                 mainViewContent.setCenter(view);
             } catch (IOException e) {
                 System.out.println("Error loading loginview.fxml: " + e.getMessage());
-                throw new ControllerExceptions.LogoutButtonException("Error loading login page: " + e.getMessage());
+                throw new MovieApiException.LogoutButtonException("Error loading login page: " + e.getMessage());
             }
         }
     }

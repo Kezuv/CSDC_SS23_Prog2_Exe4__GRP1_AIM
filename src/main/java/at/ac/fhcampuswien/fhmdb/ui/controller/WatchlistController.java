@@ -1,5 +1,6 @@
 package at.ac.fhcampuswien.fhmdb.ui.controller;
 
+import at.ac.fhcampuswien.fhmdb.Exceptions.DatabaseException;
 import at.ac.fhcampuswien.fhmdb.api.MovieAPI;
 import at.ac.fhcampuswien.fhmdb.entities.WatchlistMovieEntity;
 import at.ac.fhcampuswien.fhmdb.models.Movie;
@@ -47,6 +48,7 @@ public class WatchlistController implements Initializable {
             watchListMovies = WatchlistRepository.getAllMoviesForUser(MainViewController.getActiveUser());
         } catch (SQLException e) {
             throw new RuntimeException(e);
+        } catch (DatabaseException.GetMoviesForUserException ignored){
         }
         observableWatchList.clear();
         observableWatchList.addAll(watchListMovies); // add all movies to the observable list

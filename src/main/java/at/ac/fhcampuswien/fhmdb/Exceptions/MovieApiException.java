@@ -1,15 +1,24 @@
 package at.ac.fhcampuswien.fhmdb.Exceptions;
 
+// this class will handle all exceptions caused by the MovieAPI and the SearchParameter classes
+
+
 import java.io.IOException;
 import java.sql.SQLException;
 
-public class ControllerExceptions {
+public class MovieApiException extends IOException {
+    public MovieApiException(String message) {
+        super(message);
+    }
 
-    public static class RegistrationException extends RuntimeException {
-        public RegistrationException(String message) {
-            super("Registration exception: " + message);
+    public static String handleException(Exception e){
+        if (e instanceof IOException) {
+            return "An IO exception occurred while making the API request: " + e.getMessage();
+        } else {
+            return "An unexpected exception occurred: " + e.getMessage();
         }
     }
+
 
     public static class WebPageOpenException extends RuntimeException {
         public WebPageOpenException(String message) {
@@ -60,4 +69,5 @@ public class ControllerExceptions {
             System.out.println("Exception occurred in HomeController: " + e.getMessage());
         }
     }
+
 }

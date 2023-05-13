@@ -2,7 +2,7 @@ package at.ac.fhcampuswien.fhmdb.api;
 
 import java.io.IOException;
 
-import at.ac.fhcampuswien.fhmdb.Exceptions.APIExceptions;
+import at.ac.fhcampuswien.fhmdb.Exceptions.MovieApiException;
 import okhttp3.*;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -13,12 +13,12 @@ public class MovieAPI {
     private static String customSearchParameter = "";
     private static boolean firstParam = true;
 
-    public static String addParam(SearchParameter param, String value) throws APIExceptions {
+    public static String addParam(SearchParameter param, String value) throws MovieApiException {
         if (param == null) {
-            throw new APIExceptions("Invalid SearchParameter input: parameter cannot be null.");
+            throw new MovieApiException("Invalid SearchParameter input: parameter cannot be null.");
         }
         if (value == null || value.isEmpty()) {
-            throw new APIExceptions("Invalid SearchParameter value: value cannot be null or empty.");
+            throw new MovieApiException("Invalid SearchParameter value: value cannot be null or empty.");
         }
         if (firstParam){
             customSearchParameter += "?";
@@ -41,7 +41,7 @@ public class MovieAPI {
         firstParam = true;
     }
 
-    public static String getApiRequest() throws APIExceptions {
+    public static String getApiRequest() throws MovieApiException {
         try {
             OkHttpClient client = new OkHttpClient();
             Request request = new Request.Builder()
@@ -53,24 +53,24 @@ public class MovieAPI {
             resetURL();
             return response.body().string();
         } catch (IOException e) {
-            throw new APIExceptions(APIExceptions.handleException(e));
+            throw new MovieApiException(MovieApiException.handleException(e));
         }
     }
 
-    public static String getTrueImgUrl(String url) throws APIExceptions {
+    public static String getTrueImgUrl(String url) throws MovieApiException {
         if (url == null || url.isEmpty()) {
-            throw new APIExceptions("Invalid URL input: URL cannot be null or empty.");
+            throw new MovieApiException("Invalid URL input: URL cannot be null or empty.");
         }
 
         try {
             Document metaCode = Jsoup.connect(url).get();
             Element element = metaCode.select("meta[property=og:image]").first();
             if (element == null) {
-                throw new APIExceptions("Cannot find meta tag for image in the given URL.");
+                throw new MovieApiException("Cannot find meta tag for image in the given URL.");
             }
             return element.attr("content");
         } catch (IOException e) {
-            throw new APIExceptions("Error retrieving meta tag from the given URL: " + e.getMessage());
+            throw new MovieApiException("Error retrieving meta tag from the given URL: " + e.getMessage());
         }
     }
 
