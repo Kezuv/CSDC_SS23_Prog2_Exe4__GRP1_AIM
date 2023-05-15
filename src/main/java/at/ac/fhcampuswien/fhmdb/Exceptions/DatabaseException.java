@@ -44,23 +44,30 @@ public class DatabaseException {
 
         public static class RegisterUserException extends RuntimeException {
             public RegisterUserException(String message, SQLException e) {
-                super("Register user exception: " + message);
+                super( message);
             }
         }
 
         public static class UserLoginException extends RuntimeException {
             public UserLoginException(String message) {
-                super("User login exception: " + message);
+                super( message);
             }
         }
 
-        public static class UserExistsException extends InvocationTargetException {
-            public UserExistsException(String message) {
-                super();
-            }
+    public static class UserExistsException extends InvocationTargetException {
+        private String customMessage;
+        public UserExistsException(String message) {
+            super();
+            this.customMessage = message;
         }
+        @Override
+        public String getMessage() {
+            return customMessage;
+        }
+    }
 
-        public static class GetMoviesForUserException extends RuntimeException {
+
+    public static class GetMoviesForUserException extends RuntimeException {
             public GetMoviesForUserException(String message, Exception e) {
                 super("Get movies for user exception: " + message);
             }

@@ -32,7 +32,7 @@ public class LoginViewController {
                 System.out.println("Login succeed!");
             } catch ( DatabaseException.UserLoginException ule) {
                 loginError.getStyleClass().add("text-red");
-                loginError.setText("Username or password wrong. Please try again.");
+                loginError.setText("Login failed: "+ ule.getMessage());
             }
         }
 
@@ -45,9 +45,7 @@ public class LoginViewController {
                 clearNotifications();
                 String username = usernameField.getText();
                 if (UserRepository.isUserExists(username)) {
-                    registerSuccess.getStyleClass().add("text-red");
-                    registerSuccess.setText("Register failed! Username <"+ username +"> already exists " );
-                    throw new DatabaseException.UserExistsException("Username already exists: " + username);
+                    throw new DatabaseException.UserExistsException("Username <" + username + "> already exists" );
                 }
                 UserRepository.registerUser(username, passwordField.getText());
                 System.out.println("Register complete!");
@@ -57,8 +55,11 @@ public class LoginViewController {
                 passwordField.clear();
                 loginError.setStyle("");
             }
-        } catch (DatabaseException.UserExistsException | DatabaseException.RegisterUserException e) {
-
+        } catch (DatabaseException.UserExistsException e) {
+            registerSuccess.getStyleClass().add("text-red");
+            registerSuccess.setText("Register failed! " + e.getMessage());
+        } catch (DatabaseException.RegisterUserException re){
+            registerSuccess.setText("Register failed! " + re.getMessage());
         }
     }
 
