@@ -42,6 +42,8 @@ public class HomeController implements Initializable {
     @FXML
     public Label mostPopularActor = new Label();
     @FXML
+    public Label homeError;
+    @FXML
     public JFXListView movieListView;
     @FXML
     public JFXComboBox<String> genreComboBox;
@@ -77,7 +79,8 @@ public class HomeController implements Initializable {
             sortedState = SortedState.NONE;
             MovieRepository.addMovies(allMovies);
         } catch (IOException e) {
-            MovieApiException.handleHomeControllerException(e);
+            homeError.getStyleClass().add("text-red");
+            homeError.setText(MovieApiException.handleHomeControllerException(e));
             throw new RuntimeException(e);
         }
     }

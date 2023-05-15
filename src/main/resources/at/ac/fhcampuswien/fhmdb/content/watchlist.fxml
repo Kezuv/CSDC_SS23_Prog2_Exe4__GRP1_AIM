@@ -12,6 +12,17 @@
       AnchorPane.topAnchor="0.0"
       AnchorPane.leftAnchor="0.0"
       AnchorPane.rightAnchor="0.0">
+   <Label fx:id="watchlisterror" minHeight="30" stylesheets="@../styles/styles.css" styleClass="text-red">
+      <font>
+         <Font size="20.0" />
+      </font>
+      <opaqueInsets>
+         <Insets />
+      </opaqueInsets>
+      <VBox.margin>
+         <Insets />
+      </VBox.margin>
+   </Label>
    <VBox prefHeight="200.0" prefWidth="100.0" VBox.vgrow="ALWAYS">
       <children>
          <JFXListView fx:id="movieListView" style="-fx-background-color: black; " prefWidth="568.0" stylesheets="@../styles/styles.css" VBox.vgrow="ALWAYS" />

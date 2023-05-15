@@ -56,18 +56,20 @@ public class MovieApiException extends IOException {
         }
     }
 
-    public static void handleHomeControllerException(Exception e) {
+    public static String handleHomeControllerException(Exception e) {
         // Handle exceptions specific to HomeController
+        String message;
         if (e instanceof IOException) {
             // Handle IOException
-            System.out.println("IOException occurred in HomeController: " + e.getMessage());
+           message = "IOException occurred in HomeController: " + e.getMessage();
         } else if (e instanceof SQLException) {
             // Handle SQLException
-            System.out.println("SQLException occurred in HomeController: " + e.getMessage());
+            message = "SQLException occurred in HomeController: " + e.getMessage();
         } else {
             // Handle other exceptions
-            System.out.println("Exception occurred in HomeController: " + e.getMessage());
+            message = "Exception occurred in HomeController: " + e.getMessage();
         }
+        return message;
     }
 
 }

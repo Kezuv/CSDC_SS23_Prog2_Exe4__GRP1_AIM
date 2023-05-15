@@ -8,6 +8,17 @@
 
 <AnchorPane style="-fx-alignment: center; " BorderPane.alignment="CENTER" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="at.ac.fhcampuswien.fhmdb.ui.controller.HomeController">
    <VBox alignment="CENTER" style="-fx-background-color: black; " AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" VBox.vgrow="ALWAYS">
+      <Label fx:id="homeError" minHeight="30" stylesheets="@../styles/styles.css" >
+         <font>
+            <Font size="20.0" />
+         </font>
+         <opaqueInsets>
+            <Insets />
+         </opaqueInsets>
+         <VBox.margin>
+            <Insets />
+         </VBox.margin>
+      </Label>
       <HBox spacing="5.0" styleClass="background-black" stylesheets="@../styles/styles.css">
          <children>
             <JFXButton fx:id="sortBtn" onAction="#sortBtnClicked" styleClass="background-yellow" stylesheets="@../styles/styles.css" text="Sort" />
