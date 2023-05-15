@@ -8,6 +8,7 @@ import at.ac.fhcampuswien.fhmdb.models.Movie;
 import at.ac.fhcampuswien.fhmdb.models.SortedState;
 import at.ac.fhcampuswien.fhmdb.repos.MovieRepository;
 import at.ac.fhcampuswien.fhmdb.ui.MovieCell;
+import com.google.gson.JsonSyntaxException;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXListView;
@@ -308,7 +309,10 @@ public class HomeController implements Initializable {
             initializeLayout();
         } catch( NullPointerException npe){
             homeError.getStyleClass().add("text-red");
-            homeError.setText("API loading Error!!");
+            homeError.setText("No Internet Connection!!");
+        } catch (JsonSyntaxException je){
+            homeError.getStyleClass().add("text-red");
+            homeError.setText("API Not working properly!!");
         }
     }
 }
