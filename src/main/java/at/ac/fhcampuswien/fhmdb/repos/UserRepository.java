@@ -43,12 +43,12 @@ public class UserRepository {
                 UserEntity userEntity = allUsers.get(0);
                 return new User(userEntity.getUsername(), userEntity.getPassword(), userEntity.getId());
             } else {
-                throw new DatabaseException.UserLoginException("User not found");
+                throw new DatabaseException.UserLoginException("Username or password is wrong!");
             }
         } catch (SQLException e) {
-            throw new DatabaseException.RegisterUserException("Failed to log in user, ", e);
+            throw new DatabaseException.RegisterUserException("User not found: ", e);
         } catch (IndexOutOfBoundsException e) {
-            throw new DatabaseException.UserLoginException("User not found"+ e.getMessage());
+            throw new DatabaseException.UserLoginException("User not found: "+ e.getMessage());
         }
     }
 

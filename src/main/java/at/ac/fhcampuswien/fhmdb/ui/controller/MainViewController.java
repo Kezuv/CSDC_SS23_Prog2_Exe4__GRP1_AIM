@@ -21,7 +21,7 @@ public class MainViewController implements Initializable {
     @FXML
     public JFXButton homeBtn, watchListBtn, loggoutBtn;
     @FXML
-    public Label userNameLabel, fhmdbLogo, welcomeText;
+    public Label userNameLabel, fhmdbLogo, welcomeText, homeError;
     @FXML
     public BorderPane mainViewContent;
     @FXML
@@ -54,15 +54,23 @@ public class MainViewController implements Initializable {
         setRight.maxWidthProperty().bind(header.widthProperty());
         header.getChildren().clear();
         header.getChildren().addAll(fhmdbLogo, welcomeText,setCenter, homeBtn, watchListBtn, setRight, userNameLabel, loggoutBtn);
-
+        try{
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/at/ac/fhcampuswien/fhmdb/content/loginview.fxml"));
+
         AnchorPane view = null;
-        try {
-            view = fxmlLoader.load();
+        view = fxmlLoader.load();
+        mainViewContent.setCenter(view);
         } catch (IOException e) {
             throw new RuntimeException(e);
+        } catch (RuntimeException re){
+            try {
+                throw new MovieApiException.HomeButtonException("can't reach API");
+            } catch (MovieApiException.HomeButtonException e) {
+                homeError.getStyleClass().add("text-red");
+                homeError.setText(e.getMessage());
+            }
         }
-        mainViewContent.setCenter(view);
+
     }
 
     //TODO reduce codereuse
@@ -83,16 +91,18 @@ public class MainViewController implements Initializable {
 
     }
 
-    public void clickHomeBtn(ActionEvent actionEvent) throws IOException {
+    public void clickHomeBtn(ActionEvent actionEvent) {
         if (isLogedIn()) {
             try {
                 changeBtnColors(homeBtn);
                 FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/at/ac/fhcampuswien/fhmdb/content/home.fxml"));
                 AnchorPane root = fxmlLoader.load();
                 mainViewContent.setCenter(root);
+            } catch (MovieApiException.HomeButtonException e) {
+                homeError.getStyleClass().add("text-red");
+                homeError.setText(e.getMessage());
             } catch (IOException e) {
-                System.out.println("Error loading Home: " + e.getMessage());
-                throw new MovieApiException.HomeButtonException("Error loading Home page: " + e.getMessage());
+                throw new RuntimeException(e);
             }
         }
     }

@@ -8,6 +8,7 @@ import at.ac.fhcampuswien.fhmdb.models.Movie;
 import at.ac.fhcampuswien.fhmdb.models.SortedState;
 import at.ac.fhcampuswien.fhmdb.repos.MovieRepository;
 import at.ac.fhcampuswien.fhmdb.ui.MovieCell;
+import com.google.gson.JsonSyntaxException;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXListView;
@@ -41,6 +42,8 @@ public class HomeController implements Initializable {
     public Label titleCount = new Label();
     @FXML
     public Label mostPopularActor = new Label();
+    @FXML
+    public Label homeError;
     @FXML
     public JFXListView movieListView;
     @FXML
@@ -76,9 +79,9 @@ public class HomeController implements Initializable {
             }
             sortedState = SortedState.NONE;
             MovieRepository.addMovies(allMovies);
-        } catch (IOException e) {
-            MovieApiException.handleHomeControllerException(e);
-            throw new RuntimeException(e);
+        } catch (MovieApiException e) {
+            homeError.getStyleClass().add("text-red");
+            homeError.setText(MovieApiException.handleHomeControllerException(e));
         }
     }
 
@@ -301,7 +304,15 @@ public class HomeController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        initializeState();
-        initializeLayout();
+        try {
+            initializeState();
+            initializeLayout();
+        } catch( NullPointerException npe){
+            homeError.getStyleClass().add("text-red");
+            homeError.setText("No Internet Connection!!");
+        } catch (JsonSyntaxException je){
+            homeError.getStyleClass().add("text-red");
+            homeError.setText("API Not working properly!!");
+        }
     }
 }

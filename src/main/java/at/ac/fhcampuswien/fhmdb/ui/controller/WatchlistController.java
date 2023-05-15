@@ -40,6 +40,8 @@ public class WatchlistController implements Initializable {
     public HBox content;
     @FXML
     private  HBox directorsHBox = new HBox();
+    @FXML
+    public Label watchlisterror;
     public List<Movie> watchListMovies;
     protected ObservableList<Movie> observableWatchList = FXCollections.observableArrayList();
 
@@ -47,8 +49,12 @@ public class WatchlistController implements Initializable {
         try {
             watchListMovies = WatchlistRepository.getAllMoviesForUser(MainViewController.getActiveUser());
         } catch (SQLException e) {
+            watchlisterror.getStyleClass().add("text-red");
+            watchlisterror.setText(e.getMessage());
             throw new RuntimeException(e);
-        } catch (DatabaseException.GetMoviesForUserException ignored){
+        } catch (DatabaseException.GetMoviesForUserException gmrue){
+            watchlisterror.getStyleClass().add("text-red");
+            watchlisterror.setText(gmrue.getMessage());
         }
         observableWatchList.clear();
         observableWatchList.addAll(watchListMovies); // add all movies to the observable list
