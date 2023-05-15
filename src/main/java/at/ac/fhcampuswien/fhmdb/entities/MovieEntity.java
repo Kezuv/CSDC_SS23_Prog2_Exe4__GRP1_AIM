@@ -1,6 +1,5 @@
 package at.ac.fhcampuswien.fhmdb.entities;
 
-import at.ac.fhcampuswien.fhmdb.models.Movie;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
@@ -48,6 +47,7 @@ public class MovieEntity {
     }
 
     public String getId(){return id;}
+
     public String getTitle() {
         return title;
     }

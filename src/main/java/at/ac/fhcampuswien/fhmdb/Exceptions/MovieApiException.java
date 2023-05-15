@@ -19,7 +19,6 @@ public class MovieApiException extends IOException {
         }
     }
 
-
     public static class WebPageOpenException extends RuntimeException {
         public WebPageOpenException(String message) {
             super("Web page open exception: " + message);
@@ -50,7 +49,6 @@ public class MovieApiException extends IOException {
         }
     }
 
-
     public static class LogoutButtonException extends RuntimeException {
         public LogoutButtonException(String message) {
             super(message);
@@ -72,5 +70,4 @@ public class MovieApiException extends IOException {
         }
         return message;
     }
-
 }

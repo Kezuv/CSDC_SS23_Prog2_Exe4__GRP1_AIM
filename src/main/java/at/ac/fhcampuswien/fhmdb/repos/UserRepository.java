@@ -21,7 +21,6 @@ public class UserRepository {
         }
     }
 
-
     //Register new user in database (Need User Object)
     public static void registerUser(String username, String password) throws DatabaseException.RegisterUserException {
         try {

@@ -2,8 +2,6 @@ package at.ac.fhcampuswien.fhmdb.repos;
 
 import at.ac.fhcampuswien.fhmdb.Exceptions.DatabaseException;
 import at.ac.fhcampuswien.fhmdb.database.DataBase;
-import at.ac.fhcampuswien.fhmdb.entities.MovieEntity;
-import at.ac.fhcampuswien.fhmdb.entities.UserEntity;
 import at.ac.fhcampuswien.fhmdb.entities.WatchlistMovieEntity;
 import at.ac.fhcampuswien.fhmdb.models.Movie;
 import at.ac.fhcampuswien.fhmdb.models.User;
@@ -29,8 +27,6 @@ public class WatchlistRepository {
     //Returns all movies in the watchlist for a user
     public static List<Movie> getAllMoviesForUser(User user) throws DatabaseException.GetAllMoviesException, SQLException {
     try {
-
-
         List<Movie> movies = new ArrayList<>();
 
         QueryBuilder<WatchlistMovieEntity, Long> queryBuilder = watchlistDao.queryBuilder();
@@ -44,7 +40,6 @@ public class WatchlistRepository {
         return movies;
     } catch (SQLException e){
         throw new DatabaseException.GetMoviesForUserException("Failed to retrieve watchlist movies for user: " + user.getUsername(), e);
-
     } catch (DatabaseException.GetMovieException gme){
 
     }
@@ -59,10 +54,6 @@ public class WatchlistRepository {
             throw new DatabaseException.AddMovieToWatchlistException("Failed to add movie to watchlist for user: " + activeUser.getUsername(), e);
         }
     }
-
-
-
-
 
     //Removes a movie from the watchlist for a user
     public static boolean removeMovieFromWatchlist(User user, Movie movie) throws DatabaseException.RemoveMovieFromWatchlistException {

@@ -63,7 +63,6 @@ public class LoginViewController {
         }
     }
 
-
     public void openMoreInfo(MouseEvent mouseEvent) {
         String url = "https://www.youtube.com/watch?v=dQw4w9WgXcQ";
         try {

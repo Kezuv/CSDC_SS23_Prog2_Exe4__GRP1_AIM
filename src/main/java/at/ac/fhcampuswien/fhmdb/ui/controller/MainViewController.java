@@ -17,7 +17,6 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 public class MainViewController implements Initializable {
-
     @FXML
     public JFXButton homeBtn, watchListBtn, loggoutBtn;
     @FXML
@@ -35,16 +34,12 @@ public class MainViewController implements Initializable {
 
     private static User activeUser;
 
-
-
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-
         loggedInProperty.addListener((observable, oldValue, newValue) -> {
             checkIfLoggedIn();
         });
         checkIfLoggedIn();
-
         loggoutBtn.setText("Logout");
 
         HBox.setHgrow(setCenter, Priority.ALWAYS);
@@ -70,10 +65,8 @@ public class MainViewController implements Initializable {
                 homeError.setText(e.getMessage());
             }
         }
-
     }
 
-    //TODO reduce codereuse
     private void changeBtnColors(JFXButton pressedBtn){
         if (pressedBtn.equals(homeBtn)) {
             homeBtn.getStyleClass().addAll("background-light-black", "text-white");
@@ -88,7 +81,6 @@ public class MainViewController implements Initializable {
             homeBtn.getStyleClass().removeAll("background-light-black", "text-white");
             watchListBtn.getStyleClass().removeAll("background-light-black", "text-white");
         }
-
     }
 
     public void clickHomeBtn(ActionEvent actionEvent) {
@@ -134,6 +126,7 @@ public class MainViewController implements Initializable {
             }
         }
     }
+
     private void checkIfLoggedIn(){
         if (!isLogedIn()){
             userNameLabel.setText("");
@@ -153,7 +146,6 @@ public class MainViewController implements Initializable {
     public static boolean isLogedIn() {
         return loggedInProperty.get();
     }
-
 
     public static void setLogedIn(boolean logedIn) {
         loggedInProperty.set(logedIn);

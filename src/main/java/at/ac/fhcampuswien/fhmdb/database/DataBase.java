@@ -16,7 +16,6 @@ public class DataBase {
     public static final String databaseUrl = "jdbc:h2:./fhmdbDataBase/fhmdb";
     public static final String user = "admin";
     public static final String password = "password";
-
     private static ConnectionSource connectionSource;
     private Dao<UserEntity, Long> userDao;
     private Dao<MovieEntity, String> movieDao;
@@ -48,8 +47,6 @@ public class DataBase {
         return instance;
     }
 
-
-
     private static void createTables() throws DatabaseException.TableCreationException {
         try {
             TableUtils.createTableIfNotExists(connectionSource, UserEntity.class);
@@ -74,7 +71,6 @@ public class DataBase {
     public Dao<MovieEntity, String> getMovieDao() {
         return this.movieDao;
     }
-
     public Dao<WatchlistMovieEntity, Long> getWatchlistDao() {
         return watchlistDao;
     }

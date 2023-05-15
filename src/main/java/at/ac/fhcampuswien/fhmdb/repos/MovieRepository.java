@@ -24,7 +24,6 @@ public class MovieRepository {
         }
     }
 
-
     //Add all movies to database
     public static void addMovies(List<Movie> movies) {
         try {
@@ -35,7 +34,6 @@ public class MovieRepository {
             throw new DatabaseException.AddMovieException(e.getMessage());
         }
     }
-
 
     //In-class function to get all MovieEntity´s from the database
     private static List<MovieEntity> getAllMovieEntities() {
@@ -64,10 +62,8 @@ public class MovieRepository {
         }
     }
 
-
     //In-class converter from List<Genre> to String
     public static String genresToString(List<Genre> genres) {
-
             StringBuilder genreString = new StringBuilder();
             for (Genre genre : genres) {
                 genreString.append(genre.name()).append(",");
@@ -76,7 +72,6 @@ public class MovieRepository {
             return result;
 
     }
-
 
     //In-class converter from String to List<Genre>
     private static List<Genre> stringToGenres(String genreString) {
@@ -98,5 +93,4 @@ public class MovieRepository {
     private static List<String> stringToList(String str){
         return Arrays.asList(str.split(","));
     }
-
 }
