@@ -9,7 +9,17 @@
 <VBox prefHeight="400.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="at.ac.fhcampuswien.fhmdb.ui.controller.MainViewController">
    <BorderPane fx:id="mainViewContent" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" VBox.vgrow="ALWAYS">
       <top>
-      
+          <Label fx:id="homeError" minHeight="30" stylesheets="@../styles/styles.css" >
+              <font>
+                  <Font size="20.0" />
+              </font>
+              <opaqueInsets>
+                  <Insets />
+              </opaqueInsets>
+              <VBox.margin>
+                  <Insets />
+              </VBox.margin>
+          </Label>
           <HBox fx:id="header" prefHeight="50" alignment="CENTER_LEFT" spacing="20.0" style="-fx-background-color: black;" BorderPane.alignment="CENTER">
               <padding>
                   <Insets bottom="7.0" left="10.0" top="7.0" />

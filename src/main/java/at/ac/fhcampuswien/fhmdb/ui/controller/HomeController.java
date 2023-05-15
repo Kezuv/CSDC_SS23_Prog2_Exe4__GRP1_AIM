@@ -78,10 +78,9 @@ public class HomeController implements Initializable {
             }
             sortedState = SortedState.NONE;
             MovieRepository.addMovies(allMovies);
-        } catch (IOException e) {
+        } catch (MovieApiException e) {
             homeError.getStyleClass().add("text-red");
             homeError.setText(MovieApiException.handleHomeControllerException(e));
-            throw new RuntimeException(e);
         }
     }
 
@@ -304,7 +303,12 @@ public class HomeController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        initializeState();
-        initializeLayout();
+        try {
+            initializeState();
+            initializeLayout();
+        } catch( NullPointerException npe){
+            homeError.getStyleClass().add("text-red");
+            homeError.setText("API loading Error!!");
+        }
     }
 }

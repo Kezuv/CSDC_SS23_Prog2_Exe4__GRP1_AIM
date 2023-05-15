@@ -32,9 +32,15 @@ public class MovieApiException extends IOException {
         }
     }
 
-    public static class HomeButtonException extends RuntimeException {
+    public static class HomeButtonException extends IOException {
+        private String customMessage;
         public HomeButtonException(String message) {
-            super(message);
+            super();
+            this.customMessage = message;
+        }
+        @Override
+        public String getMessage() {
+            return customMessage;
         }
     }
 
@@ -44,11 +50,6 @@ public class MovieApiException extends IOException {
         }
     }
 
-    public static class AboutButtonException extends RuntimeException {
-        public AboutButtonException(String message) {
-            super(message);
-        }
-    }
 
     public static class LogoutButtonException extends RuntimeException {
         public LogoutButtonException(String message) {
