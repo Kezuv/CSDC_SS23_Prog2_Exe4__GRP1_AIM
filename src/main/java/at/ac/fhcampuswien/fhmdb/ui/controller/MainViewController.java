@@ -12,6 +12,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.layout.*;
 
@@ -39,7 +40,7 @@ public class MainViewController extends Observer implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-
+        WatchlistRepository.getInstance().attach(this);
         loggedInProperty.addListener((observable, oldValue, newValue) -> {
             checkIfLoggedIn();
         });
@@ -164,7 +165,10 @@ public class MainViewController extends Observer implements Initializable {
     }
 
     @Override
-    public void update() {
-        System.out.println("JippJipp!");
+    public void update(String message) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Watchlist");
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 }

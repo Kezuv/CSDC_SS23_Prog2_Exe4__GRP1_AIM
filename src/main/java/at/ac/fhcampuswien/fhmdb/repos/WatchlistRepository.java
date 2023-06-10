@@ -65,6 +65,7 @@ public class WatchlistRepository extends Observable {
         try {
             watchlistDao.createIfNotExists(new WatchlistMovieEntity(UserRepository.userToUserEntity(activeUser),
                     MovieRepository.movieToMovieEntity(movieToAdd)));
+            getInstance().notifyObservers("Movie \"" + movieToAdd.getTitle() + "\" successfully added!");
         } catch (SQLException e) {
             throw new DatabaseException.AddMovieToWatchlistException("Failed to add movie to watchlist for user: " + activeUser.getUsername(), e);
         }
@@ -83,7 +84,7 @@ public class WatchlistRepository extends Observable {
 
             WatchlistMovieEntity watchlistMovie = watchlist.get(0);
             watchlistDao.delete(watchlistMovie);
-
+            getInstance().notifyObservers("Movie \"" + movie.getTitle() + "\" successfully removed!");
             return true;
         } catch (SQLException e) {
             throw new DatabaseException.RemoveMovieFromWatchlistException("Failed to remove movie from watchlist for user: " + user.getUsername(), e);
@@ -97,6 +98,7 @@ public class WatchlistRepository extends Observable {
         if (watchlist.isEmpty()) {
             return false; // not found
         }
+        getInstance().notifyObservers("Movie \"" + movie.getTitle() + "\" already in Watchlist!");
         return true;
     }
 }

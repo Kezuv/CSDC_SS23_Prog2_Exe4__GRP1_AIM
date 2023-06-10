@@ -14,9 +14,9 @@ public abstract class Observable {
         observers.remove(observer);
     }
 
-    public void notifyObservers () {
+    public void notifyObservers (String message) {
         for(Observer o : observers){
-            o.update();
+            o.update(message);
         }
     }
 }
