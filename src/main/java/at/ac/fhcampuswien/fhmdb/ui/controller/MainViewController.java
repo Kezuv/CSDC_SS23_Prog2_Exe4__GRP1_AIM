@@ -2,6 +2,9 @@ package at.ac.fhcampuswien.fhmdb.ui.controller;
 
 import at.ac.fhcampuswien.fhmdb.Exceptions.MovieApiException;
 import at.ac.fhcampuswien.fhmdb.models.User;
+import at.ac.fhcampuswien.fhmdb.patterns.Observable;
+import at.ac.fhcampuswien.fhmdb.patterns.Observer;
+import at.ac.fhcampuswien.fhmdb.repos.WatchlistRepository;
 import com.jfoenix.controls.JFXButton;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -16,7 +19,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class MainViewController implements Initializable {
+public class MainViewController extends Observer implements Initializable {
     @FXML
     public JFXButton homeBtn, watchListBtn, loggoutBtn;
     @FXML
@@ -36,6 +39,7 @@ public class MainViewController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+
         loggedInProperty.addListener((observable, oldValue, newValue) -> {
             checkIfLoggedIn();
         });
@@ -157,5 +161,10 @@ public class MainViewController implements Initializable {
 
     public static void setActiveUser(User activeUser) {
         MainViewController.activeUser = activeUser;
+    }
+
+    @Override
+    public void update() {
+        System.out.println("JippJipp!");
     }
 }
