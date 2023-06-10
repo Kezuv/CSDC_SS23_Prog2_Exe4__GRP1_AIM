@@ -52,9 +52,9 @@ public class MovieRepository {
     }
 
     //Converts MovieEntity to movie object -> For watchlist usage maybe?
-    public static Movie movieEntityToMovie(MovieEntity movie) {
+    public static Movie movieEntityToMovie(Movie.MovieFactory factory, MovieEntity movie) {
         try {
-            return new Movie(movie.getId(), movie.getTitle(), movie.getDescription(),
+            return factory.createMovie(movie.getId(), movie.getTitle(), movie.getDescription(),
                     movie.getImgUrl(), stringToGenres(movie.getGenres()), stringToList(movie.getDirectors()), stringToList(movie.getWriters()),
                     stringToList(movie.getMainCast()), movie.getRating(), movie.getReleaseYear(), movie.getLengthInMinutes());
         } catch (IOException e) {
