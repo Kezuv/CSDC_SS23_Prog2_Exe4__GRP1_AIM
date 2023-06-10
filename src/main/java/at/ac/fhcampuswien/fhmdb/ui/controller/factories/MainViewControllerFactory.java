@@ -1,14 +1,15 @@
 package at.ac.fhcampuswien.fhmdb.ui.controller.factories;
 
+import at.ac.fhcampuswien.fhmdb.ui.controller.MainViewController;
 import javafx.util.Callback;
 
 public class MainViewControllerFactory implements Callback<Class<?>, Object> {
 
-    private static MainViewControllerFactory instance;
+    private static MainViewController instance;
 
-    private MainViewControllerFactory getInstance(){
+    private MainViewController getInstance(){
         if (instance == null){
-            instance = new MainViewControllerFactory();
+            instance = new MainViewController();
         }
         return instance;
     }

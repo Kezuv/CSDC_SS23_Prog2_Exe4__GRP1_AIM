@@ -2,6 +2,9 @@ package at.ac.fhcampuswien.fhmdb.ui.controller;
 
 import at.ac.fhcampuswien.fhmdb.Exceptions.MovieApiException;
 import at.ac.fhcampuswien.fhmdb.models.User;
+import at.ac.fhcampuswien.fhmdb.ui.controller.factories.HomeControllerFactory;
+import at.ac.fhcampuswien.fhmdb.ui.controller.factories.LoginViewControllerFactory;
+import at.ac.fhcampuswien.fhmdb.ui.controller.factories.WatchlistControllerFactory;
 import com.jfoenix.controls.JFXButton;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -50,11 +53,14 @@ public class MainViewController implements Initializable {
         header.getChildren().clear();
         header.getChildren().addAll(fhmdbLogo, welcomeText,setCenter, homeBtn, watchListBtn, setRight, userNameLabel, loggoutBtn);
         try{
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/at/ac/fhcampuswien/fhmdb/content/loginview.fxml"));
 
-        AnchorPane view = null;
-        view = fxmlLoader.load();
-        mainViewContent.setCenter(view);
+            LoginViewControllerFactory loginViewControllerFactory = new LoginViewControllerFactory();
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/at/ac/fhcampuswien/fhmdb/content/loginview.fxml"));
+            fxmlLoader.setControllerFactory(loginViewControllerFactory);
+
+            AnchorPane view = null;
+            view = fxmlLoader.load();
+            mainViewContent.setCenter(view);
         } catch (IOException e) {
             throw new RuntimeException(e);
         } catch (RuntimeException re){
@@ -87,7 +93,11 @@ public class MainViewController implements Initializable {
         if (isLogedIn()) {
             try {
                 changeBtnColors(homeBtn);
+
+                HomeControllerFactory homeControllerFactory = new HomeControllerFactory();
                 FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/at/ac/fhcampuswien/fhmdb/content/home.fxml"));
+                fxmlLoader.setControllerFactory(homeControllerFactory);
+
                 AnchorPane root = fxmlLoader.load();
                 mainViewContent.setCenter(root);
             } catch (MovieApiException.HomeButtonException e) {
@@ -103,7 +113,11 @@ public class MainViewController implements Initializable {
         if (isLogedIn()) {
             try {
                 changeBtnColors(watchListBtn);
+
+                WatchlistControllerFactory watchlistControllerFactory = new WatchlistControllerFactory();
                 FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/at/ac/fhcampuswien/fhmdb/content/watchlist.fxml"));
+                fxmlLoader.setControllerFactory(watchlistControllerFactory);
+
                 AnchorPane root = fxmlLoader.load();
                 mainViewContent.setCenter(root);
             } catch (IOException e) {
@@ -117,7 +131,10 @@ public class MainViewController implements Initializable {
         if (isLogedIn()) {
             try {
                 loggedInProperty.set(false);
+                LoginViewControllerFactory loginViewController = new LoginViewControllerFactory();
                 FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/at/ac/fhcampuswien/fhmdb/content/loginview.fxml"));
+                fxmlLoader.setControllerFactory(loginViewController);
+
                 AnchorPane view = fxmlLoader.load();
                 mainViewContent.setCenter(view);
             } catch (IOException e) {
