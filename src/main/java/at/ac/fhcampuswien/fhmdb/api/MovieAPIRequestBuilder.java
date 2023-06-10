@@ -1,13 +1,13 @@
 package at.ac.fhcampuswien.fhmdb.api;
 
 public class MovieAPIRequestBuilder {
-    private String baseURL = null;  // set the base URL here
+    private String baseURL = "https://prog2.fh-campuswien.ac.at/movies";
     private String customSearchParameter = "";
     private boolean firstParam = true;
 
     public MovieAPIRequestBuilder() {
         // here set your base URL
-        this.baseURL = "https://prog2.fh-campuswien.ac.at/movies";
+        this.baseURL = baseURL;
     }
 
     public MovieAPIRequestBuilder query(String value) {
