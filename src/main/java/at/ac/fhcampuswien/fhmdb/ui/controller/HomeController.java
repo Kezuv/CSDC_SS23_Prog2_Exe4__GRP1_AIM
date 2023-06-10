@@ -2,10 +2,9 @@ package at.ac.fhcampuswien.fhmdb.ui.controller;
 
 import at.ac.fhcampuswien.fhmdb.Exceptions.MovieApiException;
 import at.ac.fhcampuswien.fhmdb.api.MovieAPI;
+import at.ac.fhcampuswien.fhmdb.api.MovieAPIRequestBuilder;
 import at.ac.fhcampuswien.fhmdb.api.SearchParameter;
-import at.ac.fhcampuswien.fhmdb.models.Genre;
-import at.ac.fhcampuswien.fhmdb.models.Movie;
-import at.ac.fhcampuswien.fhmdb.models.SortedState;
+import at.ac.fhcampuswien.fhmdb.models.*;
 import at.ac.fhcampuswien.fhmdb.repos.MovieRepository;
 import at.ac.fhcampuswien.fhmdb.ui.MovieCell;
 import com.google.gson.JsonSyntaxException;
@@ -67,10 +66,11 @@ public class HomeController implements Initializable {
     public List<Movie> allMovies;
     protected ObservableList<Movie> observableMovies = FXCollections.observableArrayList();
     protected SortedState sortedState;
-
+    Movie.MovieFactory movieFactory = new Movie.DefaultMovieFactory();
+    MovieAPIRequestBuilder builder = new MovieAPIRequestBuilder();
     public void initializeState() {
         try {
-            allMovies = Movie.initializeMovies(MovieAPI.getApiRequest());
+            allMovies = Movie.initializeMovies(movieFactory, MovieAPI.getApiRequest(builder));
             observableMovies.clear();
             observableMovies.addAll(allMovies);
 
@@ -82,6 +82,8 @@ public class HomeController implements Initializable {
         } catch (MovieApiException e) {
             homeError.getStyleClass().add("text-red");
             homeError.setText(MovieApiException.handleHomeControllerException(e));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -244,17 +246,17 @@ public class HomeController implements Initializable {
     public void searchBtnClicked(ActionEvent actionEvent) throws IOException {
         String searchQuery =  searchField.getText().trim().toLowerCase();
         if (searchQuery != null && !searchQuery.equals("")) {
-            MovieAPI.addParam(SearchParameter.CUSTOMSEARCH, searchQuery);
+            builder.query(searchQuery);
         }
 
         String genre = genreComboBox.getSelectionModel().getSelectedItem();
         if (genre != null && !genre.equals("No filter")) {
-            MovieAPI.addParam(SearchParameter.GENRE, genre);
+            builder.genre(genre);
         }
 
         String minRating = ratingComboBox.getSelectionModel().getSelectedItem();
         if (minRating != null && !minRating.equals("No filter")) {
-            MovieAPI.addParam(SearchParameter.RATING, minRating);
+            builder.ratingFrom(minRating);
         }
 
         String releaseYear = (String) releaseYearComboBox.getSelectionModel().getSelectedItem();
@@ -262,14 +264,14 @@ public class HomeController implements Initializable {
         Integer endReleaseYear = !endReleaseYearStr.equals("No filter") ? Integer.parseInt(endReleaseYearStr) : null;
 
         if (endReleaseYear != null){
-            allMovies = Movie.initializeMovies(MovieAPI.getApiRequest());
+            allMovies = Movie.initializeMovies(movieFactory, MovieAPI.getApiRequest(builder));
             allMovies = getMoviesBetweenYears(allMovies, Integer.parseInt(releaseYear), endReleaseYear);
         }
         else if (releaseYear != null && !releaseYear.equals("No filter")) {
-            MovieAPI.addParam(SearchParameter.YEAR, releaseYear);
-            allMovies = Movie.initializeMovies(MovieAPI.getApiRequest());
+            builder.releaseYear(releaseYear);
+            allMovies = Movie.initializeMovies(movieFactory, MovieAPI.getApiRequest(builder));
         } else {
-            allMovies = Movie.initializeMovies(MovieAPI.getApiRequest());
+            allMovies = Movie.initializeMovies(movieFactory, MovieAPI.getApiRequest(builder));
         }
 
         String maxRatingStr = ratingRangeComboBox.getSelectionModel().getSelectedItem() != null ? ratingRangeComboBox.getSelectionModel().getSelectedItem().toString() : "No filter";

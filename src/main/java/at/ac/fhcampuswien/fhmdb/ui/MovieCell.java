@@ -80,7 +80,7 @@ public class MovieCell extends ListCell<Movie> {
                 watchListAddBtn.setOnMouseClicked(event -> {
 
                     if (!movie.isOnWatchList()) {
-                        WatchlistRepository.addMovieToWatchList(MainViewController.getActiveUser(), movie);
+                        WatchlistRepository.getInstance().addMovieToWatchList(MainViewController.getActiveUser(), movie);
                     } else {
                         WatchlistRepository.removeMovieFromWatchlist(MainViewController.getActiveUser(), movie);
                     }

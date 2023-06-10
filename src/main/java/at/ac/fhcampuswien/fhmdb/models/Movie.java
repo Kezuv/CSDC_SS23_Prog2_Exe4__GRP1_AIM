@@ -6,8 +6,9 @@ import com.google.gson.Gson;
 
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+
 
 public class Movie {
     private final String id, title, description;
@@ -19,7 +20,8 @@ public class Movie {
     private boolean isExpanded;
     private boolean onWatchList;
 
-    public Movie(String id, String title, String description, String imgUrl, List<Genre> genres, List<String> directors, List<String> writers, List<String> mainCast, double rating, int releaseYear, int lengthInMinutes) throws IOException {
+    // Package-private constructor
+    Movie(String id, String title, String description, String imgUrl, List<Genre> genres, List<String> directors, List<String> writers, List<String> mainCast, double rating, int releaseYear, int lengthInMinutes) throws IOException {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -96,14 +98,13 @@ public class Movie {
         }
     }
 
-    public static List<Movie> initializeMovies(String data){
+    public static List<Movie> initializeMovies(MovieFactory factory, String data) throws IOException {
         Gson gson = new Gson();
         Movie[] movies = gson.fromJson(data, Movie[].class);
-        List<Movie> moviesList = new ArrayList<>();
-        for (Movie movie : movies){
-            moviesList.add(movie);
+        for(Movie movie: movies){
+            factory.createMovie(movie.id, movie.title, movie.description, movie.imgUrl, movie.genres, movie.directors, movie.writers, movie.mainCast, movie.rating, movie.releaseYear, movie.lengthInMinutes);
         }
-        return moviesList;
+        return Arrays.asList(movies);
     }
 
     @Override
@@ -118,5 +119,20 @@ public class Movie {
             return false;
         }
         return this.title.equals(other.title) && this.description.equals(other.description) && this.genres.equals(other.genres);
+    }
+
+    public static class DefaultMovieFactory implements MovieFactory {
+        @Override
+        public Movie createMovie(String id, String title, String description, String imgUrl, List<Genre> genres, List<String> directors, List<String> writers, List<String> mainCast, double rating, int releaseYear, int lengthInMinutes) throws IOException {
+            try {
+                return new Movie(id, title, description, imgUrl, genres, directors, writers, mainCast, rating, releaseYear, lengthInMinutes);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
+    public static interface MovieFactory {
+        Movie createMovie(String id, String title, String description, String imgUrl, List<Genre> genres, List<String> directors, List<String> writers, List<String> mainCast, double rating, int releaseYear, int lengthInMinutes) throws IOException;
     }
 }
