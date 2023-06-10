@@ -5,6 +5,7 @@ import at.ac.fhcampuswien.fhmdb.database.DataBase;
 import at.ac.fhcampuswien.fhmdb.entities.WatchlistMovieEntity;
 import at.ac.fhcampuswien.fhmdb.models.Movie;
 import at.ac.fhcampuswien.fhmdb.models.User;
+import at.ac.fhcampuswien.fhmdb.patterns.Observable;
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.stmt.QueryBuilder;
 
@@ -13,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class WatchlistRepository {
+public class WatchlistRepository extends Observable {
     private static Dao<WatchlistMovieEntity, Long> watchlistDao;
     static Movie.MovieFactory movieFactory = new Movie.DefaultMovieFactory();
 
@@ -64,6 +65,7 @@ public class WatchlistRepository {
         try {
             watchlistDao.createIfNotExists(new WatchlistMovieEntity(UserRepository.userToUserEntity(activeUser),
                     MovieRepository.movieToMovieEntity(movieToAdd)));
+            getInstance().notifyObservers("Movie \"" + movieToAdd.getTitle() + "\" successfully added!");
         } catch (SQLException e) {
             throw new DatabaseException.AddMovieToWatchlistException("Failed to add movie to watchlist for user: " + activeUser.getUsername(), e);
         }
@@ -82,7 +84,7 @@ public class WatchlistRepository {
 
             WatchlistMovieEntity watchlistMovie = watchlist.get(0);
             watchlistDao.delete(watchlistMovie);
-
+            getInstance().notifyObservers("Movie \"" + movie.getTitle() + "\" successfully removed!");
             return true;
         } catch (SQLException e) {
             throw new DatabaseException.RemoveMovieFromWatchlistException("Failed to remove movie from watchlist for user: " + user.getUsername(), e);
@@ -96,6 +98,7 @@ public class WatchlistRepository {
         if (watchlist.isEmpty()) {
             return false; // not found
         }
+        getInstance().notifyObservers("Movie \"" + movie.getTitle() + "\" already in Watchlist!");
         return true;
     }
 }

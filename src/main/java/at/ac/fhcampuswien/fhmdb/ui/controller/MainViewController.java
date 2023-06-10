@@ -2,9 +2,6 @@ package at.ac.fhcampuswien.fhmdb.ui.controller;
 
 import at.ac.fhcampuswien.fhmdb.Exceptions.MovieApiException;
 import at.ac.fhcampuswien.fhmdb.models.User;
-import at.ac.fhcampuswien.fhmdb.ui.controller.factories.HomeControllerFactory;
-import at.ac.fhcampuswien.fhmdb.ui.controller.factories.LoginViewControllerFactory;
-import at.ac.fhcampuswien.fhmdb.ui.controller.factories.WatchlistControllerFactory;
 import com.jfoenix.controls.JFXButton;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -19,7 +16,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class MainViewController implements Initializable {
+public class MainViewController extends Observer implements Initializable {
     @FXML
     public JFXButton homeBtn, watchListBtn, loggoutBtn;
     @FXML

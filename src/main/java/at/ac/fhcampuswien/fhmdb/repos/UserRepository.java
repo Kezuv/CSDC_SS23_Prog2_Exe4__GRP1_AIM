@@ -4,12 +4,13 @@ import at.ac.fhcampuswien.fhmdb.Exceptions.DatabaseException;
 import at.ac.fhcampuswien.fhmdb.database.DataBase;
 import at.ac.fhcampuswien.fhmdb.entities.UserEntity;
 import at.ac.fhcampuswien.fhmdb.models.User;
+import at.ac.fhcampuswien.fhmdb.patterns.Observable;
 import com.j256.ormlite.dao.Dao;
 
 import java.sql.SQLException;
 import java.util.List;
 
-public class UserRepository {
+public class UserRepository extends Observable {
     public static Dao<UserEntity, Long> userDao;
 
     static {
