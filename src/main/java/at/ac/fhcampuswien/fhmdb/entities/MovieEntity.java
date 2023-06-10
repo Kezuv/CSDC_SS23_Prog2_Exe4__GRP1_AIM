@@ -1,7 +1,11 @@
 package at.ac.fhcampuswien.fhmdb.entities;
 
+import at.ac.fhcampuswien.fhmdb.models.Movie;
+import at.ac.fhcampuswien.fhmdb.repos.MovieRepository;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
+
+import java.io.IOException;
 
 @DatabaseTable(tableName = "Movies")
 public class MovieEntity {
@@ -44,6 +48,19 @@ public class MovieEntity {
         this.rating = rating;
         this.releaseYear = releaseYear;
         this.lengthInMinutes = lengthInMinutes;
+    }
+
+    public Movie returnAsMovie(){
+        try {
+            return new Movie(id, title, description, imgUrl,
+                    MovieRepository.stringToGenres(genres),
+                    MovieRepository.stringToList(directors),
+                    MovieRepository.stringToList(writers),
+                    MovieRepository.stringToList(mainCast),
+                    rating, releaseYear, lengthInMinutes);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public String getId(){return id;}

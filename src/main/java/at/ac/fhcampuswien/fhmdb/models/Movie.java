@@ -1,5 +1,7 @@
 package at.ac.fhcampuswien.fhmdb.models;
 
+import at.ac.fhcampuswien.fhmdb.entities.MovieEntity;
+import at.ac.fhcampuswien.fhmdb.repos.MovieRepository;
 import at.ac.fhcampuswien.fhmdb.repos.WatchlistRepository;
 import at.ac.fhcampuswien.fhmdb.ui.controller.MainViewController;
 import com.google.gson.Gson;
@@ -21,7 +23,7 @@ public class Movie {
     private boolean onWatchList;
 
     // Package-private constructor
-    Movie(String id, String title, String description, String imgUrl, List<Genre> genres, List<String> directors, List<String> writers, List<String> mainCast, double rating, int releaseYear, int lengthInMinutes) throws IOException {
+    public Movie(String id, String title, String description, String imgUrl, List<Genre> genres, List<String> directors, List<String> writers, List<String> mainCast, double rating, int releaseYear, int lengthInMinutes) throws IOException {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -33,6 +35,15 @@ public class Movie {
         this.rating = rating;
         this.releaseYear = releaseYear;
         this.lengthInMinutes = lengthInMinutes;
+    }
+
+    public MovieEntity returnAsMovieEntitiy(){
+        return new MovieEntity(id, title, description, imgUrl,
+                MovieRepository.genresToString(genres),
+                MovieRepository.listToString(directors),
+                MovieRepository.listToString(writers),
+                MovieRepository.listToString(mainCast),
+                rating, releaseYear, lengthInMinutes);
     }
 
     public String getId() {return id;}
@@ -129,9 +140,10 @@ public class Movie {
                 throw new RuntimeException(e);
             }
         }
+
     }
 
-    public static interface MovieFactory {
+    public interface MovieFactory {
         Movie createMovie(String id, String title, String description, String imgUrl, List<Genre> genres, List<String> directors, List<String> writers, List<String> mainCast, double rating, int releaseYear, int lengthInMinutes) throws IOException;
     }
 }

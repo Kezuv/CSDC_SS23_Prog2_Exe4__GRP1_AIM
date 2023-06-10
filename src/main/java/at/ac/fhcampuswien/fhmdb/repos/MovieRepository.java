@@ -46,20 +46,12 @@ public class MovieRepository {
 
     //Converts Movie object to MovieEntity
     public static MovieEntity movieToMovieEntity(Movie movie){
-        return new MovieEntity(movie.getId(), movie.getTitle(), movie.getDescription(),
-                movie.getImgUrl(), genresToString(movie.getGenres()), listToString(movie.getDirectors()), listToString(movie.getWriters()),
-                listToString(movie.getMainCast()), movie.getRating(), movie.getReleaseYear(), movie.getLengthInMinutes());
+        return movie.returnAsMovieEntitiy();
     }
 
     //Converts MovieEntity to movie object -> For watchlist usage maybe?
-    public static Movie movieEntityToMovie(Movie.MovieFactory factory, MovieEntity movie) {
-        try {
-            return factory.createMovie(movie.getId(), movie.getTitle(), movie.getDescription(),
-                    movie.getImgUrl(), stringToGenres(movie.getGenres()), stringToList(movie.getDirectors()), stringToList(movie.getWriters()),
-                    stringToList(movie.getMainCast()), movie.getRating(), movie.getReleaseYear(), movie.getLengthInMinutes());
-        } catch (IOException e) {
-            throw new DatabaseException.GetMovieException(e.getMessage());
-        }
+    public static Movie movieEntityToMovie(MovieEntity movieEntity) {
+        return movieEntity.returnAsMovie();
     }
 
     //In-class converter from List<Genre> to String
@@ -74,7 +66,7 @@ public class MovieRepository {
     }
 
     //In-class converter from String to List<Genre>
-    private static List<Genre> stringToGenres(String genreString) {
+    public static List<Genre> stringToGenres(String genreString) {
         List<Genre> genres = new ArrayList<>();
         String[] genreNames = genreString.split(",");
         for (String genreName : genreNames) {
@@ -85,12 +77,12 @@ public class MovieRepository {
     }
 
     //In-class converter from List<String> to String
-    private static String listToString(List<String> list){
+    public static String listToString(List<String> list){
         return String.join(",", list);
     }
 
     //In-class converter from String to List<String>
-    private static List<String> stringToList(String str){
+    public static List<String> stringToList(String str){
         return Arrays.asList(str.split(","));
     }
 }

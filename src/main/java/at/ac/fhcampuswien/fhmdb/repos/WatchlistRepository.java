@@ -16,7 +16,6 @@ import java.util.List;
 
 public class WatchlistRepository extends Observable {
     private static Dao<WatchlistMovieEntity, Long> watchlistDao;
-    static Movie.MovieFactory movieFactory = new Movie.DefaultMovieFactory();
 
     // Static instance of the class
     private static WatchlistRepository instance;
@@ -52,7 +51,7 @@ public class WatchlistRepository extends Observable {
             List<WatchlistMovieEntity> watchlist = queryBuilder.query();
 
             for (WatchlistMovieEntity watchlistMovie : watchlist) {
-                movies.add(MovieRepository.movieEntityToMovie(movieFactory, watchlistMovie.getMovie()));
+                movies.add(MovieRepository.movieEntityToMovie(watchlistMovie.getMovie()));
 
             }
             return movies;
