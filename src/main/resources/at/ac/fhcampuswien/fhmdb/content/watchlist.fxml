@@ -12,6 +12,7 @@
       AnchorPane.topAnchor="0.0"
       AnchorPane.leftAnchor="0.0"
       AnchorPane.rightAnchor="0.0">
+   <JFXButton fx:id="sortBtn" onAction="#sortBtnClicked" styleClass="background-yellow" stylesheets="@../styles/styles.css" text="A-Z" />
    <Label fx:id="watchlisterror" minHeight="30" stylesheets="@../styles/styles.css" styleClass="text-red">
       <font>
          <Font size="20.0" />

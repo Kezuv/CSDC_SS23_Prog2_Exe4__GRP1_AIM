@@ -6,10 +6,12 @@ import at.ac.fhcampuswien.fhmdb.entities.WatchlistMovieEntity;
 import at.ac.fhcampuswien.fhmdb.models.Movie;
 import at.ac.fhcampuswien.fhmdb.repos.WatchlistRepository;
 import at.ac.fhcampuswien.fhmdb.ui.MovieCell;
+import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXListView;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
@@ -37,6 +39,8 @@ public class WatchlistController implements Initializable {
     @FXML
     public JFXComboBox countDirectorsMovie;
     @FXML
+    public JFXButton sortBtn;
+    @FXML
     public HBox content;
     @FXML
     private  HBox directorsHBox = new HBox();
@@ -44,6 +48,11 @@ public class WatchlistController implements Initializable {
     public Label watchlisterror;
     public List<Movie> watchListMovies;
     protected ObservableList<Movie> observableWatchList = FXCollections.observableArrayList();
+    protected Sort.SortState sortState;
+
+    public void setSortState(Sort.SortState sortState) {
+        this.sortState = sortState;
+    }
 
     public void initializeState() throws IOException {
         try {
@@ -70,6 +79,7 @@ public class WatchlistController implements Initializable {
             MovieCell cell = new MovieCell(); // apply custom cells to the listview
             return cell;
         });
+        setSortState(new Sort.NoneSortState());
 
         countDirectorsMovie.setPromptText("Directors Movie Count"); // set the prompt text for the year combobox
         countDirectorsMovie.getItems().clear();
@@ -144,5 +154,20 @@ public class WatchlistController implements Initializable {
             throw new RuntimeException(e);
         }
         initializeLayout();
+    }
+
+    public void sortMovies() {
+        sortState.sort(observableWatchList);
+    }
+
+    public void sortBtnClicked(ActionEvent actionEvent) {
+        if (sortState instanceof Sort.NoneSortState || sortState instanceof Sort.DescendingSortState) {
+            setSortState(new Sort.AscendingSortState());
+            sortBtn.setText("A-Z");
+        } else if (sortState instanceof Sort.AscendingSortState) {
+            setSortState(new Sort.DescendingSortState());
+            sortBtn.setText("Z-A");
+        }
+        sortMovies();
     }
 }
