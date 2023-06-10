@@ -21,7 +21,7 @@
       </Label>
       <HBox spacing="5.0" styleClass="background-black" stylesheets="@../styles/styles.css">
          <children>
-            <JFXButton fx:id="sortBtn" onAction="#sortBtnClicked" styleClass="background-yellow" stylesheets="@../styles/styles.css" text="Sort" />
+            <JFXButton fx:id="sortBtn" onAction="#sortBtnClicked" styleClass="background-yellow" stylesheets="@../styles/styles.css" text="A-Z" />
             <TextField fx:id="searchField" prefHeight="25.0" prefWidth="170.0" promptText="Search FHMDb" />
             <JFXComboBox fx:id="genreComboBox" focusColor="#f5c518" styleClass="filter-combo-box" stylesheets="@../styles/styles.css" />
             <Label alignment="BOTTOM_LEFT" styleClass="text-yellow" stylesheets="@../styles/styles.css" text="From:">

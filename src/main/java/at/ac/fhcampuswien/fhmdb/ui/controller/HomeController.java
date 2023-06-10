@@ -3,7 +3,6 @@ package at.ac.fhcampuswien.fhmdb.ui.controller;
 import at.ac.fhcampuswien.fhmdb.Exceptions.MovieApiException;
 import at.ac.fhcampuswien.fhmdb.api.MovieAPI;
 import at.ac.fhcampuswien.fhmdb.api.MovieAPIRequestBuilder;
-import at.ac.fhcampuswien.fhmdb.api.SearchParameter;
 import at.ac.fhcampuswien.fhmdb.models.*;
 import at.ac.fhcampuswien.fhmdb.repos.MovieRepository;
 import at.ac.fhcampuswien.fhmdb.ui.MovieCell;
@@ -65,7 +64,13 @@ public class HomeController implements Initializable {
     private  HBox directorsHBox = new HBox();
     public List<Movie> allMovies;
     protected ObservableList<Movie> observableMovies = FXCollections.observableArrayList();
-    protected SortedState sortedState;
+    protected Sort.SortState sortState;
+
+    public void setSortState(Sort.SortState sortState) {
+        this.sortState = sortState;
+    }
+
+
     Movie.MovieFactory movieFactory = new Movie.DefaultMovieFactory();
     MovieAPIRequestBuilder builder = new MovieAPIRequestBuilder();
     public void initializeState() {
@@ -77,7 +82,7 @@ public class HomeController implements Initializable {
             for (Movie m : allMovies) {
                 m.upDateOnWatchList();
             }
-            sortedState = SortedState.NONE;
+            sortState = new Sort.NoneSortState();
             MovieRepository.addMovies(allMovies);
         } catch (MovieApiException e) {
             homeError.getStyleClass().add("text-red");
@@ -176,13 +181,7 @@ public class HomeController implements Initializable {
     }
 
     public void sortMovies() {
-        if (sortedState == SortedState.NONE || sortedState == SortedState.DESCENDING) {
-            observableMovies.sort(Comparator.comparing(Movie::getTitle));
-            sortedState = SortedState.ASCENDING;
-        } else if (sortedState == SortedState.ASCENDING) {
-            observableMovies.sort(Comparator.comparing(Movie::getTitle).reversed());
-            sortedState = SortedState.DESCENDING;
-        }
+        sortState.sort(observableMovies);
     }
 
     public List<Movie> filterByRating(List<Movie> movies, double minRating, double maxRating) {
@@ -283,7 +282,7 @@ public class HomeController implements Initializable {
         countDirectorsMovie.setValue("");
         observableMovies.clear();
         observableMovies.addAll(allMovies); // add all movies to the observable list
-        sortedState = SortedState.NONE;
+        setSortState(new Sort.NoneSortState()); // set sort to default
 
         mostPopularActor.setText("Most Popular Actor: " + getMostPopularActor(allMovies));
         longestTitle.setText("Longest Movie Title: " + getLongestMovieTitleName(allMovies));
@@ -295,15 +294,28 @@ public class HomeController implements Initializable {
         countDirectorsMovie.getItems().addAll(getDirectorsNames(allMovies));
         directorsCount.setText("Total: ");
 
-        if (sortedState != SortedState.NONE) {
+        if (sortState instanceof Sort.NoneSortState) {
             sortMovies();
         }
     }
 
     public void sortBtnClicked(ActionEvent actionEvent) {
+        if (sortState instanceof Sort.NoneSortState || sortState instanceof Sort.DescendingSortState) {
+            setSortState(new Sort.AscendingSortState());
+            sortBtn.setText("A-Z");
+        } else if (sortState instanceof Sort.AscendingSortState) {
+            setSortState(new Sort.DescendingSortState());
+            sortBtn.setText("Z-A");
+        }
         sortMovies();
     }
-
+    /*
+    * if (!movie.isOnWatchList()) {
+                watchListAddBtn.setText("Add to Watchlist");
+            } else {
+                watchListAddBtn.setText("Remove Watchlist");
+            }
+            * */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         try {
