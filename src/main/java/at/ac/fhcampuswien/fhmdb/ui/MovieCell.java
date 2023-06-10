@@ -78,12 +78,12 @@ public class MovieCell extends ListCell<Movie> {
             });
             try {
                 watchListAddBtn.setOnMouseClicked(event -> {
-
                     if (!movie.isOnWatchList()) {
                         WatchlistRepository.getInstance().addMovieToWatchList(MainViewController.getActiveUser(), movie);
                     } else {
                         WatchlistRepository.removeMovieFromWatchlist(MainViewController.getActiveUser(), movie);
                     }
+// <-------------------TODO DISABLE FOLLOWING LINE TO DISABLE "Add Watchlist"-Button changer --------------------->
                     movie.upDateOnWatchList();
                     updateItem(movie, false);
                 });
