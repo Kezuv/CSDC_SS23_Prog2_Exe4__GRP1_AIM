@@ -12,8 +12,13 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+
 public class WatchlistRepository {
     private static Dao<WatchlistMovieEntity, Long> watchlistDao;
+    static Movie.MovieFactory movieFactory = new Movie.DefaultMovieFactory();
+
+    // Static instance of the class
+    private static WatchlistRepository instance;
 
     static {
         try {
@@ -22,6 +27,17 @@ public class WatchlistRepository {
                  DatabaseException.DaoInitializationException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    // Private constructor to prevent creation of object from outside the class
+    private WatchlistRepository() {}
+
+    // Public method to get the singleton instance of the class
+    public static WatchlistRepository getInstance() {
+        if (instance == null) {
+            instance = new WatchlistRepository();
+        }
+        return instance;
     }
 
     //Returns all movies in the watchlist for a user
@@ -35,7 +51,8 @@ public class WatchlistRepository {
             List<WatchlistMovieEntity> watchlist = queryBuilder.query();
 
             for (WatchlistMovieEntity watchlistMovie : watchlist) {
-                movies.add(MovieRepository.movieEntityToMovie(watchlistMovie.getMovie()));
+                movies.add(MovieRepository.movieEntityToMovie(movieFactory, watchlistMovie.getMovie()));
+
             }
             return movies;
         } catch (SQLException | DatabaseException.GetMovieException e){
