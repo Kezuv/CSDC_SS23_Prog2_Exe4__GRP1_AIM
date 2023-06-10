@@ -2,6 +2,11 @@ package at.ac.fhcampuswien.fhmdb.ui.controller;
 
 import at.ac.fhcampuswien.fhmdb.Exceptions.MovieApiException;
 import at.ac.fhcampuswien.fhmdb.models.User;
+import at.ac.fhcampuswien.fhmdb.patterns.Observer;
+import at.ac.fhcampuswien.fhmdb.repos.WatchlistRepository;
+import at.ac.fhcampuswien.fhmdb.ui.controller.factories.HomeControllerFactory;
+import at.ac.fhcampuswien.fhmdb.ui.controller.factories.LoginViewControllerFactory;
+import at.ac.fhcampuswien.fhmdb.ui.controller.factories.WatchlistControllerFactory;
 import com.jfoenix.controls.JFXButton;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -9,9 +14,11 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.layout.*;
 
+import java.awt.event.MouseEvent;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -36,6 +43,7 @@ public class MainViewController extends Observer implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        WatchlistRepository.getInstance().attach(this);
         loggedInProperty.addListener((observable, oldValue, newValue) -> {
             checkIfLoggedIn();
         });
@@ -172,4 +180,14 @@ public class MainViewController extends Observer implements Initializable {
     public static void setActiveUser(User activeUser) {
         MainViewController.activeUser = activeUser;
     }
+
+    @Override
+    public void update(String message) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Watchlist");
+        alert.setHeaderText("");
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
 }
+

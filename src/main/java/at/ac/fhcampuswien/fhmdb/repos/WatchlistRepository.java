@@ -98,7 +98,7 @@ public class WatchlistRepository extends Observable {
         if (watchlist.isEmpty()) {
             return false; // not found
         }
-        getInstance().notifyObservers("Movie \"" + movie.getTitle() + "\" already in Watchlist!");
+//        getInstance().notifyObservers("Movie \"" + movie.getTitle() + "\" already in Watchlist!");
         return true;
     }
 }
