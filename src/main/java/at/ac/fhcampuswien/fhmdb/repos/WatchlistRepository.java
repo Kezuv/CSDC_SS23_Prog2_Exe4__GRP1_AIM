@@ -23,8 +23,8 @@ public class WatchlistRepository extends Observable {
     static {
         try {
             watchlistDao = DataBase.getDatabaseUser().getWatchlistDao();
-        } catch (DatabaseException.ConnectionException | DatabaseException.TableCreationException |
-                 DatabaseException.DaoInitializationException e) {
+        } catch (DatabaseException.ConnectionException |
+                 DatabaseException.InitializationException e) {
             throw new RuntimeException(e);
         }
     }
@@ -41,7 +41,7 @@ public class WatchlistRepository extends Observable {
     }
 
     //Returns all movies in the watchlist for a user
-    public static List<Movie> getAllMoviesForUser(User user) throws DatabaseException.GetAllMoviesException, SQLException {
+    public static List<Movie> getAllMoviesForUser(User user) throws DatabaseException.MovieOperationException, SQLException, DatabaseException.UserOperationException {
         try {
             List<Movie> movies = new ArrayList<>();
 
@@ -55,12 +55,12 @@ public class WatchlistRepository extends Observable {
 
             }
             return movies;
-        } catch (SQLException | DatabaseException.GetMovieException e){
-            throw new DatabaseException.GetMoviesForUserException("Failed to retrieve watchlist movies for user: " + user.getUsername(), e);
+        } catch (SQLException | DatabaseException.MovieOperationException e){
+            throw new DatabaseException.UserOperationException("Failed to retrieve watchlist movies for user: " + user.getUsername());
         }
     }
 
-    public static void addMovieToWatchList(User activeUser, Movie movieToAdd) throws DatabaseException.AddMovieToWatchlistException {
+    public static void addMovieToWatchList(User activeUser, Movie movieToAdd) throws DatabaseException.MovieOperationException {
         try {
             if (!checkIfMovieIsOnWatchList(activeUser, movieToAdd)){
                 watchlistDao.createIfNotExists(new WatchlistMovieEntity(UserRepository.userToUserEntity(activeUser),
@@ -70,12 +70,12 @@ public class WatchlistRepository extends Observable {
                 getInstance().notifyObservers("Movie \"" + movieToAdd.getTitle() + "\" already in Watchlist!");
             }
         } catch (SQLException e) {
-            throw new DatabaseException.AddMovieToWatchlistException("Failed to add movie to watchlist for user: " + activeUser.getUsername(), e);
+            throw new DatabaseException.MovieOperationException("Failed to add movie to watchlist for user: " + activeUser.getUsername());
         }
     }
 
     //Removes a movie from the watchlist for a user
-    public static boolean removeMovieFromWatchlist(User user, Movie movie) throws DatabaseException.RemoveMovieFromWatchlistException {
+    public static boolean removeMovieFromWatchlist(User user, Movie movie) throws DatabaseException.MovieOperationException {
         try {
             QueryBuilder<WatchlistMovieEntity, Long> queryBuilder = watchlistDao.queryBuilder();
             queryBuilder.where().eq("USER", user.getId()).and().eq("MOVIEID", movie.getId());
@@ -90,7 +90,7 @@ public class WatchlistRepository extends Observable {
             getInstance().notifyObservers("Movie \"" + movie.getTitle() + "\" successfully removed!");
             return true;
         } catch (SQLException e) {
-            throw new DatabaseException.RemoveMovieFromWatchlistException("Failed to remove movie from watchlist for user: " + user.getUsername(), e);
+            throw new DatabaseException.MovieOperationException("Failed to remove movie from watchlist for user: " + user.getUsername());
         }
     }
 

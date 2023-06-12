@@ -1,6 +1,6 @@
 package at.ac.fhcampuswien.fhmdb.ui.controller;
 
-import at.ac.fhcampuswien.fhmdb.exceptions.DatabaseException;
+import at.ac.fhcampuswien.fhmdb.Exceptions.DatabaseException;
 import at.ac.fhcampuswien.fhmdb.models.Movie;
 import at.ac.fhcampuswien.fhmdb.repos.WatchlistRepository;
 import at.ac.fhcampuswien.fhmdb.ui.MovieCell;
@@ -59,7 +59,7 @@ public class WatchlistController implements Initializable {
             watchlisterror.getStyleClass().add("text-red");
             watchlisterror.setText(e.getMessage());
             throw new RuntimeException(e);
-        } catch (DatabaseException.GetMoviesForUserException gmrue){
+        } catch (DatabaseException.UserOperationException gmrue){
             watchlisterror.getStyleClass().add("text-red");
             watchlisterror.setText(gmrue.getMessage());
         }

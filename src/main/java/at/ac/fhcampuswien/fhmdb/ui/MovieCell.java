@@ -86,7 +86,7 @@ public class MovieCell extends ListCell<Movie> {
                     movie.upDateOnWatchList();
                     updateItem(movie, false);
                 });
-            } catch (DatabaseException.AddMovieToWatchlistException | DatabaseException.RemoveMovieFromWatchlistException ignored){}
+            } catch (DatabaseException.MovieOperationException ignored){}
 
             //set Text
             title.setText(movie.getTitle());
