@@ -1,6 +1,6 @@
 package at.ac.fhcampuswien.fhmdb.ui.controller;
 
-import at.ac.fhcampuswien.fhmdb.Exceptions.DatabaseException;
+import at.ac.fhcampuswien.fhmdb.exceptions.DatabaseException;
 import at.ac.fhcampuswien.fhmdb.models.Movie;
 import at.ac.fhcampuswien.fhmdb.repos.WatchlistRepository;
 import at.ac.fhcampuswien.fhmdb.ui.MovieCell;
