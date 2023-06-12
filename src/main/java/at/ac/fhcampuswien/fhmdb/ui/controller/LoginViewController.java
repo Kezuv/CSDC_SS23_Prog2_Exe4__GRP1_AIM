@@ -10,8 +10,6 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.control.TextField;
 
-import java.lang.reflect.InvocationTargetException;
-
 public class LoginViewController {
     @FXML
     public TextField usernameField;
@@ -30,7 +28,7 @@ public class LoginViewController {
                 loginError.getStyleClass().add("text-green");
                 loginError.setText("Login succeed!");
                 System.out.println("Login succeed!");
-            } catch ( DatabaseException.UserLoginException ule) {
+            } catch ( DatabaseException.UserOperationException ule) {
                 loginError.getStyleClass().add("text-red");
                 loginError.setText("Login failed: "+ ule.getMessage());
             }
@@ -45,7 +43,7 @@ public class LoginViewController {
                 clearNotifications();
                 String username = usernameField.getText();
                 if (UserRepository.isUserExists(username)) {
-                    throw new DatabaseException.UserExistsException("Username <" + username + "> already exists" );
+                    throw new DatabaseException.UserOperationException("Username <" + username + "> already exists" );
                 }
                 UserRepository.registerUser(username, passwordField.getText());
                 System.out.println("Register complete!");
@@ -55,11 +53,9 @@ public class LoginViewController {
                 passwordField.clear();
                 loginError.setStyle("");
             }
-        } catch (DatabaseException.UserExistsException e) {
+        } catch (DatabaseException.UserOperationException e) {
             registerSuccess.getStyleClass().add("text-red");
             registerSuccess.setText("Register failed! " + e.getMessage());
-        } catch (DatabaseException.RegisterUserException re){
-            registerSuccess.setText("Register failed! " + re.getMessage());
         }
     }
 
@@ -69,7 +65,7 @@ public class LoginViewController {
             java.awt.Desktop.getDesktop().browse(java.net.URI.create(url));
         } catch (java.io.IOException e) {
             System.out.println("Could not open webpage: " + url);
-            throw new MovieApiException.WebPageOpenException("Error opening webpage: " + e.getMessage());
+            throw new MovieApiException.PageOperationException("Error opening webpage: " + e.getMessage());
         }
     }
 
@@ -80,7 +76,7 @@ public class LoginViewController {
             registerSuccess.setText("");
             registerSuccess.getStyleClass().clear();
         } catch (Exception e) {
-            throw new MovieApiException.ClearNotificationsException("Error clearing notifications: " + e.getMessage());
+            throw new MovieApiException.NotificationOperationException("Error clearing notifications: " + e.getMessage());
         }
     }
 }

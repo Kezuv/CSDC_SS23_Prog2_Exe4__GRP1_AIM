@@ -86,7 +86,7 @@ public class HomeController implements Initializable {
             MovieRepository.addMovies(allMovies);
         } catch (MovieApiException e) {
             homeError.getStyleClass().add("text-red");
-            homeError.setText(MovieApiException.handleHomeControllerException(e));
+            homeError.setText(MovieApiException.handleException(e));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -307,6 +307,7 @@ public class HomeController implements Initializable {
             setSortState(new Sort.DescendingSortState());
             sortBtn.setText("Z-A");
         }
+
         sortMovies();
     }
     /*

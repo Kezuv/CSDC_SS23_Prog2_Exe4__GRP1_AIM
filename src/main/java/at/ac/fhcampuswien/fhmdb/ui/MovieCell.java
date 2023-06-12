@@ -18,7 +18,6 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 
 import java.io.IOException;
-import java.sql.SQLException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -87,7 +86,7 @@ public class MovieCell extends ListCell<Movie> {
                     movie.upDateOnWatchList();
                     updateItem(movie, false);
                 });
-            } catch (DatabaseException.AddMovieToWatchlistException | DatabaseException.RemoveMovieFromWatchlistException ignored){}
+            } catch (DatabaseException.MovieOperationException ignored){}
 
             //set Text
             title.setText(movie.getTitle());
