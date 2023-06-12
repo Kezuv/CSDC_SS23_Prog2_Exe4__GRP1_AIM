@@ -26,4 +26,6 @@ module at.ac.fhcampuswien.fhmdb {
     opens at.ac.fhcampuswien.fhmdb.entities to ormlite.jdbc;
     exports at.ac.fhcampuswien.fhmdb.repos;
     opens at.ac.fhcampuswien.fhmdb.repos to ormlite.jdbc;
+    exports at.ac.fhcampuswien.fhmdb.patterns;
+    opens at.ac.fhcampuswien.fhmdb.patterns to javafx.fxml;
 }

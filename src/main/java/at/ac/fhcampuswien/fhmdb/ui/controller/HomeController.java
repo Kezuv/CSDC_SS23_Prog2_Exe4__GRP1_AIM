@@ -4,6 +4,7 @@ import at.ac.fhcampuswien.fhmdb.exceptions.MovieApiException;
 import at.ac.fhcampuswien.fhmdb.api.MovieAPI;
 import at.ac.fhcampuswien.fhmdb.api.MovieAPIRequestBuilder;
 import at.ac.fhcampuswien.fhmdb.models.*;
+import at.ac.fhcampuswien.fhmdb.patterns.SortingState;
 import at.ac.fhcampuswien.fhmdb.repos.MovieRepository;
 import at.ac.fhcampuswien.fhmdb.ui.MovieCell;
 import com.google.gson.JsonSyntaxException;
@@ -64,11 +65,9 @@ public class HomeController implements Initializable {
     private  HBox directorsHBox = new HBox();
     public List<Movie> allMovies;
     protected ObservableList<Movie> observableMovies = FXCollections.observableArrayList();
-    protected Sort.SortState sortState;
+    protected SortingState sortingState;
 
-    public void setSortState(Sort.SortState sortState) {
-        this.sortState = sortState;
-    }
+
 
 
     Movie.MovieFactory movieFactory = new Movie.DefaultMovieFactory();
@@ -78,11 +77,10 @@ public class HomeController implements Initializable {
             allMovies = Movie.initializeMovies(movieFactory, MovieAPI.getApiRequest(builder));
             observableMovies.clear();
             observableMovies.addAll(allMovies);
-
+            sortingState = new SortingState();
             for (Movie m : allMovies) {
                 m.upDateOnWatchList();
             }
-            sortState = new Sort.NoneSortState();
             MovieRepository.addMovies(allMovies);
         } catch (MovieApiException e) {
             homeError.getStyleClass().add("text-red");
@@ -180,9 +178,6 @@ public class HomeController implements Initializable {
         content.setPadding(new Insets(10));
     }
 
-    public void sortMovies() {
-        sortState.sort(observableMovies);
-    }
 
     public List<Movie> filterByRating(List<Movie> movies, double minRating, double maxRating) {
         return movies.stream()
@@ -282,7 +277,6 @@ public class HomeController implements Initializable {
         countDirectorsMovie.setValue("");
         observableMovies.clear();
         observableMovies.addAll(allMovies); // add all movies to the observable list
-        setSortState(new Sort.NoneSortState()); // set sort to default
 
         mostPopularActor.setText("Most Popular Actor: " + getMostPopularActor(allMovies));
         longestTitle.setText("Longest Movie Title: " + getLongestMovieTitleName(allMovies));
@@ -294,29 +288,19 @@ public class HomeController implements Initializable {
         countDirectorsMovie.getItems().addAll(getDirectorsNames(allMovies));
         directorsCount.setText("Total: ");
 
-        if (sortState instanceof Sort.NoneSortState) {
-            sortMovies();
-        }
-    }
 
+    }
+    // should be in the sort class
     public void sortBtnClicked(ActionEvent actionEvent) {
-        if (sortState instanceof Sort.NoneSortState || sortState instanceof Sort.DescendingSortState) {
-            setSortState(new Sort.AscendingSortState());
-            sortBtn.setText("A-Z");
-        } else if (sortState instanceof Sort.AscendingSortState) {
-            setSortState(new Sort.DescendingSortState());
-            sortBtn.setText("Z-A");
-        }
 
-        sortMovies();
+
+        sortingState.getState().sort(observableMovies);
+        sortingState.next();
+        sortBtn.setText(sortingState.displayText());
+
+
     }
-    /*
-    * if (!movie.isOnWatchList()) {
-                watchListAddBtn.setText("Add to Watchlist");
-            } else {
-                watchListAddBtn.setText("Remove Watchlist");
-            }
-            * */
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         try {
