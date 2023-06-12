@@ -4,69 +4,57 @@ package at.ac.fhcampuswien.fhmdb.Exceptions;
 
 
 import java.io.IOException;
-import java.sql.SQLException;
 
 public class MovieApiException extends IOException {
     public MovieApiException(String message) {
         super(message);
     }
 
-    public static String handleException(Exception e){
-        if (e instanceof IOException) {
-            return "An IO exception occurred while making the API request: " + e.getMessage();
-        } else {
-            return "An unexpected exception occurred: " + e.getMessage();
-        }
-    }
 
-    public static class WebPageOpenException extends RuntimeException {
-        public WebPageOpenException(String message) {
+    public static class PageOperationException extends RuntimeException {
+        public PageOperationException(String message) {
             super("Web page open exception: " + message);
         }
     }
 
-    public static class ClearNotificationsException extends RuntimeException {
-        public ClearNotificationsException(String message) {
+    public static class NotificationOperationException extends RuntimeException {
+        public NotificationOperationException(String message) {
             super("Clear notifications exception: " + message);
         }
     }
 
-    public static class HomeButtonException extends IOException {
+    public static class ButtonOperationException extends IOException {
         private String customMessage;
-        public HomeButtonException(String message) {
+
+        public ButtonOperationException(String message) {
             super();
             this.customMessage = message;
         }
+
         @Override
         public String getMessage() {
             return customMessage;
         }
     }
 
-    public static class WatchListButtonException extends RuntimeException {
-        public WatchListButtonException(String message) {
-            super(message);
-        }
-    }
 
-    public static class LogoutButtonException extends RuntimeException {
-        public LogoutButtonException(String message) {
-            super(message);
-        }
-    }
-
-    public static String handleHomeControllerException(Exception e) {
-        // Handle exceptions specific to HomeController
+    public static String handleException(Exception e) {
         String message;
-        if (e instanceof IOException) {
-            // Handle IOException
-           message = "IOException occurred in HomeController: " + e.getMessage();
-        } else if (e instanceof SQLException) {
-            // Handle SQLException
-            message = "SQLException occurred in HomeController: " + e.getMessage();
+        if (e instanceof MovieApiException) {
+            // Handle ApiException
+            message = "ApiException occurred while making the API request: " + e.getMessage();
+        } else if (e instanceof PageOperationException) {
+            // Handle PageOperationException
+            message = "PageOperationException occurred: " + e.getMessage();
+        } else if (e instanceof NotificationOperationException) {
+            // Handle NotificationOperationException
+            message = "NotificationOperationException occurred: " + e.getMessage();
+        } else if (e instanceof ButtonOperationException) {
+            // Handle ButtonOperationException
+            message = "ButtonOperationException occurred: " + e.getMessage();
         } else {
             // Handle other exceptions
-            message = "Exception occurred in HomeController: " + e.getMessage();
+            message = "General exception occurred: " + e.getMessage();
         }
         return message;
     }

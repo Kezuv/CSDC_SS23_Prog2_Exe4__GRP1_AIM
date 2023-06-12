@@ -24,7 +24,7 @@ public class DataBase {
 
     private static DataBase instance;
 
-    private DataBase() throws DatabaseException.ConnectionException, DatabaseException.TableCreationException, DatabaseException.DaoInitializationException {
+    private DataBase() throws DatabaseException.ConnectionException, DatabaseException.InitializationException, DatabaseException.InitializationException {
         try {
             createConnectionSource();
             userDao = DaoManager.createDao(connectionSource, UserEntity.class);
@@ -33,27 +33,27 @@ public class DataBase {
             createTables();
         } catch (SQLException e) {
             throw new DatabaseException.ConnectionException("Error creating connection source: " + e.getMessage());
-        } catch (DatabaseException.TableCreationException tce) {
-            throw new DatabaseException.TableCreationException("Error creating tables: " + tce.getMessage());
+        } catch (DatabaseException.InitializationException tce) {
+            throw new DatabaseException.InitializationException("Error creating tables: " + tce.getMessage());
         } catch (Exception ex) {
-            throw new DatabaseException.DaoInitializationException("Error initializing DAOs: " + ex.getMessage());
+            throw new DatabaseException.InitializationException("Error initializing DAOs: " + ex.getMessage());
         }
     }
 
-    public static DataBase getDatabaseUser() throws DatabaseException.ConnectionException, DatabaseException.TableCreationException, DatabaseException.DaoInitializationException {
+    public static DataBase getDatabaseUser() throws DatabaseException.ConnectionException, DatabaseException.InitializationException, DatabaseException.InitializationException {
         if(instance == null){
             instance = new DataBase();
         }
         return instance;
     }
 
-    private static void createTables() throws DatabaseException.TableCreationException {
+    private static void createTables() throws DatabaseException.InitializationException {
         try {
             TableUtils.createTableIfNotExists(connectionSource, UserEntity.class);
             TableUtils.createTableIfNotExists(connectionSource, MovieEntity.class);
             TableUtils.createTableIfNotExists(connectionSource, WatchlistMovieEntity.class);
         } catch (SQLException e) {
-            throw new DatabaseException.TableCreationException("Error creating tables: " + e.getMessage());
+            throw new DatabaseException.InitializationException("Error creating tables: " + e.getMessage());
         }
     }
 

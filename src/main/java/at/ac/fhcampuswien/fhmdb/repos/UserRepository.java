@@ -15,18 +15,18 @@ public class UserRepository {
     static {
         try {
             userDao = DataBase.getDatabaseUser().getUserDao();
-        } catch (DatabaseException.ConnectionException | DatabaseException.TableCreationException |
-                 DatabaseException.DaoInitializationException e) {
+        } catch (DatabaseException.ConnectionException |
+                 DatabaseException.InitializationException e) {
             throw new RuntimeException(e);
         }
     }
 
     //Register new user in database (Need User Object)
-    public static void registerUser(String username, String password) throws DatabaseException.RegisterUserException {
+    public static void registerUser(String username, String password) throws DatabaseException.UserOperationException {
         try {
             userDao.createIfNotExists(new UserEntity(username, password));
         } catch (SQLException e) {
-            throw new DatabaseException.RegisterUserException("Failed to register user", e);
+            throw new DatabaseException.UserOperationException("Failed to register user");
         }
     }
 
@@ -35,19 +35,19 @@ public class UserRepository {
         return new UserEntity(user.getId(), user.getUsername(), user.getPassword());
     }
 
-    public static User userLogIn(String username, String password) throws DatabaseException.UserLoginException {
+    public static User userLogIn(String username, String password) throws DatabaseException.UserOperationException {
         try {
             List<UserEntity> allUsers = userDao.queryForMatching(new UserEntity(username, password));
             if (!allUsers.isEmpty()) {
                 UserEntity userEntity = allUsers.get(0);
                 return new User(userEntity.getUsername(), userEntity.getPassword(), userEntity.getId());
             } else {
-                throw new DatabaseException.UserLoginException("Username or password is wrong!");
+                throw new DatabaseException.UserOperationException("Username or password is wrong!");
             }
         } catch (SQLException e) {
-            throw new DatabaseException.RegisterUserException("User not found: ", e);
+            throw new DatabaseException.UserOperationException("User not found: ");
         } catch (IndexOutOfBoundsException e) {
-            throw new DatabaseException.UserLoginException("User not found: "+ e.getMessage());
+            throw new DatabaseException.UserOperationException("User not found: "+ e.getMessage());
         }
     }
 

@@ -31,7 +31,7 @@ public class MovieRepository {
                 movieDao.createIfNotExists(movieToMovieEntity(movie));
             }
         } catch (SQLException e) {
-            throw new DatabaseException.AddMovieException(e.getMessage());
+            throw new DatabaseException.MovieOperationException(e.getMessage());
         }
     }
 
@@ -40,7 +40,7 @@ public class MovieRepository {
         try {
             return movieDao.queryForAll();
         } catch (SQLException e) {
-            throw new DatabaseException.GetAllMoviesException(e.getMessage());
+            throw new DatabaseException.MovieOperationException(e.getMessage());
         }
     }
 
@@ -58,7 +58,7 @@ public class MovieRepository {
                     movie.getImgUrl(), stringToGenres(movie.getGenres()), stringToList(movie.getDirectors()), stringToList(movie.getWriters()),
                     stringToList(movie.getMainCast()), movie.getRating(), movie.getReleaseYear(), movie.getLengthInMinutes());
         } catch (IOException e) {
-            throw new DatabaseException.GetMovieException(e.getMessage());
+            throw new DatabaseException.MovieOperationException(e.getMessage());
         }
     }
 

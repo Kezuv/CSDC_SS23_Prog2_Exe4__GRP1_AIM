@@ -59,8 +59,8 @@ public class MainViewController implements Initializable {
             throw new RuntimeException(e);
         } catch (RuntimeException re){
             try {
-                throw new MovieApiException.HomeButtonException("can't reach API");
-            } catch (MovieApiException.HomeButtonException e) {
+                throw new MovieApiException.ButtonOperationException("can't reach API");
+            } catch (MovieApiException.ButtonOperationException e) {
                 homeError.getStyleClass().add("text-red");
                 homeError.setText(e.getMessage());
             }
@@ -90,7 +90,7 @@ public class MainViewController implements Initializable {
                 FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/at/ac/fhcampuswien/fhmdb/content/home.fxml"));
                 AnchorPane root = fxmlLoader.load();
                 mainViewContent.setCenter(root);
-            } catch (MovieApiException.HomeButtonException e) {
+            } catch (MovieApiException.ButtonOperationException e) {
                 homeError.getStyleClass().add("text-red");
                 homeError.setText(e.getMessage());
             } catch (IOException e) {
@@ -108,7 +108,7 @@ public class MainViewController implements Initializable {
                 mainViewContent.setCenter(root);
             } catch (IOException e) {
                 System.out.println("Error loading watchlist.fxml: " + e.getMessage());
-                throw new MovieApiException.WatchListButtonException("Error loading watchlist page: " + e.getMessage());
+                throw new MovieApiException.ButtonOperationException("Error loading watchlist page: " + e.getMessage());
             }
         }
     }
@@ -122,7 +122,7 @@ public class MainViewController implements Initializable {
                 mainViewContent.setCenter(view);
             } catch (IOException e) {
                 System.out.println("Error loading loginview.fxml: " + e.getMessage());
-                throw new MovieApiException.LogoutButtonException("Error loading login page: " + e.getMessage());
+                throw new MovieApiException.ButtonOperationException("Error loading login page: " + e.getMessage());
             }
         }
     }
