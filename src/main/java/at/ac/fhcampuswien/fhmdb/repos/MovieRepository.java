@@ -31,7 +31,7 @@ public class MovieRepository {
                 movieDao.createIfNotExists(movieToMovieEntity(movie));
             }
         } catch (SQLException e) {
-            throw new DatabaseException.AddMovieException(e.getMessage());
+            throw new DatabaseException.MovieOperationException(e.getMessage());
         }
     }
 
@@ -40,7 +40,7 @@ public class MovieRepository {
         try {
             return movieDao.queryForAll();
         } catch (SQLException e) {
-            throw new DatabaseException.GetAllMoviesException(e.getMessage());
+            throw new DatabaseException.MovieOperationException(e.getMessage());
         }
     }
 
