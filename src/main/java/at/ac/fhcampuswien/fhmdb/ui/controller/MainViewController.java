@@ -55,7 +55,7 @@ public class MainViewController extends Observer implements Initializable {
         header.getChildren().clear();
         header.getChildren().addAll(fhmdbLogo, welcomeText,setCenter, homeBtn, watchListBtn, setRight, userNameLabel, loggoutBtn);
         try{
-            AnchorPane view = ControllerFactory.getController(Controllers.LOGIN_VIEW).load();
+            AnchorPane view = ControllerFactory.getController(Controllers.LOGIN_VIEW);
             mainViewContent.setCenter(view);
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -89,7 +89,7 @@ public class MainViewController extends Observer implements Initializable {
         if (isLogedIn()) {
             try {
                 changeBtnColors(homeBtn);
-                AnchorPane root = ControllerFactory.getController(Controllers.HOME).load();
+                AnchorPane root = ControllerFactory.getController(Controllers.HOME);
                 mainViewContent.setCenter(root);
             } catch (MovieApiException.ButtonOperationException e) {
                 homeError.getStyleClass().add("text-red");
@@ -104,7 +104,7 @@ public class MainViewController extends Observer implements Initializable {
         if (isLogedIn()) {
             try {
                 changeBtnColors(watchListBtn);
-                AnchorPane root = ControllerFactory.getController(Controllers.WATCHLIST).load();
+                AnchorPane root = ControllerFactory.getController(Controllers.WATCHLIST);
                 mainViewContent.setCenter(root);
             } catch (IOException e) {
                 System.out.println("Error loading watchlist.fxml: " + e.getMessage());
@@ -117,7 +117,7 @@ public class MainViewController extends Observer implements Initializable {
         if (isLogedIn()) {
             try {
                 loggedInProperty.set(false);
-                AnchorPane view = ControllerFactory.getController(Controllers.LOGIN_VIEW).load();
+                AnchorPane view = ControllerFactory.getController(Controllers.LOGIN_VIEW);
                 mainViewContent.setCenter(view);
             } catch (IOException e) {
                 System.out.println("Error loading loginview.fxml: " + e.getMessage());
