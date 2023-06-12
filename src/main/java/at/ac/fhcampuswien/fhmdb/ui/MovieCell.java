@@ -119,8 +119,10 @@ public class MovieCell extends ListCell<Movie> {
 
             //Width of the cell´s
             HBox.setHgrow(setRight, Priority.ALWAYS);
-            layout.setPrefWidth(getScene().getWindow().getWidth() * 0.975);
-            layout.setMinWidth(getScene().getWindow().getWidth() * 0.975);
+            if (getScene() != null) {
+                layout.setPrefWidth(getScene().getWindow().getWidth() * 0.975);
+                layout.setMinWidth(getScene().getWindow().getWidth() * 0.975);
+            }
 
             //if !isExpanded (small / not selected)
             if (!movie.isExpanded()){
