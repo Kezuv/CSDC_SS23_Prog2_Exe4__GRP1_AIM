@@ -1,9 +1,11 @@
 package at.ac.fhcampuswien.fhmdb.ui.controller.factories;
 import javafx.fxml.FXMLLoader;
 
+import java.io.IOException;
+
 public class ControllerFactory {
 
-    public static FXMLLoader getController(Controllers controller){
+    public static <T> T  getController(Controllers controller) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(ControllerFactory.class.getResource(controller.getPath()));
 
         switch (controller){
@@ -24,7 +26,8 @@ public class ControllerFactory {
                 break;
         }
 
-        return fxmlLoader;
+        return fxmlLoader.load();
+
     }
 
 }

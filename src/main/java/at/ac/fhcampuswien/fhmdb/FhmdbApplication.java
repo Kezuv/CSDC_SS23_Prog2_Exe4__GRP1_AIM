@@ -16,7 +16,7 @@ public class FhmdbApplication extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
-        Scene scene = new Scene(ControllerFactory.getController(Controllers.MAIN_VIEW).load(), 1500, 1000); //Size of the window raised to display all elements in the bottom bar
+        Scene scene = new Scene(ControllerFactory.getController(Controllers.MAIN_VIEW), 1500, 1000); //Size of the window raised to display all elements in the bottom bar
         scene.getStylesheets().add(Objects.requireNonNull(FhmdbApplication.class.getResource("styles/styles.css")).toExternalForm());
         stage.setTitle("FHMDb!");
         stage.setScene(scene);
