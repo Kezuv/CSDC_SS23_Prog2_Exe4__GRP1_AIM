@@ -62,7 +62,7 @@ public class MovieEntity {
             throw new RuntimeException(e);
         }
     }
-
+    /*Below are the getters for future usage maybe
     public String getId(){return id;}
 
     public String getTitle() {
@@ -103,5 +103,5 @@ public class MovieEntity {
 
     public int getLengthInMinutes() {
         return lengthInMinutes;
-    }
+    }*/
 }

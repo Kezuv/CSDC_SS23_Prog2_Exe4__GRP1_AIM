@@ -140,7 +140,6 @@ public class Movie {
                 throw new RuntimeException(e);
             }
         }
-
     }
 
     public interface MovieFactory {

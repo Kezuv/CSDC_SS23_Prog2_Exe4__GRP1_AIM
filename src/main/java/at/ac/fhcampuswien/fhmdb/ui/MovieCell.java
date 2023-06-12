@@ -1,6 +1,6 @@
 package at.ac.fhcampuswien.fhmdb.ui;
 
-import at.ac.fhcampuswien.fhmdb.Exceptions.DatabaseException;
+import at.ac.fhcampuswien.fhmdb.exceptions.DatabaseException;
 import at.ac.fhcampuswien.fhmdb.api.MovieAPI;
 import at.ac.fhcampuswien.fhmdb.models.Movie;
 import at.ac.fhcampuswien.fhmdb.repos.WatchlistRepository;
@@ -18,7 +18,6 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 
 import java.io.IOException;
-import java.sql.SQLException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -83,7 +82,7 @@ public class MovieCell extends ListCell<Movie> {
                     } else {
                         WatchlistRepository.removeMovieFromWatchlist(MainViewController.getActiveUser(), movie);
                     }
-// <-------------------TODO DISABLE FOLLOWING LINE TO DISABLE "Add Watchlist"-Button changer --------------------->
+/*<-------------------TODO DISABLE FOLLOWING LINE TO DISABLE "Add Watchlist"-Button changer --------------------->*/
                     movie.upDateOnWatchList();
                     updateItem(movie, false);
                 });
@@ -117,7 +116,6 @@ public class MovieCell extends ListCell<Movie> {
             } else {
                 watchListAddBtn.setText("Remove Watchlist");
             }
-
 
             //Width of the cell´s
             HBox.setHgrow(setRight, Priority.ALWAYS);

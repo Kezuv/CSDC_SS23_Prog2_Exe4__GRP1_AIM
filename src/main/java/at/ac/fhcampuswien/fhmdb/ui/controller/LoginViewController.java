@@ -1,7 +1,7 @@
 package at.ac.fhcampuswien.fhmdb.ui.controller;
 
-import at.ac.fhcampuswien.fhmdb.Exceptions.DatabaseException;
-import at.ac.fhcampuswien.fhmdb.Exceptions.MovieApiException;
+import at.ac.fhcampuswien.fhmdb.exceptions.DatabaseException;
+import at.ac.fhcampuswien.fhmdb.exceptions.MovieApiException;
 import at.ac.fhcampuswien.fhmdb.repos.UserRepository;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -9,8 +9,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.control.TextField;
-
-import java.lang.reflect.InvocationTargetException;
 
 public class LoginViewController {
     @FXML

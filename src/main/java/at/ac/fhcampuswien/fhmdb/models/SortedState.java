@@ -4,5 +4,4 @@ public enum SortedState {
     ASCENDING,
     DESCENDING,
     NONE;
-
 }

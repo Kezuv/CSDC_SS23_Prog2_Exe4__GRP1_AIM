@@ -1,4 +1,4 @@
-package at.ac.fhcampuswien.fhmdb.Exceptions;
+package at.ac.fhcampuswien.fhmdb.exceptions;
 
 import java.lang.reflect.InvocationTargetException;
 import java.sql.SQLException;

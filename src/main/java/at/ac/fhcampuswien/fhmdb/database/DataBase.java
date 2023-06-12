@@ -1,6 +1,6 @@
 package at.ac.fhcampuswien.fhmdb.database;
 
-import at.ac.fhcampuswien.fhmdb.Exceptions.DatabaseException;
+import at.ac.fhcampuswien.fhmdb.exceptions.DatabaseException;
 import at.ac.fhcampuswien.fhmdb.entities.MovieEntity;
 import at.ac.fhcampuswien.fhmdb.entities.UserEntity;
 import at.ac.fhcampuswien.fhmdb.entities.WatchlistMovieEntity;
@@ -20,8 +20,6 @@ public class DataBase {
     private Dao<UserEntity, Long> userDao;
     private Dao<MovieEntity, String> movieDao;
     private Dao<WatchlistMovieEntity, Long> watchlistDao;
-
-
     private static DataBase instance;
 
     private DataBase() throws DatabaseException.ConnectionException, DatabaseException.TableCreationException, DatabaseException.DaoInitializationException {

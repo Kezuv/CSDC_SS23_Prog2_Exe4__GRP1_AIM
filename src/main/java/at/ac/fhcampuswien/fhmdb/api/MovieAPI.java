@@ -1,6 +1,6 @@
 package at.ac.fhcampuswien.fhmdb.api;
 
-import at.ac.fhcampuswien.fhmdb.Exceptions.MovieApiException;
+import at.ac.fhcampuswien.fhmdb.exceptions.MovieApiException;
 import okhttp3.*;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;

@@ -1,4 +1,4 @@
-package at.ac.fhcampuswien.fhmdb.Exceptions;
+package at.ac.fhcampuswien.fhmdb.exceptions;
 
 // this class will handle all exceptions caused by the MovieAPI and the SearchParameter classes
 
